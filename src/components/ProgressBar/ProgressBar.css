@@ -1,0 +1,67 @@
+.progress-bar {
+  position: relative;
+}
+
+.progress-bar__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.progress-bar__percentage {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gold-300);
+}
+
+.progress-bar__fraction {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.progress-bar__track {
+  height: 8px;
+  background: var(--bg-card);
+  border-radius: 4px;
+  overflow: visible;
+  position: relative;
+  border: 1px solid var(--border);
+}
+
+.progress-bar__fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--gold-600), var(--gold-400), var(--gold-300));
+  transition: width 0.6s var(--ease-out);
+  position: relative;
+}
+
+.progress-bar__fill--complete {
+  background: linear-gradient(90deg, var(--green-600), var(--green-400));
+  box-shadow: 0 0 12px var(--green-glow);
+}
+
+.progress-bar__glow {
+  position: absolute;
+  top: -2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--gold-300);
+  transform: translateX(-50%);
+  box-shadow: 0 0 8px rgba(252, 211, 77, 0.4);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.progress-bar__complete-text {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--green-400);
+  letter-spacing: 0.04em;
+  animation: fadeIn 0.5s var(--ease-out);
+}
