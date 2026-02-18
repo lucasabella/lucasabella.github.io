@@ -13,12 +13,15 @@
 .map-marker {
   background: none !important;
   border: none !important;
-  transition: transform 0.3s var(--ease-spring);
 }
 
-.map-marker:hover {
-  transform: scale(1.15) !important;
-  z-index: 1000 !important;
+.map-marker svg {
+  transition: transform 0.2s ease;
+  transform-origin: bottom center;
+}
+
+.map-marker:hover svg {
+  transform: scale(1.2);
 }
 
 .map-marker--visited {
