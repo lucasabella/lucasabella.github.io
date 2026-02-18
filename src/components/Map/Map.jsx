@@ -4,7 +4,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './Map.css';
 
-
+//test
 function createMarkerIcon(visited) {
   const color = visited ? '#22c55e' : '#f59e0b';
   const glow = visited ? 'rgba(34,197,94,0.3)' : 'rgba(245,158,11,0.3)';
