@@ -5,6 +5,15 @@ const LOCALSTORAGE_KEY = 'chaincaser-visited';
 const REFRESH_TOKEN_KEY = 'cc_refresh_token';
 const AuthContext = createContext(null);
 
+/** Safely parse a Response as JSON; returns a fallback object on failure. */
+async function safeJson(res, fallback = {}) {
+  try {
+    return await res.json();
+  } catch {
+    return fallback;
+  }
+}
+
 async function migrateLocalStorage(token) {
   try {
     const raw = localStorage.getItem(LOCALSTORAGE_KEY);
@@ -97,10 +106,11 @@ export function AuthProvider({ children }) {
       body: JSON.stringify({ email, password }),
     });
     if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Login failed');
+      const err = await safeJson(res, {});
+      throw new Error(err.error || `Login failed (HTTP ${res.status})`);
     }
-    const data = await res.json();
+    const data = await safeJson(res, {});
+    if (!data.user) throw new Error('Unexpected response from server. Check your API URL configuration.');
     setUser(data.user);
     setAccessToken(data.accessToken);
     if (data.refreshToken) localStorage.setItem(REFRESH_TOKEN_KEY, data.refreshToken);
@@ -116,10 +126,11 @@ export function AuthProvider({ children }) {
       body: JSON.stringify({ email, password, name }),
     });
     if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || err.errors?.[0]?.msg || 'Registration failed');
+      const err = await safeJson(res, {});
+      throw new Error(err.error || err.errors?.[0]?.msg || `Registration failed (HTTP ${res.status})`);
     }
-    const data = await res.json();
+    const data = await safeJson(res, {});
+    if (!data.user) throw new Error('Unexpected response from server. Check your API URL configuration.');
     setUser(data.user);
     setAccessToken(data.accessToken);
     if (data.refreshToken) localStorage.setItem(REFRESH_TOKEN_KEY, data.refreshToken);
@@ -135,10 +146,11 @@ export function AuthProvider({ children }) {
       body: JSON.stringify({ idToken }),
     });
     if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Google login failed');
+      const err = await safeJson(res, {});
+      throw new Error(err.error || `Google login failed (HTTP ${res.status})`);
     }
-    const data = await res.json();
+    const data = await safeJson(res, {});
+    if (!data.user) throw new Error('Unexpected response from server. Check your API URL configuration.');
     setUser(data.user);
     setAccessToken(data.accessToken);
     if (data.refreshToken) localStorage.setItem(REFRESH_TOKEN_KEY, data.refreshToken);
