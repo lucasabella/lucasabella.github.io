@@ -125,9 +125,18 @@ export default function ChainDetailPage() {
         </div>
 
         <div className="panel__header">
-          <div className="panel__back-row">
-            <button className="panel__back" onClick={() => navigate('/dashboard')} aria-label="Back to dashboard">
-              ← Dashboard
+          <div className="panel__header-row">
+            <div className="panel__back-row">
+              <button className="panel__back" onClick={() => navigate('/dashboard')} aria-label="Back to dashboard">
+                ← Dashboard
+              </button>
+            </div>
+            <button
+              className="panel__close"
+              onClick={() => setPanelCollapsed(true)}
+              aria-label="Close panel"
+            >
+              ×
             </button>
           </div>
           <div className="panel__brand">

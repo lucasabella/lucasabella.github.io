@@ -68,7 +68,7 @@
 
 /* — Back button — */
 .panel__back-row {
-  margin-bottom: 8px;
+  margin-bottom: 0;
 }
 
 .panel__back {
@@ -85,6 +85,35 @@
 
 .panel__back:hover {
   color: var(--accent);
+}
+
+.panel__header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.panel__close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  color: var(--text-muted);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s var(--ease-out);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.panel__close:hover {
+  background: var(--accent-light);
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 /* — Panel header — */
@@ -253,9 +282,9 @@
 }
 
 .filter-tab--active {
-  background: var(--text-primary);
+  background: var(--accent);
   color: #FFFFFF;
-  border-color: var(--text-primary);
+  border-color: var(--accent);
 }
 
 /* — Location list — */
@@ -357,7 +386,7 @@
   }
 
   .panel__back-row {
-    margin-bottom: 4px;
+    margin-bottom: 0;
   }
 
   .panel__brand {

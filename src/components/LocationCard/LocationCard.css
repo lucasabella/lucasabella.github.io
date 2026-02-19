@@ -29,7 +29,7 @@
 }
 
 .location-card--visited:hover {
-  background: #dff0e8;
+  background: var(--visited-light);
   border-left-color: var(--visited);
 }
 
@@ -79,22 +79,19 @@
   letter-spacing: 0.05em;
 }
 
-/* Toggle button — circular */
+/* Toggle button — pill */
 .location-card__toggle {
   flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  font-size: 14px;
+  padding: 5px 12px;
+  border-radius: 0;
+  font-size: 12px;
   font-weight: 600;
+  letter-spacing: 0.02em;
   background: transparent;
   color: var(--text-muted);
-  border: 2px solid var(--border-strong);
-  transition: all 0.25s var(--ease-out);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
+  border: 1px solid var(--border-strong);
+  transition: all 0.2s var(--ease-out);
+  white-space: nowrap;
 }
 
 .location-card__toggle:hover {
@@ -104,7 +101,7 @@
 }
 
 .location-card__toggle:active {
-  transform: scale(0.9);
+  transform: scale(0.99);
   transition-duration: 0.1s;
 }
 
@@ -116,6 +113,7 @@
 }
 
 .location-card__toggle--visited:hover {
-  background: #245a3c;
-  border-color: #245a3c;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #FFFFFF;
 }

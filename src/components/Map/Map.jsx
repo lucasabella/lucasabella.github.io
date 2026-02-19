@@ -94,7 +94,7 @@ export default function Map({ locations = [], isVisited, onToggleVisit, focusedI
                     className={`popup-content__btn ${visited ? 'popup-content__btn--visited' : ''}`}
                     onClick={() => onToggleVisit?.(loc.id)}
                   >
-                    {visited ? '&#10003; Visited' : 'Mark as visited'}
+                    {visited ? '\u2713 Visited' : 'Mark as visited'}
                   </button>
                 </div>
               </Popup>
