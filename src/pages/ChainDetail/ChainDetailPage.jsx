@@ -31,7 +31,7 @@ export default function ChainDetailPage() {
 
   const { isVisited, toggleVisit, visitedCount, updateFromLocations } = useVisits(locations);
   const { position, loading: geoLoading, error: geoError, requestPosition } = useGeolocation();
-  const { sheetStyle, handleProps, snapState, isDragging } = useBottomSheet(52);
+  const { sheetStyle, panelRef, dragHandleRef, snapState } = useBottomSheet(52);
 
   useEffect(() => {
     (async () => {
@@ -142,6 +142,7 @@ export default function ChainDetailPage() {
 
       <aside
         className={panelClass}
+        ref={window.innerWidth <= 768 ? panelRef : undefined}
         style={window.innerWidth <= 768 ? sheetStyle : undefined}
       >
         {/* Desktop toggle */}
@@ -155,8 +156,9 @@ export default function ChainDetailPage() {
 
         {/* Mobile drag handle */}
         <div
-          className={`panel__drag-handle ${isDragging ? 'panel__drag-handle--active' : ''}`}
-          {...handleProps}
+          className="panel__drag-handle"
+          ref={dragHandleRef}
+          style={{ touchAction: 'none' }}
         >
           <div className="panel__drag-handle-bar" />
         </div>

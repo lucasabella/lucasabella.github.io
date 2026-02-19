@@ -1,196 +1,188 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, useLayoutEffect } from 'react';
 
 /**
- * useBottomSheet — iOS-style bottom sheet with finger-following drag and snap points.
+ * useBottomSheet — iOS-style bottom sheet with three snap positions.
  *
- * Snap positions (as % of viewport height from the BOTTOM):
- *   - COLLAPSED: only the drag handle + mini header visible (~80px)
- *   - HALF:      ~65% of viewport height
- *   - FULL:      full viewport height (minus nav)
+ * Performance: transform during drag is applied directly to the DOM via panelRef,
+ * completely bypassing React state updates. React is only notified once on finger-lift
+ * to record the final snap position.
  *
- * Returns:
- *   - sheetStyle:  inline style to apply to the panel element
- *   - handleProps: spread onto the drag handle element
- *   - snapState:   'collapsed' | 'half' | 'full'
- *   - isDragging:  true while finger is down
+ * Snap positions (translateY from bottom of nav):
+ *   collapsed — only drag handle visible (~80px)
+ *   half      — 65% of viewport height
+ *   full      — full height (minus nav)
  */
 
-const COLLAPSED_PX = 80;          // visible pixels when collapsed
-const VELOCITY_THRESHOLD = 0.4;   // px/ms — fast flick threshold
+const COLLAPSED_PX = 80;
+const VELOCITY_THRESHOLD = 0.4; // px/ms
+const SNAP_TRANSITION = 'transform 0.35s cubic-bezier(0.32, 0.72, 0, 1)';
+
+function getTranslateYForState(state, panelHeight) {
+    switch (state) {
+        case 'full':      return 0;
+        case 'half':      return panelHeight * 0.35;
+        case 'collapsed': return panelHeight - COLLAPSED_PX;
+        default:          return panelHeight * 0.35;
+    }
+}
 
 export function useBottomSheet(navHeight = 52) {
     const [snapState, setSnapState] = useState('half');
-    const [isDragging, setIsDragging] = useState(false);
-    const [dragOffset, setDragOffset] = useState(0); // px offset from snap position during drag
 
-    const dragData = useRef({
-        startY: 0,
-        startTime: 0,
-        startTranslateY: 0,
-        currentY: 0,
-        panelHeight: 0,
-        viewportHeight: 0,
+    // DOM refs — imperative updates during drag, no React state involved
+    const panelRef      = useRef(null);
+    const dragHandleRef = useRef(null);
+
+    // Drag state in a ref — never triggers re-renders
+    const drag = useRef({
+        active:           false,
+        startY:           0,
+        startTime:        0,
+        startTranslateY:  0,
+        currentY:         0,
+        panelHeight:      0,
     });
 
-    // Compute the translateY for a given snap state
-    const getTranslateY = useCallback((state, vh) => {
-        const fullHeight = vh - navHeight;
-        switch (state) {
-            case 'full':
-                return 0; // panel top is at nav bottom
-            case 'half':
-                return fullHeight * 0.35; // show 65%
-            case 'collapsed':
-                return fullHeight - COLLAPSED_PX;
-            default:
-                return fullHeight * 0.35;
+    // Keep snapState readable inside effects without stale closures
+    const snapStateRef    = useRef(snapState);
+    snapStateRef.current  = snapState;
+
+    // Prevents useLayoutEffect from overriding the transform that onEnd already set
+    const justSnappedRef = useRef(false);
+
+    // ── Apply transform when snapState changes from outside (initial mount, external snap) ──
+    useLayoutEffect(() => {
+        if (!panelRef.current) return;
+        if (justSnappedRef.current) {
+            // onEnd already animated to the correct position — skip
+            justSnappedRef.current = false;
+            return;
         }
-    }, [navHeight]);
+        const panelHeight = window.innerHeight - navHeight;
+        const ty = getTranslateYForState(snapState, panelHeight);
+        panelRef.current.style.transition = SNAP_TRANSITION;
+        panelRef.current.style.transform  = `translateY(${ty}px)`;
+    }, [snapState, navHeight]);
 
-    // Get the snap points in translateY values (sorted ascending = full, half, collapsed)
-    const getSnapPoints = useCallback((vh) => {
-        const fullHeight = vh - navHeight;
-        return [
-            { state: 'full', ty: 0 },
-            { state: 'half', ty: fullHeight * 0.35 },
-            { state: 'collapsed', ty: fullHeight - COLLAPSED_PX },
-        ];
-    }, [navHeight]);
+    // ── Touchstart on drag handle ──
+    useEffect(() => {
+        const handle = dragHandleRef.current;
+        if (!handle) return;
 
-    const handleTouchStart = useCallback((e) => {
-        const touch = e.touches[0];
-        const vh = window.innerHeight;
-        const currentTY = getTranslateY(snapState, vh);
+        const onStart = (e) => {
+            const touch       = e.touches[0];
+            const panelHeight = window.innerHeight - navHeight;
 
-        dragData.current = {
-            startY: touch.clientY,
-            startTime: Date.now(),
-            startTranslateY: currentTY,
-            currentY: touch.clientY,
-            panelHeight: vh - navHeight,
-            viewportHeight: vh,
+            drag.current = {
+                active:          true,
+                startY:          touch.clientY,
+                startTime:       Date.now(),
+                startTranslateY: getTranslateYForState(snapStateRef.current, panelHeight),
+                currentY:        touch.clientY,
+                panelHeight,
+            };
+
+            // Kill transition so the sheet follows the finger instantly
+            if (panelRef.current) {
+                panelRef.current.style.transition = 'none';
+            }
+
+            handle.classList.add('panel__drag-handle--active');
         };
 
-        setIsDragging(true);
-        setDragOffset(0);
-    }, [snapState, getTranslateY, navHeight]);
+        handle.addEventListener('touchstart', onStart, { passive: true });
+        return () => handle.removeEventListener('touchstart', onStart);
+    }, [navHeight]);
 
-    const handleTouchMove = useCallback((e) => {
-        if (!isDragging) return;
-        const touch = e.touches[0];
-        dragData.current.currentY = touch.clientY;
-
-        const dy = touch.clientY - dragData.current.startY;
-        let newTY = dragData.current.startTranslateY + dy;
-
-        // Clamp: don't go above full (0) or below collapsed
-        const maxTY = dragData.current.panelHeight - COLLAPSED_PX;
-        newTY = Math.max(0, Math.min(maxTY, newTY));
-
-        // Small rubber-band effect at edges
-        setDragOffset(newTY - dragData.current.startTranslateY);
-    }, [isDragging]);
-
-    const handleTouchEnd = useCallback(() => {
-        if (!isDragging) return;
-
-        const { startY, startTime, startTranslateY, currentY, viewportHeight } = dragData.current;
-        const dy = currentY - startY;
-        const dt = Date.now() - startTime;
-        const velocity = dy / Math.max(dt, 1); // px/ms
-
-        let newTY = startTranslateY + dy;
-        const maxTY = (viewportHeight - navHeight) - COLLAPSED_PX;
-        newTY = Math.max(0, Math.min(maxTY, newTY));
-
-        const snaps = getSnapPoints(viewportHeight);
-
-        // If velocity is high, snap in the direction of the flick
-        let targetSnap;
-        if (Math.abs(velocity) > VELOCITY_THRESHOLD) {
-            const currentIdx = snaps.findIndex(s => s.state === snapState);
-            if (velocity > 0) {
-                // Swiping down → next more-collapsed state
-                targetSnap = snaps[Math.min(currentIdx + 1, snaps.length - 1)];
-            } else {
-                // Swiping up → next more-expanded state
-                targetSnap = snaps[Math.max(currentIdx - 1, 0)];
-            }
-        } else {
-            // Snap to nearest
-            let minDist = Infinity;
-            for (const snap of snaps) {
-                const dist = Math.abs(newTY - snap.ty);
-                if (dist < minDist) {
-                    minDist = dist;
-                    targetSnap = snap;
-                }
-            }
-        }
-
-        setSnapState(targetSnap.state);
-        setIsDragging(false);
-        setDragOffset(0);
-    }, [isDragging, snapState, getSnapPoints, navHeight]);
-
-    // Clean up listeners on unmount
+    // ── Window-level move / end — empty deps, all state via refs ──
     useEffect(() => {
-        if (!isDragging) return;
-
         const onMove = (e) => {
+            if (!drag.current.active || !panelRef.current) return;
+
             const touch = e.touches[0];
-            dragData.current.currentY = touch.clientY;
-            const dy = touch.clientY - dragData.current.startY;
-            let newTY = dragData.current.startTranslateY + dy;
-            const maxTY = dragData.current.panelHeight - COLLAPSED_PX;
+            drag.current.currentY = touch.clientY;
+
+            const dy    = touch.clientY - drag.current.startY;
+            let   newTY = drag.current.startTranslateY + dy;
+            const maxTY = drag.current.panelHeight - COLLAPSED_PX;
             newTY = Math.max(0, Math.min(maxTY, newTY));
-            setDragOffset(newTY - dragData.current.startTranslateY);
+
+            // Direct DOM write — zero React overhead
+            panelRef.current.style.transform = `translateY(${newTY}px)`;
         };
 
         const onEnd = () => {
-            handleTouchEnd();
+            if (!drag.current.active) return;
+            drag.current.active = false;
+
+            const { startY, startTime, startTranslateY, currentY, panelHeight } = drag.current;
+
+            const dy       = currentY - startY;
+            const dt       = Date.now() - startTime;
+            const velocity = dy / Math.max(dt, 1); // px/ms
+
+            let   newTY = startTranslateY + dy;
+            const maxTY = panelHeight - COLLAPSED_PX;
+            newTY = Math.max(0, Math.min(maxTY, newTY));
+
+            const snaps = [
+                { state: 'full',      ty: 0 },
+                { state: 'half',      ty: panelHeight * 0.35 },
+                { state: 'collapsed', ty: panelHeight - COLLAPSED_PX },
+            ];
+
+            let targetSnap;
+            if (Math.abs(velocity) > VELOCITY_THRESHOLD) {
+                // Flick — advance one snap in the direction of travel
+                const idx = snaps.findIndex(s => s.state === snapStateRef.current);
+                targetSnap = velocity > 0
+                    ? snaps[Math.min(idx + 1, snaps.length - 1)]
+                    : snaps[Math.max(idx - 1, 0)];
+            } else {
+                // Slow drag — snap to nearest position
+                let minDist = Infinity;
+                for (const snap of snaps) {
+                    const dist = Math.abs(newTY - snap.ty);
+                    if (dist < minDist) { minDist = dist; targetSnap = snap; }
+                }
+            }
+
+            // Apply animated snap directly — mark so useLayoutEffect skips the override
+            justSnappedRef.current = true;
+            if (panelRef.current) {
+                panelRef.current.style.transition = SNAP_TRANSITION;
+                panelRef.current.style.transform  = `translateY(${targetSnap.ty}px)`;
+            }
+            if (dragHandleRef.current) {
+                dragHandleRef.current.classList.remove('panel__drag-handle--active');
+            }
+
+            // One React state update — just to record the final position
+            setSnapState(targetSnap.state);
         };
 
-        // Use window listeners for better tracking when finger moves outside handle
-        window.addEventListener('touchmove', onMove, { passive: true });
-        window.addEventListener('touchend', onEnd);
+        window.addEventListener('touchmove',   onMove, { passive: true });
+        window.addEventListener('touchend',    onEnd);
         window.addEventListener('touchcancel', onEnd);
 
         return () => {
-            window.removeEventListener('touchmove', onMove);
-            window.removeEventListener('touchend', onEnd);
+            window.removeEventListener('touchmove',   onMove);
+            window.removeEventListener('touchend',    onEnd);
             window.removeEventListener('touchcancel', onEnd);
         };
-    }, [isDragging, handleTouchEnd]);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // Compute current translateY
-    const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
-    const baseTY = getTranslateY(snapState, vh);
-    let currentTY = baseTY;
-
-    if (isDragging) {
-        currentTY = baseTY + dragOffset;
-        const maxTY = (vh - navHeight) - COLLAPSED_PX;
-        currentTY = Math.max(0, Math.min(maxTY, currentTY));
-    }
-
+    // Non-transform styles only — transform/transition are managed imperatively above
     const sheetStyle = {
-        transform: `translateY(${currentTY}px)`,
-        transition: isDragging ? 'none' : 'transform 0.35s cubic-bezier(0.32, 0.72, 0, 1)',
         willChange: 'transform',
-        height: `calc(100dvh - ${navHeight}px)`,
-    };
-
-    const handleProps = {
-        onTouchStart: handleTouchStart,
-        style: { touchAction: 'none' },
+        height:     `calc(100dvh - ${navHeight}px)`,
     };
 
     return {
+        panelRef,
+        dragHandleRef,
         sheetStyle,
-        handleProps,
         snapState,
         setSnapState,
-        isDragging,
     };
 }
