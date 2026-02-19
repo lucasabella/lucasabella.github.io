@@ -3,7 +3,7 @@
     "slug": "dunkin",
     "description": "World-famous donut and coffee chain — bringing sweet treats across the Netherlands",
     "website": "https://www.dunkin.nl",
-    "logo_url": "https://www.dunkin.nl/favicon.ico",
+    "logo_url": "https://www.google.com/s2/favicons?sz=128&domain=dunkin.nl",
     "locations": [
         {
             "id": "dunkin-001",

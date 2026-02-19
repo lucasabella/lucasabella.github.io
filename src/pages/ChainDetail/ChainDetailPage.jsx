@@ -6,6 +6,7 @@ import LocationCard from '../../components/LocationCard/LocationCard';
 import { useApi } from '../../hooks/useApi';
 import { useVisits } from '../../hooks/useVisits';
 import { useGeolocation } from '../../hooks/useGeolocation';
+import { useBottomSheet } from '../../hooks/useBottomSheet';
 import { haversineDistance } from '../../utils/geo';
 import './ChainDetailPage.css';
 
@@ -26,11 +27,11 @@ export default function ChainDetailPage() {
   const [focusedId, setFocusedId] = useState(null);
   const [imgError, setImgError] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const dragRef = useRef({ startY: 0, startCollapsed: false });
   const locationsRef = useRef(null);
 
   const { isVisited, toggleVisit, visitedCount, updateFromLocations } = useVisits(locations);
   const { position, loading: geoLoading, error: geoError, requestPosition } = useGeolocation();
+  const { sheetStyle, handleProps, snapState, isDragging } = useBottomSheet(52);
 
   useEffect(() => {
     (async () => {
@@ -101,18 +102,6 @@ export default function ChainDetailPage() {
     setFocusedId(location.id);
   }, []);
 
-  const handleDragHandleTouchStart = useCallback((e) => {
-    dragRef.current.startY = e.touches[0].clientY;
-    dragRef.current.startCollapsed = panelCollapsed;
-  }, [panelCollapsed]);
-
-  const handleDragHandleTouchEnd = useCallback((e) => {
-    const dy = e.changedTouches[0].clientY - dragRef.current.startY;
-    if (Math.abs(dy) > 60) {
-      setPanelCollapsed(dy > 0);
-    }
-  }, []);
-
   const handleLocationsScroll = useCallback((e) => {
     setShowScrollTop(e.target.scrollTop > 200);
   }, []);
@@ -137,6 +126,9 @@ export default function ChainDetailPage() {
     );
   }
 
+  // Determine panel class for desktop (mobile uses inline sheetStyle)
+  const panelClass = `app__panel ${panelCollapsed ? 'app__panel--collapsed' : ''} app__panel--snap-${snapState}`;
+
   return (
     <div className="chain-detail">
       <div className="chain-detail__map">
@@ -148,7 +140,11 @@ export default function ChainDetailPage() {
         />
       </div>
 
-      <aside className={`app__panel ${panelCollapsed ? 'app__panel--collapsed' : ''}`}>
+      <aside
+        className={panelClass}
+        style={window.innerWidth <= 768 ? sheetStyle : undefined}
+      >
+        {/* Desktop toggle */}
         <button
           className="app__panel-toggle"
           onClick={() => setPanelCollapsed((c) => !c)}
@@ -157,12 +153,10 @@ export default function ChainDetailPage() {
           {panelCollapsed ? '\u25C0' : '\u25B6'}
         </button>
 
+        {/* Mobile drag handle */}
         <div
-          className="panel__drag-handle"
-          onClick={() => setPanelCollapsed((c) => !c)}
-          onTouchStart={handleDragHandleTouchStart}
-          onTouchEnd={handleDragHandleTouchEnd}
-          style={{ touchAction: 'none' }}
+          className={`panel__drag-handle ${isDragging ? 'panel__drag-handle--active' : ''}`}
+          {...handleProps}
         >
           <div className="panel__drag-handle-bar" />
         </div>

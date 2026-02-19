@@ -3,7 +3,7 @@
     "slug": "bagels-and-beans",
     "description": "Popular Dutch café chain serving fresh bagels, specialty coffee, and homemade juices",
     "website": "https://www.bagelsbeans.nl",
-    "logo_url": "https://www.bagelsbeans.nl/favicon.ico",
+    "logo_url": "https://www.google.com/s2/favicons?sz=128&domain=bagelsbeans.nl",
     "locations": [
         {
             "id": "bb-001",

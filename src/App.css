@@ -390,7 +390,7 @@
     height: 100%;
   }
 
-  /* Bottom sheet: GPU-accelerated transform instead of max-height */
+  /* Bottom sheet: full height, position controlled by useBottomSheet hook */
   .app__panel {
     position: absolute;
     top: auto;
@@ -398,19 +398,19 @@
     left: 0;
     right: 0;
     width: 100%;
-    height: 65dvh;
+    height: calc(100dvh - var(--nav-height));
     border-left: none;
     border-top: 1px solid var(--border-strong);
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     box-shadow: 0 -4px 24px rgba(28, 23, 19, 0.12);
-    animation: slideUpSheet 0.5s var(--ease-sheet) backwards;
-    transition: transform 0.4s var(--ease-sheet);
-    transform: translateY(0);
+    /* Animation handled by inline sheetStyle from hook */
+    animation: none;
   }
 
-  /* Collapsed: show only drag handle + header (~80px) */
+  /* Collapsed class no longer drives transform on mobile — hook does */
   .app__panel--collapsed {
-    transform: translateY(calc(100% - 80px));
+    transform: none;
+    /* Overridden by inline sheetStyle */
   }
 
   .app__panel-toggle {
@@ -444,9 +444,11 @@
     opacity: 1;
   }
 
-  .panel__drag-handle:active .panel__drag-handle-bar {
+  .panel__drag-handle:active .panel__drag-handle-bar,
+  .panel__drag-handle--active .panel__drag-handle-bar {
     background: var(--accent);
     opacity: 1;
+    width: 56px;
   }
 
   .panel__header {
@@ -487,6 +489,12 @@
   }
 
   .panel__progress {
+    padding: 10px 20px;
+  }
+
+  /* Show progress in full-screen mode */
+  .app__panel--snap-collapsed .panel__progress,
+  .app__panel--snap-half .panel__progress {
     display: none;
   }
 

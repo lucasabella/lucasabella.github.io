@@ -3,7 +3,7 @@
     "slug": "sumo",
     "description": "All-you-can-eat Japanese sushi & grill restaurant chain",
     "website": "https://www.restaurantsumo.com",
-    "logo_url": "https://www.restaurantsumo.com/favicon.ico",
+    "logo_url": "https://www.google.com/s2/favicons?sz=128&domain=restaurantsumo.com",
     "locations": [
         {
             "id": "sumo-001",
