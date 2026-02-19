@@ -112,11 +112,7 @@ export default function LoginPage() {
           <span>or</span>
         </div>
 
-        <div
-          id="google-signin-btn"
-          className="auth-google"
-          data-callback="__handleGoogleCallback"
-        />
+        <div id="google-signin-btn" className="auth-google" />
 
         <p className="auth-switch">
           Don&apos;t have an account?{' '}

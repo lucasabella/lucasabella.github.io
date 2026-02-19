@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import '../Login/AuthForm.css';
@@ -35,7 +35,36 @@ export default function RegisterPage() {
     }
   };
 
-  window.__handleGoogleCallback = handleGoogleCallback;
+  useEffect(() => {
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    if (!clientId) return;
+
+    const initGoogle = () => {
+      if (!window.google?.accounts?.id) return false;
+      window.google.accounts.id.initialize({
+        client_id: clientId,
+        callback: handleGoogleCallback,
+      });
+      const btn = document.getElementById('google-signin-btn');
+      if (btn) {
+        window.google.accounts.id.renderButton(btn, {
+          theme: 'outline',
+          size: 'large',
+          width: btn.offsetWidth || 320,
+          text: 'signup_with',
+          shape: 'rectangular',
+        });
+      }
+      return true;
+    };
+
+    if (!initGoogle()) {
+      const interval = setInterval(() => {
+        if (initGoogle()) clearInterval(interval);
+      }, 100);
+      return () => clearInterval(interval);
+    }
+  }, []);
 
   return (
     <div className="auth-page">
@@ -96,11 +125,7 @@ export default function RegisterPage() {
           <span>or</span>
         </div>
 
-        <div
-          id="google-signin-btn"
-          className="auth-google"
-          data-callback="__handleGoogleCallback"
-        />
+        <div id="google-signin-btn" className="auth-google" />
 
         <p className="auth-switch">
           Already have an account?{' '}
