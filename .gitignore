@@ -12,6 +12,8 @@
 .env.development.local
 .env.test.local
 .env.production.local
+backend/.env
+backend/.env.*
 
 # logs
 npm-debug.log*
@@ -35,3 +37,7 @@ Thumbs.db
 # misc
 *.tgz
 .eslintcache
+
+# boilerplate assets
+public/vite.svg
+src/assets/react.svg

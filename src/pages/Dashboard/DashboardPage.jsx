@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useApi } from '../../hooks/useApi';
+import { useAuth } from '../../contexts/AuthContext';
 import ChainCard from './ChainCard';
 import './DashboardPage.css';
 
 export default function DashboardPage() {
   const apiFetch = useApi();
+  const { user } = useAuth();
   const [chains, setChains] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -32,7 +34,9 @@ export default function DashboardPage() {
   return (
     <div className="dashboard">
       <div className="dashboard__header">
-        <h1 className="dashboard__title">Your Chains</h1>
+        <h1 className="dashboard__title">
+          {user ? `Welcome back, ${user.name || user.email?.split('@')[0]}` : 'Your Chains'}
+        </h1>
         <p className="dashboard__subtitle">Pick a chain and start chasing</p>
       </div>
 

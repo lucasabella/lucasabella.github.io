@@ -5,16 +5,19 @@
   min-height: 100dvh;
   padding: 1.5rem;
   background: var(--bg-deep);
+  /* Subtle gold radial glow */
+  background-image: radial-gradient(ellipse 60% 40% at 50% 30%, rgba(252, 211, 77, 0.06) 0%, transparent 70%);
 }
 
 .auth-card {
   width: 100%;
   max-width: 400px;
-  background: var(--surface-1);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--bg-surface);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   padding: 2.5rem 2rem;
-  animation: fadeIn 0.4s ease-out;
+  animation: scaleIn 0.35s var(--ease-out) both;
+  box-shadow: var(--shadow-lg), 0 0 40px rgba(252, 211, 77, 0.04);
 }
 
 .auth-header {
@@ -58,21 +61,22 @@
 
 .auth-field label {
   display: block;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   color: var(--text-secondary);
   margin-bottom: 0.35rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.07em;
 }
 
 .auth-field input {
   width: 100%;
   padding: 0.65rem 0.85rem;
-  background: var(--surface-2);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
-  font-size: 0.95rem;
+  font-size: 1rem; /* 16px — prevents iOS auto-zoom */
   font-family: var(--font-body);
   transition: border-color 0.2s;
   box-sizing: border-box;
@@ -81,6 +85,7 @@
 .auth-field input:focus {
   outline: none;
   border-color: var(--gold-400);
+  box-shadow: 0 0 0 3px rgba(252, 211, 77, 0.1);
 }
 
 .auth-submit {
@@ -100,6 +105,10 @@
 .auth-submit:hover:not(:disabled) {
   background: var(--gold-300);
   transform: translateY(-1px);
+}
+
+.auth-submit:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .auth-submit:disabled {
@@ -149,4 +158,15 @@
 
 .auth-switch a:hover {
   text-decoration: underline;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 2rem 1.25rem;
+  }
+
+  .auth-title {
+    font-size: 1.7rem;
+  }
 }

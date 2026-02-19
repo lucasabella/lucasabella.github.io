@@ -1,17 +1,40 @@
 .chain-card {
-  background: var(--surface-1);
+  background: var(--bg-card);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   cursor: pointer;
-  transition: all 0.25s var(--ease-out);
+  transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), border-color 0.25s var(--ease-out);
   animation: slideUp 0.4s var(--ease-out) both;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.chain-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 60% 0%, rgba(252, 211, 77, 0.08) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out);
+  pointer-events: none;
 }
 
 .chain-card:hover {
-  border-color: rgba(252, 211, 77, 0.25);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  border-color: rgba(252, 211, 77, 0.3);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md), 0 0 24px rgba(252, 211, 77, 0.06);
+}
+
+.chain-card:hover::after {
+  opacity: 1;
+}
+
+.chain-card:active {
+  transform: translateY(-1px) scale(0.99);
 }
 
 .chain-card__header {

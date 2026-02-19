@@ -41,3 +41,23 @@
   padding: 4rem 1rem;
   font-size: 1rem;
 }
+
+/* Mobile */
+@media (max-width: 480px) {
+  .dashboard {
+    padding: 1.25rem 1rem;
+  }
+
+  .dashboard__header {
+    margin-bottom: 1.25rem;
+  }
+
+  .dashboard__title {
+    font-size: 1.5rem;
+  }
+
+  .dashboard__grid {
+    grid-template-columns: 1fr;
+    gap: 0.875rem;
+  }
+}

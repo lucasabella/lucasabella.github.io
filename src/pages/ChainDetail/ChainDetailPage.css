@@ -3,6 +3,8 @@
   flex: 1;
   position: relative;
   overflow: hidden;
+  /* Fill remaining height after the nav bar */
+  height: calc(100dvh - var(--nav-height));
 }
 
 .chain-detail--loading,
@@ -17,4 +19,19 @@
 
 .chain-detail__map {
   flex: 1;
+  height: 100%;
+}
+
+/* Mobile: map fills full screen behind sheet */
+@media (max-width: 768px) {
+  .chain-detail {
+    height: calc(100dvh - var(--nav-height));
+  }
+
+  .chain-detail__map {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    width: 100%;
+  }
 }

@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import Map from '../../components/Map/Map';
 import ProgressBar from '../../components/ProgressBar/ProgressBar';
 import LocationCard from '../../components/LocationCard/LocationCard';
@@ -11,6 +11,7 @@ const FILTERS = ['All', 'Visited', 'Remaining'];
 
 export default function ChainDetailPage() {
   const { slug } = useParams();
+  const navigate = useNavigate();
   const apiFetch = useApi();
   const [chain, setChain] = useState(null);
   const [locations, setLocations] = useState([]);
@@ -19,6 +20,7 @@ export default function ChainDetailPage() {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('All');
   const [focusedId, setFocusedId] = useState(null);
+  const dragRef = useRef({ startY: 0, startCollapsed: false });
 
   const { isVisited, toggleVisit, visitedCount, updateFromLocations } = useVisits(locations);
 
@@ -64,6 +66,18 @@ export default function ChainDetailPage() {
     setFocusedId(location.id);
   }, []);
 
+  const handleDragHandleTouchStart = useCallback((e) => {
+    dragRef.current.startY = e.touches[0].clientY;
+    dragRef.current.startCollapsed = panelCollapsed;
+  }, [panelCollapsed]);
+
+  const handleDragHandleTouchEnd = useCallback((e) => {
+    const dy = e.changedTouches[0].clientY - dragRef.current.startY;
+    if (Math.abs(dy) > 60) {
+      setPanelCollapsed(dy > 0);
+    }
+  }, []);
+
   if (loading) {
     return (
       <div className="chain-detail chain-detail--loading">
@@ -100,11 +114,22 @@ export default function ChainDetailPage() {
           {panelCollapsed ? '\u25C0' : '\u25B6'}
         </button>
 
-        <div className="panel__drag-handle" onClick={() => setPanelCollapsed((c) => !c)}>
+        <div
+          className="panel__drag-handle"
+          onClick={() => setPanelCollapsed((c) => !c)}
+          onTouchStart={handleDragHandleTouchStart}
+          onTouchEnd={handleDragHandleTouchEnd}
+          style={{ touchAction: 'none' }}
+        >
           <div className="panel__drag-handle-bar" />
         </div>
 
         <div className="panel__header">
+          <div className="panel__back-row">
+            <button className="panel__back" onClick={() => navigate('/dashboard')} aria-label="Back to dashboard">
+              ← Dashboard
+            </button>
+          </div>
           <div className="panel__brand">
             <span className="panel__logo">
               Chain<span className="panel__logo-accent">Chaser</span>

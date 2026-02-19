@@ -58,6 +58,25 @@
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
   --shadow-gold: 0 0 20px rgba(252, 211, 77, 0.08);
+
+  /* — Surface aliases (used by auth & layout components) — */
+  --surface-1: var(--bg-surface);
+  --surface-2: var(--bg-deep);
+
+  /* — Layout — */
+  --nav-height: 52px;
+
+  /* — Z-index scale — */
+  --z-nav: 100;
+  --z-panel: 1000;
+  --z-overlay: 2000;
+
+  /* — Glass-morphism — */
+  --glass-bg: rgba(17, 24, 39, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.07);
+
+  /* — Sheet animation curve — */
+  --ease-sheet: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 html {
@@ -202,4 +221,25 @@ a {
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.6; }
+}
+
+@keyframes slideUpSheet {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  from { background-position: -200% center; }
+  to { background-position: 200% center; }
+}
+
+/* Map popup — mobile */
+@media (max-width: 480px) {
+  .leaflet-popup-content-wrapper {
+    max-width: 220px !important;
+  }
+
+  .leaflet-popup {
+    margin-bottom: 8px !important;
+  }
 }
