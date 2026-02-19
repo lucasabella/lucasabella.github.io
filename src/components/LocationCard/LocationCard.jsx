@@ -32,7 +32,7 @@ export default function LocationCard({ location, visited = false, onToggle, onFo
           }}
           aria-label={visited ? 'Mark as not visited' : 'Mark as visited'}
         >
-          {visited ? '✓' : ''}
+          {visited ? 'Visited' : 'Mark as visited'}
         </button>
       </div>
     </div>

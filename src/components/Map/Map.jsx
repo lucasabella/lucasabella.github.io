@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { useTheme } from '../../contexts/ThemeContext';
 import './Map.css';
 
 //test
@@ -48,10 +49,15 @@ function FlyToLocation({ locations, focusedId }) {
 
 export default function Map({ locations = [], isVisited, onToggleVisit, focusedId }) {
   const mapRef = useRef(null);
+  const { theme } = useTheme();
 
   // Netherlands center
   const center = [52.2, 5.3];
   const zoom = 8;
+
+  const tileUrl = theme === 'dark'
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
 
   return (
     <div className="map-wrapper">
@@ -64,8 +70,9 @@ export default function Map({ locations = [], isVisited, onToggleVisit, focusedI
         scrollWheelZoom={true}
       >
         <TileLayer
+          key={tileUrl}
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          url={tileUrl}
         />
 
         <FlyToLocation locations={locations} focusedId={focusedId} />
