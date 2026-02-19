@@ -30,7 +30,7 @@
   background: var(--bg-surface);
   border-left: 1px solid var(--border-strong);
   box-shadow: -4px 0 24px rgba(28, 23, 19, 0.10);
-  animation: slideInRight 0.5s var(--ease-out) both;
+  animation: slideInRight 0.5s var(--ease-out) backwards;
   transition: transform 0.4s var(--ease-out);
   will-change: transform;
 }
@@ -335,7 +335,7 @@
     border-top: 1px solid var(--border-strong);
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     box-shadow: 0 -4px 24px rgba(28, 23, 19, 0.12);
-    animation: slideUpSheet 0.5s var(--ease-sheet) both;
+    animation: slideUpSheet 0.5s var(--ease-sheet) backwards;
     transition: transform 0.4s var(--ease-sheet);
     transform: translateY(0);
   }
