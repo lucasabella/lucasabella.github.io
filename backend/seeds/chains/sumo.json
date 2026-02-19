@@ -1,0 +1,81 @@
+{
+    "chain": "Sumo",
+    "slug": "sumo",
+    "description": "All-you-can-eat Japanese sushi & grill restaurant chain",
+    "website": "https://www.restaurantsumo.com",
+    "logo_url": "https://www.restaurantsumo.com/favicon.ico",
+    "locations": [
+        {
+            "id": "sumo-001",
+            "name": "Sumo Amsterdam Leidseplein",
+            "address": "Korte Leidsedwarsstraat 51, 1017 PW Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3638,
+            "lng": 4.8825
+        },
+        {
+            "id": "sumo-002",
+            "name": "Sumo Amsterdam Centrum",
+            "address": "Damrak 28, 1012 LJ Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3750,
+            "lng": 4.8951
+        },
+        {
+            "id": "sumo-003",
+            "name": "Sumo Amsterdam Zuid",
+            "address": "Beethovenstraat 58, 1077 JK Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3467,
+            "lng": 4.8783
+        },
+        {
+            "id": "sumo-004",
+            "name": "Sumo Rotterdam Markthal",
+            "address": "Verlengde Nieuwstraat 2-5, 3011 GK Rotterdam",
+            "city": "Rotterdam",
+            "lat": 51.9205,
+            "lng": 4.4870
+        },
+        {
+            "id": "sumo-005",
+            "name": "Sumo Rotterdam Kralingen",
+            "address": "Kralingse Zoom 91, 3063 ND Rotterdam",
+            "city": "Rotterdam",
+            "lat": 51.9283,
+            "lng": 4.5173
+        },
+        {
+            "id": "sumo-006",
+            "name": "Sumo Den Haag",
+            "address": "Herengracht 2-6, 2511 EJ Den Haag",
+            "city": "Den Haag",
+            "lat": 52.0784,
+            "lng": 4.3123
+        },
+        {
+            "id": "sumo-007",
+            "name": "Sumo Scheveningen",
+            "address": "Palacestraat 8, 2584 HW Scheveningen",
+            "city": "Scheveningen",
+            "lat": 52.1164,
+            "lng": 4.2810
+        },
+        {
+            "id": "sumo-008",
+            "name": "Sumo Arnhem",
+            "address": "Jansplein 52B, 6811 GE Arnhem",
+            "city": "Arnhem",
+            "lat": 51.9843,
+            "lng": 5.9129
+        },
+        {
+            "id": "sumo-009",
+            "name": "Sumo Nijmegen",
+            "address": "Molenstraat 57, 6511 HD Nijmegen",
+            "city": "Nijmegen",
+            "lat": 51.8472,
+            "lng": 5.8632
+        }
+    ]
+}

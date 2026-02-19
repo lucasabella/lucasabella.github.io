@@ -1,0 +1,361 @@
+{
+    "chain": "FEBO",
+    "slug": "febo",
+    "description": "Iconic Dutch automaat chain — famous for their kroketten and frikandellen from the wall",
+    "website": "https://www.febo.nl",
+    "logo_url": "https://www.febo.nl/favicon.ico",
+    "locations": [
+        {
+            "id": "febo-001",
+            "name": "FEBO Reguliersbreestraat",
+            "address": "Reguliersbreestraat 38, 1017 CN Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3657,
+            "lng": 4.8952
+        },
+        {
+            "id": "febo-002",
+            "name": "FEBO Leidsestraat",
+            "address": "Leidsestraat 94, 1017 PG Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3643,
+            "lng": 4.8839
+        },
+        {
+            "id": "febo-003",
+            "name": "FEBO Ferdinand Bolstraat",
+            "address": "Ferdinand Bolstraat 33, 1072 LA Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3568,
+            "lng": 4.8927
+        },
+        {
+            "id": "febo-004",
+            "name": "FEBO Kinkerstraat",
+            "address": "Kinkerstraat 36, 1053 EA Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3678,
+            "lng": 4.8697
+        },
+        {
+            "id": "febo-005",
+            "name": "FEBO Nieuwendijk 50",
+            "address": "Nieuwendijk 50, 1012 MB Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3767,
+            "lng": 4.8935
+        },
+        {
+            "id": "febo-006",
+            "name": "FEBO Nieuwendijk 220",
+            "address": "Nieuwendijk 220, 1012 MH Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3794,
+            "lng": 4.8921
+        },
+        {
+            "id": "febo-007",
+            "name": "FEBO Amsteldijk",
+            "address": "Amsteldijk 4, 1074 HP Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3535,
+            "lng": 4.9030
+        },
+        {
+            "id": "febo-008",
+            "name": "FEBO Van Woustraat",
+            "address": "Van Woustraat 4, 1073 LL Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3558,
+            "lng": 4.8973
+        },
+        {
+            "id": "febo-009",
+            "name": "FEBO Oudezijds Voorburgwal",
+            "address": "Oudezijds Voorburgwal 33, 1012 EH Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3749,
+            "lng": 4.8980
+        },
+        {
+            "id": "febo-010",
+            "name": "FEBO Bos en Lommerplein",
+            "address": "Bos en Lommerplein 176, 1055 EK Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3752,
+            "lng": 4.8530
+        },
+        {
+            "id": "febo-011",
+            "name": "FEBO Javaplein",
+            "address": "Javaplein 21, 1095 CJ Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3618,
+            "lng": 4.9286
+        },
+        {
+            "id": "febo-012",
+            "name": "FEBO Linnaeusstraat",
+            "address": "Linnaeusstraat 64, 1092 CL Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3610,
+            "lng": 4.9215
+        },
+        {
+            "id": "febo-013",
+            "name": "FEBO Eerste van Swindenstraat",
+            "address": "Eerste van Swindenstraat 22, 1093 GD Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3610,
+            "lng": 4.9293
+        },
+        {
+            "id": "febo-014",
+            "name": "FEBO Hugo de Grootplein",
+            "address": "Hugo de Grootplein 3, 1052 KW Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3775,
+            "lng": 4.8704
+        },
+        {
+            "id": "febo-015",
+            "name": "FEBO Martelaarsgracht",
+            "address": "Martelaarsgracht 1, 1012 TP Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3789,
+            "lng": 4.8965
+        },
+        {
+            "id": "febo-016",
+            "name": "FEBO Stadionplein",
+            "address": "Stadionplein 73, 1076 CJ Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3437,
+            "lng": 4.8733
+        },
+        {
+            "id": "febo-017",
+            "name": "FEBO Osdorpplein",
+            "address": "Osdorpplein 342, 1068 EW Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3588,
+            "lng": 4.8097
+        },
+        {
+            "id": "febo-018",
+            "name": "FEBO Buikslotermeerplein",
+            "address": "Buikslotermeerplein 340, 1025 EP Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.4007,
+            "lng": 4.9397
+        },
+        {
+            "id": "febo-019",
+            "name": "FEBO Bijlmerplein",
+            "address": "Bijlmerplein 675, 1102 DK Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3125,
+            "lng": 4.9475
+        },
+        {
+            "id": "febo-020",
+            "name": "FEBO Galileïplantsoen",
+            "address": "Galileïplantsoen 14, 1098 NA Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3518,
+            "lng": 4.9362
+        },
+        {
+            "id": "febo-021",
+            "name": "FEBO Almere Diagonaal",
+            "address": "Diagonaal 60, 1315 XK Almere",
+            "city": "Almere",
+            "lat": 52.3750,
+            "lng": 5.2175
+        },
+        {
+            "id": "febo-022",
+            "name": "FEBO Almere Buiten",
+            "address": "Evenaar 148, 1354 ES Almere",
+            "city": "Almere",
+            "lat": 52.3498,
+            "lng": 5.2762
+        },
+        {
+            "id": "febo-023",
+            "name": "FEBO Amersfoort",
+            "address": "Utrechtsestraat 40, 3811 NB Amersfoort",
+            "city": "Amersfoort",
+            "lat": 52.1561,
+            "lng": 5.3878
+        },
+        {
+            "id": "febo-024",
+            "name": "FEBO Amstelveen",
+            "address": "Binnenhof 61, 1181 NB Amstelveen",
+            "city": "Amstelveen",
+            "lat": 52.3022,
+            "lng": 4.8624
+        },
+        {
+            "id": "febo-025",
+            "name": "FEBO Beverwijk",
+            "address": "Breestraat 89, 1941 EH Beverwijk",
+            "city": "Beverwijk",
+            "lat": 52.4830,
+            "lng": 4.6567
+        },
+        {
+            "id": "febo-026",
+            "name": "FEBO Den Bosch",
+            "address": "Visstraat 1, 5211 DN Den Bosch",
+            "city": "Den Bosch",
+            "lat": 51.6872,
+            "lng": 5.3068
+        },
+        {
+            "id": "febo-027",
+            "name": "FEBO Gorinchem",
+            "address": "Langendijk 62, 4201 CK Gorinchem",
+            "city": "Gorinchem",
+            "lat": 51.8308,
+            "lng": 4.9724
+        },
+        {
+            "id": "febo-028",
+            "name": "FEBO Groningen",
+            "address": "Gelkingestraat 1, 9711 NA Groningen",
+            "city": "Groningen",
+            "lat": 53.2165,
+            "lng": 5.7196
+        },
+        {
+            "id": "febo-029",
+            "name": "FEBO Haarlem Centrum",
+            "address": "Grote Houtstraat 88, 2011 SR Haarlem",
+            "city": "Haarlem",
+            "lat": 52.3803,
+            "lng": 4.6358
+        },
+        {
+            "id": "febo-030",
+            "name": "FEBO Haarlem Schalkwijk",
+            "address": "Rivièraweg 2, 2037 AR Haarlem",
+            "city": "Haarlem",
+            "lat": 52.3629,
+            "lng": 4.6480
+        },
+        {
+            "id": "febo-031",
+            "name": "FEBO Heerhugowaard",
+            "address": "Middenweg 120, 1703 RG Heerhugowaard",
+            "city": "Heerhugowaard",
+            "lat": 52.6698,
+            "lng": 4.8471
+        },
+        {
+            "id": "febo-032",
+            "name": "FEBO Hilversum",
+            "address": "Kerkstraat 81, 1211 CL Hilversum",
+            "city": "Hilversum",
+            "lat": 52.2244,
+            "lng": 5.1762
+        },
+        {
+            "id": "febo-033",
+            "name": "FEBO Hoofddorp",
+            "address": "Marktlaan 88, 2132 DL Hoofddorp",
+            "city": "Hoofddorp",
+            "lat": 52.3024,
+            "lng": 4.6890
+        },
+        {
+            "id": "febo-034",
+            "name": "FEBO Hoorn Centrum",
+            "address": "Nieuwstraat 18, 1621 EA Hoorn",
+            "city": "Hoorn",
+            "lat": 52.6425,
+            "lng": 5.0609
+        },
+        {
+            "id": "febo-035",
+            "name": "FEBO Hoorn Grote Noord",
+            "address": "Grote Noord 114, 1621 KH Hoorn",
+            "city": "Hoorn",
+            "lat": 52.6432,
+            "lng": 5.0583
+        },
+        {
+            "id": "febo-036",
+            "name": "FEBO Leeuwarden",
+            "address": "Wirdumerdijk 34, 8911 CG Leeuwarden",
+            "city": "Leeuwarden",
+            "lat": 53.2010,
+            "lng": 5.8002
+        },
+        {
+            "id": "febo-037",
+            "name": "FEBO Leiden",
+            "address": "Haarlemmerstraat 23, 2312 DG Leiden",
+            "city": "Leiden",
+            "lat": 52.1605,
+            "lng": 4.4874
+        },
+        {
+            "id": "febo-038",
+            "name": "FEBO Nijmegen",
+            "address": "Broerstraat 57, 6511 KC Nijmegen",
+            "city": "Nijmegen",
+            "lat": 51.8468,
+            "lng": 5.8656
+        },
+        {
+            "id": "febo-039",
+            "name": "FEBO Purmerend",
+            "address": "Kaasmarkt 6, 1441 BG Purmerend",
+            "city": "Purmerend",
+            "lat": 52.5053,
+            "lng": 4.9519
+        },
+        {
+            "id": "febo-040",
+            "name": "FEBO Tilburg",
+            "address": "Heuvelstraat 48, 5038 AH Tilburg",
+            "city": "Tilburg",
+            "lat": 51.5589,
+            "lng": 5.0917
+        },
+        {
+            "id": "febo-041",
+            "name": "FEBO Utrecht",
+            "address": "Voorstraat 28, 3512 AP Utrecht",
+            "city": "Utrecht",
+            "lat": 52.0910,
+            "lng": 5.1208
+        },
+        {
+            "id": "febo-042",
+            "name": "FEBO Zaandam",
+            "address": "Gedempte Gracht 50, 1506 CJ Zaandam",
+            "city": "Zaandam",
+            "lat": 52.4385,
+            "lng": 4.8300
+        },
+        {
+            "id": "febo-043",
+            "name": "FEBO Zoetermeer",
+            "address": "Dorpsstraat 119, 2712 AE Zoetermeer",
+            "city": "Zoetermeer",
+            "lat": 52.0568,
+            "lng": 4.4938
+        },
+        {
+            "id": "febo-044",
+            "name": "FEBO Zwolle",
+            "address": "Diezerstraat 53, 8011 RA Zwolle",
+            "city": "Zwolle",
+            "lat": 52.5105,
+            "lng": 6.0935
+        }
+    ]
+}

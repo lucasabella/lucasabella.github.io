@@ -69,14 +69,33 @@
   text-overflow: ellipsis;
 }
 
+.location-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
 .location-card__city {
   display: inline-block;
   font-size: 11px;
   font-weight: 600;
   color: var(--text-muted);
-  margin-top: 4px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+.location-card__distance {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-light);
+  padding: 1px 6px;
+  border-radius: 99px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
 /* Toggle button — pill */
@@ -116,4 +135,36 @@
   background: var(--accent);
   border-color: var(--accent);
   color: #FFFFFF;
+}
+
+/* — Mobile compact cards — */
+@media (max-width: 768px) {
+  .location-card {
+    padding: 8px 12px;
+    margin-bottom: 4px;
+    min-height: unset;
+    border-radius: var(--radius-sm);
+  }
+
+  .location-card__content {
+    gap: 8px;
+  }
+
+  .location-card__name {
+    font-size: 14px;
+  }
+
+  .location-card__address {
+    display: none;
+  }
+
+  .location-card__city {
+    font-size: 10px;
+    margin-top: 1px;
+  }
+
+  .location-card__toggle {
+    padding: 3px 8px;
+    font-size: 11px;
+  }
 }

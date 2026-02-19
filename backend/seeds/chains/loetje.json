@@ -3,44 +3,311 @@
   "slug": "loetje",
   "description": "Dutch restaurant chain famous for their biefstuk in jus",
   "website": "https://www.loetje.nl",
+  "logo_url": "https://www.loetje.nl/favicon.ico",
   "locations": [
-    { "id": "loetje-001", "name": "Caf\u00e9 Loetje (The Original)", "address": "Johannes Vermeerstraat 52, 1071 DS Amsterdam", "city": "Amsterdam", "lat": 52.3549, "lng": 4.8922 },
-    { "id": "loetje-002", "name": "Loetje Centraal", "address": "Stationsplein 10, 1012 AB Amsterdam", "city": "Amsterdam", "lat": 52.3791, "lng": 4.8981 },
-    { "id": "loetje-003", "name": "Loetje aan 't IJ", "address": "Lincolnweg 31, 1013 LR Amsterdam", "city": "Amsterdam", "lat": 52.3856, "lng": 4.8933 },
-    { "id": "loetje-004", "name": "Loetje Oost", "address": "Ruyschstraat 15, 1091 BT Amsterdam", "city": "Amsterdam", "lat": 52.3611, "lng": 4.9158 },
-    { "id": "loetje-005", "name": "Loetje Zuidas", "address": "Parnassusweg 1021, 1082 LN Amsterdam", "city": "Amsterdam", "lat": 52.3396, "lng": 4.874 },
-    { "id": "loetje-006", "name": "Loetje Aan de Amstel", "address": "Amsteldijk 36, 1074 HR Amsterdam", "city": "Amsterdam", "lat": 52.3513, "lng": 4.9053 },
-    { "id": "loetje-009", "name": "Loetje Overveen", "address": "Bloemendaalseweg 60, 2051 GJ Overveen", "city": "Overveen", "lat": 52.3914, "lng": 4.6025 },
-    { "id": "loetje-010", "name": "Loetje Leiden", "address": "Steenstraat 51, 2312 BT Leiden", "city": "Leiden", "lat": 52.1601, "lng": 4.4893 },
-    { "id": "loetje-011", "name": "Loetje Haarlem", "address": "Gedempte Oude Gracht 34, 2011 GR Haarlem", "city": "Haarlem", "lat": 52.3814, "lng": 4.637 },
-    { "id": "loetje-012", "name": "Loetje Hilversum", "address": "Kerkbrink 3, 1211 BX Hilversum", "city": "Hilversum", "lat": 52.2239, "lng": 5.1764 },
-    { "id": "loetje-013", "name": "Loetje Utrecht", "address": "Oudegracht 136, 3511 AV Utrecht", "city": "Utrecht", "lat": 52.0907, "lng": 5.117 },
-    { "id": "loetje-014", "name": "Loetje Breukelen", "address": "Stationsweg 1, 3621 LJ Breukelen", "city": "Breukelen", "lat": 52.1712, "lng": 4.9924 },
-    { "id": "loetje-015", "name": "Loetje Rotterdam Centrum", "address": "Binnenrotte 124, 3011 HC Rotterdam", "city": "Rotterdam", "lat": 51.9214, "lng": 4.4893 },
-    { "id": "loetje-016", "name": "Loetje Rotterdam Kop van Zuid", "address": "Wilhelminakade 327, 3072 AR Rotterdam", "city": "Rotterdam", "lat": 51.9027, "lng": 4.487 },
-    { "id": "loetje-017", "name": "Loetje Den Haag Centrum", "address": "Lange Houtstraat 3, 2511 CV Den Haag", "city": "Den Haag", "lat": 52.0801, "lng": 4.3131 },
-    { "id": "loetje-018", "name": "Loetje Delft", "address": "Voldersgracht 1, 2611 ER Delft", "city": "Delft", "lat": 52.0116, "lng": 4.3571 },
-    { "id": "loetje-019", "name": "Loetje Breda", "address": "Grote Markt 32, 4811 XR Breda", "city": "Breda", "lat": 51.5889, "lng": 4.7757 },
-    { "id": "loetje-020", "name": "Loetje Eindhoven", "address": "Markt 16, 5611 EB Eindhoven", "city": "Eindhoven", "lat": 51.438, "lng": 5.4787 },
-    { "id": "loetje-021", "name": "Loetje Arnhem", "address": "Korenmarkt 2, 6811 GR Arnhem", "city": "Arnhem", "lat": 51.9835, "lng": 5.9119 },
-    { "id": "loetje-022", "name": "Loetje Nijmegen", "address": "Mari\u00ebnburg 36, 6511 PS Nijmegen", "city": "Nijmegen", "lat": 51.8475, "lng": 5.8651 },
-    { "id": "loetje-023", "name": "Loetje Almere Centrum", "address": "Mandelaplein 1, 1315 KG Almere", "city": "Almere", "lat": 52.3759, "lng": 5.2188 },
-    { "id": "loetje-024", "name": "Loetje Almere Noorderplassen", "address": "Oortdreef 2, 1324 KZ Almere", "city": "Almere", "lat": 52.3926, "lng": 5.2508 },
-    { "id": "loetje-025", "name": "Loetje Huizen", "address": "Havenstraat 32, 1271 AD Huizen", "city": "Huizen", "lat": 52.2985, "lng": 5.24 },
-    { "id": "loetje-026", "name": "Loetje Laren", "address": "Brink 55, 1251 KR Laren", "city": "Laren", "lat": 52.2579, "lng": 5.2285 },
-    { "id": "loetje-027", "name": "Loetje Enschede", "address": "Oude Markt 7, 7511 GA Enschede", "city": "Enschede", "lat": 52.2198, "lng": 6.8936 },
-    { "id": "loetje-028", "name": "Loetje Zwolle", "address": "Melkmarkt 25, 8011 MB Zwolle", "city": "Zwolle", "lat": 52.5126, "lng": 6.0945 },
-    { "id": "loetje-029", "name": "Loetje Leeuwarden", "address": "Wirdumerdijk 12, 8911 CB Leeuwarden", "city": "Leeuwarden", "lat": 53.2013, "lng": 5.799 },
-    { "id": "loetje-030", "name": "Loetje Maastricht", "address": "Boschstraat 24, 6211 AX Maastricht", "city": "Maastricht", "lat": 50.8538, "lng": 5.6882 },
-    { "id": "loetje-031", "name": "Loetje Vught", "address": "Taalstraat 82, 5261 BJ Vught", "city": "Vught", "lat": 51.6576, "lng": 5.2935 },
-    { "id": "loetje-032", "name": "Loetje Gorssel", "address": "Hoofdstraat 28, 7213 CW Gorssel", "city": "Gorssel", "lat": 52.2099, "lng": 6.1867 },
-    { "id": "loetje-033", "name": "Loetje Houten", "address": "Het Rond 4, 3995 DJ Houten", "city": "Houten", "lat": 52.0289, "lng": 5.1684 },
-    { "id": "loetje-034", "name": "Loetje Zeist", "address": "Het Rond 17, 3701 HS Zeist", "city": "Zeist", "lat": 52.0894, "lng": 5.2288 },
-    { "id": "loetje-035", "name": "Loetje Ouderkerk aan de Amstel", "address": "Amstelzijde 51, 1184 TZ Ouderkerk aan de Amstel", "city": "Ouderkerk aan de Amstel", "lat": 52.2963, "lng": 4.9083 },
-    { "id": "loetje-036", "name": "Loetje Bergen", "address": "Plein 19, 1861 JK Bergen", "city": "Bergen", "lat": 52.6687, "lng": 4.7073 },
-    { "id": "loetje-037", "name": "Loetje Paterswolde", "address": "Hoofdweg 174, 9765 CJ Paterswolde", "city": "Paterswolde", "lat": 53.1437, "lng": 6.5638 },
-    { "id": "loetje-038", "name": "Loetje Oegstgeest", "address": "Klinkenbergerplas 1, 2342 KH Oegstgeest", "city": "Oegstgeest", "lat": 52.1788, "lng": 4.462 },
-    { "id": "loetje-039", "name": "Loetje Den Haag Binckhorst", "address": "Saturnusstraat 100, 2516 AH Den Haag", "city": "Den Haag", "lat": 52.0609, "lng": 4.3301 },
-    { "id": "loetje-040", "name": "Loetje Reeuwijk", "address": "Burgemeester Lucasselaan 1, 2811 CA Reeuwijk", "city": "Reeuwijk", "lat": 52.0427, "lng": 4.7415 }
+    {
+      "id": "loetje-001",
+      "name": "Caf\u00e9 Loetje (The Original)",
+      "address": "Johannes Vermeerstraat 52, 1071 DS Amsterdam",
+      "city": "Amsterdam",
+      "lat": 52.3549,
+      "lng": 4.8922
+    },
+    {
+      "id": "loetje-002",
+      "name": "Loetje Centraal",
+      "address": "Stationsplein 10, 1012 AB Amsterdam",
+      "city": "Amsterdam",
+      "lat": 52.3791,
+      "lng": 4.8981
+    },
+    {
+      "id": "loetje-003",
+      "name": "Loetje aan 't IJ",
+      "address": "Lincolnweg 31, 1013 LR Amsterdam",
+      "city": "Amsterdam",
+      "lat": 52.3856,
+      "lng": 4.8933
+    },
+    {
+      "id": "loetje-004",
+      "name": "Loetje Oost",
+      "address": "Ruyschstraat 15, 1091 BT Amsterdam",
+      "city": "Amsterdam",
+      "lat": 52.3611,
+      "lng": 4.9158
+    },
+    {
+      "id": "loetje-005",
+      "name": "Loetje Zuidas",
+      "address": "Parnassusweg 1021, 1082 LN Amsterdam",
+      "city": "Amsterdam",
+      "lat": 52.3396,
+      "lng": 4.874
+    },
+    {
+      "id": "loetje-006",
+      "name": "Loetje Aan de Amstel",
+      "address": "Amsteldijk 36, 1074 HR Amsterdam",
+      "city": "Amsterdam",
+      "lat": 52.3513,
+      "lng": 4.9053
+    },
+    {
+      "id": "loetje-009",
+      "name": "Loetje Overveen",
+      "address": "Bloemendaalseweg 60, 2051 GJ Overveen",
+      "city": "Overveen",
+      "lat": 52.3914,
+      "lng": 4.6025
+    },
+    {
+      "id": "loetje-010",
+      "name": "Loetje Leiden",
+      "address": "Steenstraat 51, 2312 BT Leiden",
+      "city": "Leiden",
+      "lat": 52.1601,
+      "lng": 4.4893
+    },
+    {
+      "id": "loetje-011",
+      "name": "Loetje Haarlem",
+      "address": "Gedempte Oude Gracht 34, 2011 GR Haarlem",
+      "city": "Haarlem",
+      "lat": 52.3814,
+      "lng": 4.637
+    },
+    {
+      "id": "loetje-012",
+      "name": "Loetje Hilversum",
+      "address": "Kerkbrink 3, 1211 BX Hilversum",
+      "city": "Hilversum",
+      "lat": 52.2239,
+      "lng": 5.1764
+    },
+    {
+      "id": "loetje-013",
+      "name": "Loetje Utrecht",
+      "address": "Oudegracht 136, 3511 AV Utrecht",
+      "city": "Utrecht",
+      "lat": 52.0907,
+      "lng": 5.117
+    },
+    {
+      "id": "loetje-014",
+      "name": "Loetje Breukelen",
+      "address": "Stationsweg 1, 3621 LJ Breukelen",
+      "city": "Breukelen",
+      "lat": 52.1712,
+      "lng": 4.9924
+    },
+    {
+      "id": "loetje-015",
+      "name": "Loetje Rotterdam Centrum",
+      "address": "Binnenrotte 124, 3011 HC Rotterdam",
+      "city": "Rotterdam",
+      "lat": 51.9214,
+      "lng": 4.4893
+    },
+    {
+      "id": "loetje-016",
+      "name": "Loetje Rotterdam Kop van Zuid",
+      "address": "Wilhelminakade 327, 3072 AR Rotterdam",
+      "city": "Rotterdam",
+      "lat": 51.9027,
+      "lng": 4.487
+    },
+    {
+      "id": "loetje-017",
+      "name": "Loetje Den Haag Centrum",
+      "address": "Lange Houtstraat 3, 2511 CV Den Haag",
+      "city": "Den Haag",
+      "lat": 52.0801,
+      "lng": 4.3131
+    },
+    {
+      "id": "loetje-018",
+      "name": "Loetje Delft",
+      "address": "Voldersgracht 1, 2611 ER Delft",
+      "city": "Delft",
+      "lat": 52.0116,
+      "lng": 4.3571
+    },
+    {
+      "id": "loetje-019",
+      "name": "Loetje Breda",
+      "address": "Grote Markt 32, 4811 XR Breda",
+      "city": "Breda",
+      "lat": 51.5889,
+      "lng": 4.7757
+    },
+    {
+      "id": "loetje-020",
+      "name": "Loetje Eindhoven",
+      "address": "Markt 16, 5611 EB Eindhoven",
+      "city": "Eindhoven",
+      "lat": 51.438,
+      "lng": 5.4787
+    },
+    {
+      "id": "loetje-021",
+      "name": "Loetje Arnhem",
+      "address": "Korenmarkt 2, 6811 GR Arnhem",
+      "city": "Arnhem",
+      "lat": 51.9835,
+      "lng": 5.9119
+    },
+    {
+      "id": "loetje-022",
+      "name": "Loetje Nijmegen",
+      "address": "Mari\u00ebnburg 36, 6511 PS Nijmegen",
+      "city": "Nijmegen",
+      "lat": 51.8475,
+      "lng": 5.8651
+    },
+    {
+      "id": "loetje-023",
+      "name": "Loetje Almere Centrum",
+      "address": "Mandelaplein 1, 1315 KG Almere",
+      "city": "Almere",
+      "lat": 52.3759,
+      "lng": 5.2188
+    },
+    {
+      "id": "loetje-024",
+      "name": "Loetje Almere Noorderplassen",
+      "address": "Oortdreef 2, 1324 KZ Almere",
+      "city": "Almere",
+      "lat": 52.3926,
+      "lng": 5.2508
+    },
+    {
+      "id": "loetje-025",
+      "name": "Loetje Huizen",
+      "address": "Havenstraat 32, 1271 AD Huizen",
+      "city": "Huizen",
+      "lat": 52.2985,
+      "lng": 5.24
+    },
+    {
+      "id": "loetje-026",
+      "name": "Loetje Laren",
+      "address": "Brink 55, 1251 KR Laren",
+      "city": "Laren",
+      "lat": 52.2579,
+      "lng": 5.2285
+    },
+    {
+      "id": "loetje-027",
+      "name": "Loetje Enschede",
+      "address": "Oude Markt 7, 7511 GA Enschede",
+      "city": "Enschede",
+      "lat": 52.2198,
+      "lng": 6.8936
+    },
+    {
+      "id": "loetje-028",
+      "name": "Loetje Zwolle",
+      "address": "Melkmarkt 25, 8011 MB Zwolle",
+      "city": "Zwolle",
+      "lat": 52.5126,
+      "lng": 6.0945
+    },
+    {
+      "id": "loetje-029",
+      "name": "Loetje Leeuwarden",
+      "address": "Wirdumerdijk 12, 8911 CB Leeuwarden",
+      "city": "Leeuwarden",
+      "lat": 53.2013,
+      "lng": 5.799
+    },
+    {
+      "id": "loetje-030",
+      "name": "Loetje Maastricht",
+      "address": "Boschstraat 24, 6211 AX Maastricht",
+      "city": "Maastricht",
+      "lat": 50.8538,
+      "lng": 5.6882
+    },
+    {
+      "id": "loetje-031",
+      "name": "Loetje Vught",
+      "address": "Taalstraat 82, 5261 BJ Vught",
+      "city": "Vught",
+      "lat": 51.6576,
+      "lng": 5.2935
+    },
+    {
+      "id": "loetje-032",
+      "name": "Loetje Gorssel",
+      "address": "Hoofdstraat 28, 7213 CW Gorssel",
+      "city": "Gorssel",
+      "lat": 52.2099,
+      "lng": 6.1867
+    },
+    {
+      "id": "loetje-033",
+      "name": "Loetje Houten",
+      "address": "Het Rond 4, 3995 DJ Houten",
+      "city": "Houten",
+      "lat": 52.0289,
+      "lng": 5.1684
+    },
+    {
+      "id": "loetje-034",
+      "name": "Loetje Zeist",
+      "address": "Het Rond 17, 3701 HS Zeist",
+      "city": "Zeist",
+      "lat": 52.0894,
+      "lng": 5.2288
+    },
+    {
+      "id": "loetje-035",
+      "name": "Loetje Ouderkerk aan de Amstel",
+      "address": "Amstelzijde 51, 1184 TZ Ouderkerk aan de Amstel",
+      "city": "Ouderkerk aan de Amstel",
+      "lat": 52.2963,
+      "lng": 4.9083
+    },
+    {
+      "id": "loetje-036",
+      "name": "Loetje Bergen",
+      "address": "Plein 19, 1861 JK Bergen",
+      "city": "Bergen",
+      "lat": 52.6687,
+      "lng": 4.7073
+    },
+    {
+      "id": "loetje-037",
+      "name": "Loetje Paterswolde",
+      "address": "Hoofdweg 174, 9765 CJ Paterswolde",
+      "city": "Paterswolde",
+      "lat": 53.1437,
+      "lng": 6.5638
+    },
+    {
+      "id": "loetje-038",
+      "name": "Loetje Oegstgeest",
+      "address": "Klinkenbergerplas 1, 2342 KH Oegstgeest",
+      "city": "Oegstgeest",
+      "lat": 52.1788,
+      "lng": 4.462
+    },
+    {
+      "id": "loetje-039",
+      "name": "Loetje Den Haag Binckhorst",
+      "address": "Saturnusstraat 100, 2516 AH Den Haag",
+      "city": "Den Haag",
+      "lat": 52.0609,
+      "lng": 4.3301
+    },
+    {
+      "id": "loetje-040",
+      "name": "Loetje Reeuwijk",
+      "address": "Burgemeester Lucasselaan 1, 2811 CA Reeuwijk",
+      "city": "Reeuwijk",
+      "lat": 52.0427,
+      "lng": 4.7415
+    }
   ]
 }

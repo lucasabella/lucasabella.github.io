@@ -1,0 +1,209 @@
+{
+    "chain": "Dunkin'",
+    "slug": "dunkin",
+    "description": "World-famous donut and coffee chain — bringing sweet treats across the Netherlands",
+    "website": "https://www.dunkin.nl",
+    "logo_url": "https://www.dunkin.nl/favicon.ico",
+    "locations": [
+        {
+            "id": "dunkin-001",
+            "name": "Dunkin' Amsterdam Centraal",
+            "address": "Stationsplein 14, 1012 AB Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3791,
+            "lng": 4.8988
+        },
+        {
+            "id": "dunkin-002",
+            "name": "Dunkin' Damrak",
+            "address": "Damrak 60, 1012 LM Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3758,
+            "lng": 4.8950
+        },
+        {
+            "id": "dunkin-003",
+            "name": "Dunkin' Kalverstraat",
+            "address": "Kalverstraat 109, 1012 PA Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3710,
+            "lng": 4.8911
+        },
+        {
+            "id": "dunkin-004",
+            "name": "Dunkin' Kinkerstraat",
+            "address": "Kinkerstraat 96, 1053 ED Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3670,
+            "lng": 4.8685
+        },
+        {
+            "id": "dunkin-005",
+            "name": "Dunkin' Ferdinand Bolstraat",
+            "address": "Ferdinand Bolstraat 79, 1072 LB Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3557,
+            "lng": 4.8924
+        },
+        {
+            "id": "dunkin-006",
+            "name": "Dunkin' Schiphol Plaza",
+            "address": "Schiphol Plaza, 1118 AV Schiphol",
+            "city": "Schiphol",
+            "lat": 52.3105,
+            "lng": 4.7618
+        },
+        {
+            "id": "dunkin-007",
+            "name": "Dunkin' Rotterdam Beurstraverse",
+            "address": "Beurstraverse 50, 3011 AA Rotterdam",
+            "city": "Rotterdam",
+            "lat": 51.9232,
+            "lng": 4.4790
+        },
+        {
+            "id": "dunkin-008",
+            "name": "Dunkin' Rotterdam Centraal",
+            "address": "Stationsplein 16, 3013 AJ Rotterdam",
+            "city": "Rotterdam",
+            "lat": 51.9243,
+            "lng": 4.4691
+        },
+        {
+            "id": "dunkin-009",
+            "name": "Dunkin' Rotterdam Alexandrium",
+            "address": "Poolsterstraat 2, 3067 GH Rotterdam",
+            "city": "Rotterdam",
+            "lat": 51.9481,
+            "lng": 4.5430
+        },
+        {
+            "id": "dunkin-010",
+            "name": "Dunkin' Den Haag Spui",
+            "address": "Spui 10B, 2511 BZ Den Haag",
+            "city": "Den Haag",
+            "lat": 52.0797,
+            "lng": 4.3116
+        },
+        {
+            "id": "dunkin-011",
+            "name": "Dunkin' Den Haag HS",
+            "address": "Stationsplein 48, 2515 BV Den Haag",
+            "city": "Den Haag",
+            "lat": 52.0700,
+            "lng": 4.3212
+        },
+        {
+            "id": "dunkin-012",
+            "name": "Dunkin' Utrecht Centraal",
+            "address": "Stationshal 12, 3511 CE Utrecht",
+            "city": "Utrecht",
+            "lat": 52.0893,
+            "lng": 5.1101
+        },
+        {
+            "id": "dunkin-013",
+            "name": "Dunkin' Utrecht Hoog Catharijne",
+            "address": "Godebaldkwartier 77, 3511 DT Utrecht",
+            "city": "Utrecht",
+            "lat": 52.0899,
+            "lng": 5.1122
+        },
+        {
+            "id": "dunkin-014",
+            "name": "Dunkin' Eindhoven Piazza",
+            "address": "Piazza 1, 5611 AE Eindhoven",
+            "city": "Eindhoven",
+            "lat": 51.4408,
+            "lng": 5.4800
+        },
+        {
+            "id": "dunkin-015",
+            "name": "Dunkin' Eindhoven Centraal",
+            "address": "Stationsplein 10, 5611 AA Eindhoven",
+            "city": "Eindhoven",
+            "lat": 51.4433,
+            "lng": 5.4810
+        },
+        {
+            "id": "dunkin-016",
+            "name": "Dunkin' Groningen",
+            "address": "Herestraat 38, 9711 LB Groningen",
+            "city": "Groningen",
+            "lat": 53.2177,
+            "lng": 5.7255
+        },
+        {
+            "id": "dunkin-017",
+            "name": "Dunkin' Tilburg",
+            "address": "Heuvelstraat 12, 5038 AA Tilburg",
+            "city": "Tilburg",
+            "lat": 51.5577,
+            "lng": 5.0880
+        },
+        {
+            "id": "dunkin-018",
+            "name": "Dunkin' Breda",
+            "address": "Ginnekenstraat 22, 4811 JA Breda",
+            "city": "Breda",
+            "lat": 51.5869,
+            "lng": 4.7740
+        },
+        {
+            "id": "dunkin-019",
+            "name": "Dunkin' Arnhem",
+            "address": "Ketelstraat 22, 6811 CZ Arnhem",
+            "city": "Arnhem",
+            "lat": 51.9831,
+            "lng": 5.9105
+        },
+        {
+            "id": "dunkin-020",
+            "name": "Dunkin' Leiden",
+            "address": "Haarlemmerstraat 201, 2312 DN Leiden",
+            "city": "Leiden",
+            "lat": 52.1612,
+            "lng": 4.4855
+        },
+        {
+            "id": "dunkin-021",
+            "name": "Dunkin' Almere Centrum",
+            "address": "Stationsstraat 60, 1315 GN Almere",
+            "city": "Almere",
+            "lat": 52.3754,
+            "lng": 5.2170
+        },
+        {
+            "id": "dunkin-022",
+            "name": "Dunkin' Lelystad",
+            "address": "Agorahof 50, 8224 BZ Lelystad",
+            "city": "Lelystad",
+            "lat": 52.5083,
+            "lng": 5.4762
+        },
+        {
+            "id": "dunkin-023",
+            "name": "Dunkin' Amersfoort",
+            "address": "Utrechtsestraat 28, 3811 NA Amersfoort",
+            "city": "Amersfoort",
+            "lat": 52.1558,
+            "lng": 5.3882
+        },
+        {
+            "id": "dunkin-024",
+            "name": "Dunkin' Nijmegen",
+            "address": "Broerstraat 31, 6511 KA Nijmegen",
+            "city": "Nijmegen",
+            "lat": 51.8470,
+            "lng": 5.8660
+        },
+        {
+            "id": "dunkin-025",
+            "name": "Dunkin' Haarlem",
+            "address": "Grote Houtstraat 70, 2011 SR Haarlem",
+            "city": "Haarlem",
+            "lat": 52.3805,
+            "lng": 4.6360
+        }
+    ]
+}

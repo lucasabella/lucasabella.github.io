@@ -5,9 +5,12 @@ import ProgressBar from '../../components/ProgressBar/ProgressBar';
 import LocationCard from '../../components/LocationCard/LocationCard';
 import { useApi } from '../../hooks/useApi';
 import { useVisits } from '../../hooks/useVisits';
+import { useGeolocation } from '../../hooks/useGeolocation';
+import { haversineDistance } from '../../utils/geo';
 import './ChainDetailPage.css';
 
 const FILTERS = ['All', 'Visited', 'Remaining'];
+const SORT_OPTIONS = ['Default', 'Near Me'];
 
 export default function ChainDetailPage() {
   const { slug } = useParams();
@@ -19,10 +22,15 @@ export default function ChainDetailPage() {
   const [panelCollapsed, setPanelCollapsed] = useState(false);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('All');
+  const [sort, setSort] = useState('Default');
   const [focusedId, setFocusedId] = useState(null);
+  const [imgError, setImgError] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const dragRef = useRef({ startY: 0, startCollapsed: false });
+  const locationsRef = useRef(null);
 
   const { isVisited, toggleVisit, visitedCount, updateFromLocations } = useVisits(locations);
+  const { position, loading: geoLoading, error: geoError, requestPosition } = useGeolocation();
 
   useEffect(() => {
     (async () => {
@@ -43,6 +51,15 @@ export default function ChainDetailPage() {
   const total = locations.length;
   const remainingCount = total - visitedCount;
 
+  // Handle sort toggle
+  const handleSortChange = useCallback((s) => {
+    setSort(s);
+    if (s === 'Near Me') {
+      requestPosition();
+    }
+  }, [requestPosition]);
+
+  // Filter + sort locations
   const filteredLocations = useMemo(() => {
     let result = locations;
     if (filter === 'Visited') {
@@ -59,8 +76,26 @@ export default function ChainDetailPage() {
           (l.address && l.address.toLowerCase().includes(q))
       );
     }
+    // Sort by distance when Near Me is active and we have a position
+    if (sort === 'Near Me' && position) {
+      result = [...result].sort((a, b) => {
+        const distA = haversineDistance(position.lat, position.lng, a.lat, a.lng);
+        const distB = haversineDistance(position.lat, position.lng, b.lat, b.lng);
+        return distA - distB;
+      });
+    }
     return result;
-  }, [locations, filter, search, isVisited]);
+  }, [locations, filter, search, isVisited, sort, position]);
+
+  // Pre-compute distances for display
+  const distances = useMemo(() => {
+    if (sort !== 'Near Me' || !position) return {};
+    const map = {};
+    for (const loc of locations) {
+      map[loc.id] = haversineDistance(position.lat, position.lng, loc.lat, loc.lng);
+    }
+    return map;
+  }, [locations, sort, position]);
 
   const handleFocusLocation = useCallback((location) => {
     setFocusedId(location.id);
@@ -76,6 +111,14 @@ export default function ChainDetailPage() {
     if (Math.abs(dy) > 60) {
       setPanelCollapsed(dy > 0);
     }
+  }, []);
+
+  const handleLocationsScroll = useCallback((e) => {
+    setShowScrollTop(e.target.scrollTop > 200);
+  }, []);
+
+  const scrollToTop = useCallback(() => {
+    locationsRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   if (loading) {
@@ -125,25 +168,30 @@ export default function ChainDetailPage() {
         </div>
 
         <div className="panel__header">
-          <div className="panel__header-row">
-            <div className="panel__back-row">
-              <button className="panel__back" onClick={() => navigate('/dashboard')} aria-label="Back to dashboard">
-                ← Dashboard
-              </button>
-            </div>
-            <button
-              className="panel__close"
-              onClick={() => setPanelCollapsed(true)}
-              aria-label="Close panel"
-            >
-              ×
+          <div className="panel__back-row">
+            <button className="panel__back" onClick={() => navigate('/dashboard')} aria-label="Back to dashboard">
+              ← Dashboard
             </button>
           </div>
           <div className="panel__brand">
             <span className="panel__logo">
               Chain<span className="panel__logo-accent">Chaser</span>
             </span>
-            <span className="panel__chain-badge">{chain.name}</span>
+            <div className="panel__chain-info">
+              {chain.logo_url && !imgError ? (
+                <img
+                  src={chain.logo_url}
+                  alt={`${chain.name} logo`}
+                  className="panel__chain-logo"
+                  onError={() => setImgError(true)}
+                />
+              ) : (
+                <span className="panel__chain-logo-fallback">
+                  {chain.name?.charAt(0)}
+                </span>
+              )}
+              <span className="panel__chain-badge">{chain.name}</span>
+            </div>
           </div>
           <p className="panel__subtitle">{chain.description}</p>
         </div>
@@ -177,6 +225,15 @@ export default function ChainDetailPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
+            {search && (
+              <button
+                className="search-clear"
+                onClick={() => setSearch('')}
+                aria-label="Clear search"
+              >
+                ×
+              </button>
+            )}
           </div>
         </div>
 
@@ -188,13 +245,32 @@ export default function ChainDetailPage() {
               onClick={() => setFilter(f)}
             >
               {f}
+              {f === 'All' && ` (${total})`}
               {f === 'Visited' && ` (${visitedCount})`}
               {f === 'Remaining' && ` (${remainingCount})`}
             </button>
           ))}
         </div>
 
-        <div className="panel__locations">
+        <div className="panel__sort">
+          {SORT_OPTIONS.map((s) => (
+            <button
+              key={s}
+              className={`sort-tab ${sort === s ? 'sort-tab--active' : ''}`}
+              onClick={() => handleSortChange(s)}
+            >
+              {s === 'Near Me' ? '📍 Near Me' : s}
+            </button>
+          ))}
+          {sort === 'Near Me' && geoLoading && (
+            <span className="sort-status">Locating…</span>
+          )}
+          {sort === 'Near Me' && geoError && (
+            <span className="sort-status sort-status--error">Location unavailable</span>
+          )}
+        </div>
+
+        <div className="panel__locations" ref={locationsRef} onScroll={handleLocationsScroll}>
           <div className="panel__locations-count">
             {filteredLocations.length} location{filteredLocations.length !== 1 ? 's' : ''}
           </div>
@@ -211,9 +287,17 @@ export default function ChainDetailPage() {
                 onToggle={() => toggleVisit(loc.id)}
                 onFocus={handleFocusLocation}
                 index={i}
+                distance={distances[loc.id]}
               />
             ))
           )}
+          <button
+            className={`panel__scroll-top ${showScrollTop ? 'panel__scroll-top--visible' : ''}`}
+            onClick={scrollToTop}
+            aria-label="Scroll to top"
+          >
+            ↑
+          </button>
         </div>
       </aside>
     </div>

@@ -1,0 +1,249 @@
+{
+    "chain": "La Place",
+    "slug": "la-place",
+    "description": "Fresh food restaurant chain — known for their in-house baked breads, salads, and juices",
+    "website": "https://www.laplace.com",
+    "logo_url": "https://www.laplace.com/favicon.ico",
+    "locations": [
+        {
+            "id": "laplace-001",
+            "name": "La Place Kalverstraat",
+            "address": "Kalverstraat 201-203, 1012 XC Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3694,
+            "lng": 4.8906
+        },
+        {
+            "id": "laplace-002",
+            "name": "La Place RAI",
+            "address": "Europaplein 24, 1078 GZ Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3389,
+            "lng": 4.8886
+        },
+        {
+            "id": "laplace-003",
+            "name": "La Place Schiphol Plaza",
+            "address": "Aankomstpassage 1, 1118 AX Schiphol",
+            "city": "Schiphol",
+            "lat": 52.3105,
+            "lng": 4.7627
+        },
+        {
+            "id": "laplace-004",
+            "name": "La Place Apeldoorn de Somp",
+            "address": "A50, 7381 AZ Klarenbeek",
+            "city": "Klarenbeek",
+            "lat": 52.1698,
+            "lng": 5.9963
+        },
+        {
+            "id": "laplace-005",
+            "name": "La Place Arnhem Kronenburg",
+            "address": "Kronenburgpassage 116, 6831 ES Arnhem",
+            "city": "Arnhem",
+            "lat": 51.9741,
+            "lng": 5.9163
+        },
+        {
+            "id": "laplace-006",
+            "name": "La Place Baarn Nijhof",
+            "address": "Minervaweg 3, 3741 GR Baarn",
+            "city": "Baarn",
+            "lat": 52.2161,
+            "lng": 5.2724
+        },
+        {
+            "id": "laplace-007",
+            "name": "La Place Bergen op Zoom Wouwse Tol",
+            "address": "Mastendreef 85, 4623 RE Bergen op Zoom",
+            "city": "Bergen op Zoom",
+            "lat": 51.5175,
+            "lng": 4.3428
+        },
+        {
+            "id": "laplace-008",
+            "name": "La Place Deventer",
+            "address": "Boreelplein 1, 7411 BD Deventer",
+            "city": "Deventer",
+            "lat": 52.2545,
+            "lng": 6.1597
+        },
+        {
+            "id": "laplace-009",
+            "name": "La Place Eindhoven Heuvel",
+            "address": "Heuvel Galerie 135, 5611 DK Eindhoven",
+            "city": "Eindhoven",
+            "lat": 51.4380,
+            "lng": 5.4760
+        },
+        {
+            "id": "laplace-010",
+            "name": "La Place Enschede",
+            "address": "Raadhuisstraat 12, 7511 EH Enschede",
+            "city": "Enschede",
+            "lat": 52.2205,
+            "lng": 6.8960
+        },
+        {
+            "id": "laplace-011",
+            "name": "La Place 't Harde A28",
+            "address": "Eperweg 94, 8084 HK 't Harde",
+            "city": "'t Harde",
+            "lat": 52.4036,
+            "lng": 5.8680
+        },
+        {
+            "id": "laplace-012",
+            "name": "La Place Hoofddorp De Brug",
+            "address": "A4 1B, 2132 MA Hoofddorp",
+            "city": "Hoofddorp",
+            "lat": 52.3056,
+            "lng": 4.6700
+        },
+        {
+            "id": "laplace-013",
+            "name": "La Place Hoofddorp De Vier Meren",
+            "address": "Marktlaan 156, 2132 DM Hoofddorp",
+            "city": "Hoofddorp",
+            "lat": 52.3037,
+            "lng": 4.6870
+        },
+        {
+            "id": "laplace-014",
+            "name": "La Place Laren",
+            "address": "Westerheide 2, 1251 ET Laren",
+            "city": "Laren",
+            "lat": 52.2550,
+            "lng": 5.2232
+        },
+        {
+            "id": "laplace-015",
+            "name": "La Place Leeuwarden Zaailand",
+            "address": "Zaailand 100, 8911 BN Leeuwarden",
+            "city": "Leeuwarden",
+            "lat": 53.1990,
+            "lng": 5.7952
+        },
+        {
+            "id": "laplace-016",
+            "name": "La Place Leiderdorp A4",
+            "address": "Persant Snoepweg 2, 2353 KA Leiderdorp",
+            "city": "Leiderdorp",
+            "lat": 52.1710,
+            "lng": 4.5128
+        },
+        {
+            "id": "laplace-017",
+            "name": "La Place Lelystad Bataviastad",
+            "address": "Bataviaplein 230, 8242 PS Lelystad",
+            "city": "Lelystad",
+            "lat": 52.5137,
+            "lng": 5.4273
+        },
+        {
+            "id": "laplace-018",
+            "name": "La Place Maastricht",
+            "address": "Vliegveldweg 72, 6199 AD Maastricht",
+            "city": "Maastricht",
+            "lat": 50.8654,
+            "lng": 5.6991
+        },
+        {
+            "id": "laplace-019",
+            "name": "La Place Meerkerk",
+            "address": "Energieweg 116, 4231 DJ Meerkerk",
+            "city": "Meerkerk",
+            "lat": 51.9203,
+            "lng": 4.9800
+        },
+        {
+            "id": "laplace-020",
+            "name": "La Place Muiden De Hackelaar",
+            "address": "Rijksweg A1 NZ 3, 1398 PW Muiden",
+            "city": "Muiden",
+            "lat": 52.3340,
+            "lng": 5.0682
+        },
+        {
+            "id": "laplace-021",
+            "name": "La Place Oosterhout A27",
+            "address": "Beneluxweg 1, 4904 SJ Oosterhout",
+            "city": "Oosterhout",
+            "lat": 51.6437,
+            "lng": 4.8548
+        },
+        {
+            "id": "laplace-022",
+            "name": "La Place Venray De Wuust A73",
+            "address": "Venloseweg 9, 5808 PA Oirlo",
+            "city": "Venray",
+            "lat": 51.5290,
+            "lng": 5.9812
+        },
+        {
+            "id": "laplace-023",
+            "name": "La Place Roermond Outlet",
+            "address": "Stadsweide 122, 6041 TD Roermond",
+            "city": "Roermond",
+            "lat": 51.1916,
+            "lng": 5.9820
+        },
+        {
+            "id": "laplace-024",
+            "name": "La Place Roosendaal Outlet",
+            "address": "Rosada 83, 4703 TB Roosendaal",
+            "city": "Roosendaal",
+            "lat": 51.5303,
+            "lng": 4.4582
+        },
+        {
+            "id": "laplace-025",
+            "name": "La Place Rotterdam Alexandrium",
+            "address": "Korte Poolsterstraat 2, 3067 LZ Rotterdam",
+            "city": "Rotterdam",
+            "lat": 51.9478,
+            "lng": 4.5425
+        },
+        {
+            "id": "laplace-026",
+            "name": "La Place Stroe A1",
+            "address": "Heideweg 26, 3776 PX Stroe",
+            "city": "Stroe",
+            "lat": 52.2097,
+            "lng": 5.6813
+        },
+        {
+            "id": "laplace-027",
+            "name": "La Place Wassenaar Duinrell",
+            "address": "Duinrell 1, 2242 JP Wassenaar",
+            "city": "Wassenaar",
+            "lat": 52.1335,
+            "lng": 4.3842
+        },
+        {
+            "id": "laplace-028",
+            "name": "La Place Zoeterwoude A4",
+            "address": "Groene Hartplein 1, 2381 GS Zoeterwoude",
+            "city": "Zoeterwoude",
+            "lat": 52.1159,
+            "lng": 4.5041
+        },
+        {
+            "id": "laplace-029",
+            "name": "La Place Zwolle A28",
+            "address": "Oude Meppelerweg 1-3, 8024 AB Zwolle",
+            "city": "Zwolle",
+            "lat": 52.5037,
+            "lng": 6.0787
+        },
+        {
+            "id": "laplace-030",
+            "name": "La Place Heerhugowaard",
+            "address": "Middenwaard 93, 1701 HK Heerhugowaard",
+            "city": "Heerhugowaard",
+            "lat": 52.6704,
+            "lng": 4.8452
+        }
+    ]
+}

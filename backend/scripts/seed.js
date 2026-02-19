@@ -19,15 +19,16 @@ async function seed() {
 
       // Upsert chain
       const { rows: [chain] } = await client.query(
-        `INSERT INTO chains (name, slug, description, website, location_count)
-         VALUES ($1, $2, $3, $4, $5)
+        `INSERT INTO chains (name, slug, description, website, logo_url, location_count)
+         VALUES ($1, $2, $3, $4, $5, $6)
          ON CONFLICT (slug) DO UPDATE SET
            name = EXCLUDED.name,
            description = EXCLUDED.description,
            website = EXCLUDED.website,
+           logo_url = EXCLUDED.logo_url,
            location_count = EXCLUDED.location_count
          RETURNING id`,
-        [data.chain, slug, data.description, data.website, data.locations.length]
+        [data.chain, slug, data.description, data.website, data.logo_url || null, data.locations.length]
       );
 
       // Upsert locations

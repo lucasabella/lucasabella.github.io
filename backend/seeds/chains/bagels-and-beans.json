@@ -1,0 +1,249 @@
+{
+    "chain": "Bagels & Beans",
+    "slug": "bagels-and-beans",
+    "description": "Popular Dutch café chain serving fresh bagels, specialty coffee, and homemade juices",
+    "website": "https://www.bagelsbeans.nl",
+    "logo_url": "https://www.bagelsbeans.nl/favicon.ico",
+    "locations": [
+        {
+            "id": "bb-001",
+            "name": "Bagels & Beans Keizersgracht",
+            "address": "Keizersgracht 504, 1017 EH Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3644,
+            "lng": 4.8877
+        },
+        {
+            "id": "bb-002",
+            "name": "Bagels & Beans IJdok",
+            "address": "IJdok 49, 1013 MM Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3849,
+            "lng": 4.9030
+        },
+        {
+            "id": "bb-003",
+            "name": "Bagels & Beans Raadhuisstraat",
+            "address": "Raadhuisstraat 18, 1016 DE Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3737,
+            "lng": 4.8850
+        },
+        {
+            "id": "bb-004",
+            "name": "Bagels & Beans Roetersstraat",
+            "address": "Roetersstraat 2, 1018 WC Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3641,
+            "lng": 4.9113
+        },
+        {
+            "id": "bb-005",
+            "name": "Bagels & Beans Van Baerlestraat",
+            "address": "Van Baerlestraat 40, 1071 AW Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3584,
+            "lng": 4.8791
+        },
+        {
+            "id": "bb-006",
+            "name": "Bagels & Beans Waterlooplein",
+            "address": "Waterlooplein 2, 1011 PG Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3668,
+            "lng": 4.9016
+        },
+        {
+            "id": "bb-007",
+            "name": "Bagels & Beans Haarlemmerdijk",
+            "address": "Haarlemmerdijk 122, 1013 JJ Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3815,
+            "lng": 4.8865
+        },
+        {
+            "id": "bb-008",
+            "name": "Bagels & Beans Ferdinand Bolstraat",
+            "address": "Ferdinand Bolstraat 70, 1072 LK Amsterdam",
+            "city": "Amsterdam",
+            "lat": 52.3561,
+            "lng": 4.8930
+        },
+        {
+            "id": "bb-009",
+            "name": "Bagels & Beans Hoogstraat Rotterdam",
+            "address": "Hoogstraat 129, 3011 PL Rotterdam",
+            "city": "Rotterdam",
+            "lat": 51.9211,
+            "lng": 4.4953
+        },
+        {
+            "id": "bb-010",
+            "name": "Bagels & Beans Biltstraat Utrecht",
+            "address": "Biltstraat 60, 3572 BJ Utrecht",
+            "city": "Utrecht",
+            "lat": 52.0942,
+            "lng": 5.1302
+        },
+        {
+            "id": "bb-011",
+            "name": "Bagels & Beans Twijnstraat Utrecht",
+            "address": "Twijnstraat 32, 3511 ZH Utrecht",
+            "city": "Utrecht",
+            "lat": 52.0868,
+            "lng": 5.1214
+        },
+        {
+            "id": "bb-012",
+            "name": "Bagels & Beans Mariaplaats Utrecht",
+            "address": "Mariaplaats 6, 3511 LH Utrecht",
+            "city": "Utrecht",
+            "lat": 52.0891,
+            "lng": 5.1157
+        },
+        {
+            "id": "bb-013",
+            "name": "Bagels & Beans Hoog Catharijne",
+            "address": "Godebaldkwartier 60, 3511 DX Utrecht",
+            "city": "Utrecht",
+            "lat": 52.0895,
+            "lng": 5.1114
+        },
+        {
+            "id": "bb-014",
+            "name": "Bagels & Beans Arnhemsestraat Amersfoort",
+            "address": "Arnhemsestraat 12, 3811 LG Amersfoort",
+            "city": "Amersfoort",
+            "lat": 52.1560,
+            "lng": 5.3882
+        },
+        {
+            "id": "bb-015",
+            "name": "Bagels & Beans Vathorst Amersfoort",
+            "address": "Laak 1, 3826 EJ Amersfoort",
+            "city": "Amersfoort",
+            "lat": 52.1914,
+            "lng": 5.4259
+        },
+        {
+            "id": "bb-016",
+            "name": "Bagels & Beans Schutterstraat Almere",
+            "address": "Schutterstraat 1, 1315 HB Almere",
+            "city": "Almere",
+            "lat": 52.3750,
+            "lng": 5.2205
+        },
+        {
+            "id": "bb-017",
+            "name": "Bagels & Beans Thorbeckeplein Alphen a/d Rijn",
+            "address": "Thorbeckeplein 12, 2401 EA Alphen aan den Rijn",
+            "city": "Alphen aan den Rijn",
+            "lat": 52.1270,
+            "lng": 4.6575
+        },
+        {
+            "id": "bb-018",
+            "name": "Bagels & Beans Kelders Leeuwarden",
+            "address": "Kelders 4, 8911 KD Leeuwarden",
+            "city": "Leeuwarden",
+            "lat": 53.2004,
+            "lng": 5.7927
+        },
+        {
+            "id": "bb-019",
+            "name": "Bagels & Beans Blijmarkt Zwolle",
+            "address": "Blijmarkt 15, 8011 ND Zwolle",
+            "city": "Zwolle",
+            "lat": 52.5112,
+            "lng": 6.0952
+        },
+        {
+            "id": "bb-020",
+            "name": "Bagels & Beans Promenadeplein Zoetermeer",
+            "address": "Promenadeplein 25, 2711 AA Zoetermeer",
+            "city": "Zoetermeer",
+            "lat": 52.0534,
+            "lng": 4.4954
+        },
+        {
+            "id": "bb-021",
+            "name": "Bagels & Beans 1e Hogeweg Zeist",
+            "address": "1e Hogeweg 2, 3701 HK Zeist",
+            "city": "Zeist",
+            "lat": 52.0881,
+            "lng": 5.2290
+        },
+        {
+            "id": "bb-022",
+            "name": "Bagels & Beans Stadhuisplein Zaandam",
+            "address": "Stadhuisplein 90, 1506 DV Zaandam",
+            "city": "Zaandam",
+            "lat": 52.4393,
+            "lng": 4.8337
+        },
+        {
+            "id": "bb-023",
+            "name": "Bagels & Beans Hoogstraat Wageningen",
+            "address": "Hoogstraat 1, 6701 BL Wageningen",
+            "city": "Wageningen",
+            "lat": 51.9681,
+            "lng": 5.6637
+        },
+        {
+            "id": "bb-024",
+            "name": "Bagels & Beans Maasstraat Venlo",
+            "address": "Maasstraat 1, 5911 CJ Venlo",
+            "city": "Venlo",
+            "lat": 51.3700,
+            "lng": 6.1724
+        },
+        {
+            "id": "bb-025",
+            "name": "Bagels & Beans Brouwersgracht Veenendaal",
+            "address": "Brouwersgracht 2, 3901 PZ Veenendaal",
+            "city": "Veenendaal",
+            "lat": 52.0251,
+            "lng": 5.5572
+        },
+        {
+            "id": "bb-026",
+            "name": "Bagels & Beans Haarlem",
+            "address": "Kleine Houtstraat 28, 2011 DL Haarlem",
+            "city": "Haarlem",
+            "lat": 52.3793,
+            "lng": 4.6380
+        },
+        {
+            "id": "bb-027",
+            "name": "Bagels & Beans Den Haag",
+            "address": "Denneweg 56, 2514 CJ Den Haag",
+            "city": "Den Haag",
+            "lat": 52.0839,
+            "lng": 4.3180
+        },
+        {
+            "id": "bb-028",
+            "name": "Bagels & Beans Leiden",
+            "address": "Breestraat 11, 2311 CG Leiden",
+            "city": "Leiden",
+            "lat": 52.1593,
+            "lng": 4.4890
+        },
+        {
+            "id": "bb-029",
+            "name": "Bagels & Beans Groningen",
+            "address": "Oosterstraat 24, 9711 NR Groningen",
+            "city": "Groningen",
+            "lat": 53.2151,
+            "lng": 5.7240
+        },
+        {
+            "id": "bb-030",
+            "name": "Bagels & Beans Nijmegen",
+            "address": "Molenstraat 48, 6511 HD Nijmegen",
+            "city": "Nijmegen",
+            "lat": 51.8472,
+            "lng": 5.8622
+        }
+    ]
+}
