@@ -142,7 +142,7 @@ export default function ChainDetailPage() {
 
       <aside
         className={panelClass}
-        ref={window.innerWidth <= 768 ? panelRef : undefined}
+        ref={panelRef}
         style={window.innerWidth <= 768 ? sheetStyle : undefined}
       >
         {/* Desktop toggle */}
