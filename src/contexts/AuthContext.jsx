@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 
 const API_URL = import.meta.env.VITE_API_URL || '/api';
 const LOCALSTORAGE_KEY = 'chaincaser-visited';
+const REFRESH_TOKEN_KEY = 'cc_refresh_token';
 const AuthContext = createContext(null);
 
 async function migrateLocalStorage(token) {
@@ -34,34 +35,51 @@ export function AuthProvider({ children }) {
 
   const getAccessToken = useCallback(async () => {
     if (accessToken) return accessToken;
-    // Try refreshing
+    // Try refreshing using stored refresh token
     try {
+      const storedRefreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
       const res = await fetch(`${API_URL}/auth/refresh`, {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
+        body: storedRefreshToken ? JSON.stringify({ refreshToken: storedRefreshToken }) : undefined,
       });
-      if (!res.ok) return null;
+      if (!res.ok) {
+        localStorage.removeItem(REFRESH_TOKEN_KEY);
+        return null;
+      }
       const data = await res.json();
       setAccessToken(data.accessToken);
       setUser(data.user);
+      if (data.refreshToken) {
+        localStorage.setItem(REFRESH_TOKEN_KEY, data.refreshToken);
+      }
       return data.accessToken;
     } catch {
       return null;
     }
   }, [accessToken]);
 
-  // On mount, try to restore session from refresh token
+  // On mount, try to restore session using stored refresh token
   useEffect(() => {
     (async () => {
       try {
+        const storedRefreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
         const res = await fetch(`${API_URL}/auth/refresh`, {
           method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
+          body: storedRefreshToken ? JSON.stringify({ refreshToken: storedRefreshToken }) : undefined,
         });
         if (res.ok) {
           const data = await res.json();
           setAccessToken(data.accessToken);
           setUser(data.user);
+          if (data.refreshToken) {
+            localStorage.setItem(REFRESH_TOKEN_KEY, data.refreshToken);
+          }
+        } else {
+          localStorage.removeItem(REFRESH_TOKEN_KEY);
         }
       } catch {
         // No valid session
@@ -85,6 +103,7 @@ export function AuthProvider({ children }) {
     const data = await res.json();
     setUser(data.user);
     setAccessToken(data.accessToken);
+    if (data.refreshToken) localStorage.setItem(REFRESH_TOKEN_KEY, data.refreshToken);
     migrateLocalStorage(data.accessToken);
     return data.user;
   };
@@ -103,6 +122,7 @@ export function AuthProvider({ children }) {
     const data = await res.json();
     setUser(data.user);
     setAccessToken(data.accessToken);
+    if (data.refreshToken) localStorage.setItem(REFRESH_TOKEN_KEY, data.refreshToken);
     migrateLocalStorage(data.accessToken);
     return data.user;
   };
@@ -121,20 +141,27 @@ export function AuthProvider({ children }) {
     const data = await res.json();
     setUser(data.user);
     setAccessToken(data.accessToken);
+    if (data.refreshToken) localStorage.setItem(REFRESH_TOKEN_KEY, data.refreshToken);
     migrateLocalStorage(data.accessToken);
     return data.user;
   };
 
   const logout = async () => {
     try {
+      const storedRefreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
       await fetch(`${API_URL}/auth/logout`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${accessToken}` },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
         credentials: 'include',
+        body: storedRefreshToken ? JSON.stringify({ refreshToken: storedRefreshToken }) : undefined,
       });
     } catch {
       // Ignore errors on logout
     }
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
     setUser(null);
     setAccessToken(null);
   };

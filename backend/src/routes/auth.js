@@ -31,7 +31,7 @@ router.post(
       await authService.saveRefreshToken(user.id, refreshToken);
       authService.setRefreshCookie(res, refreshToken);
 
-      res.status(201).json({ user, accessToken });
+      res.status(201).json({ user, accessToken, refreshToken });
     } catch (err) {
       next(err);
     }
@@ -64,7 +64,7 @@ router.post(
       await authService.saveRefreshToken(user.id, refreshToken);
       authService.setRefreshCookie(res, refreshToken);
 
-      res.json({ user: safeUser, accessToken });
+      res.json({ user: safeUser, accessToken, refreshToken });
     } catch (err) {
       next(err);
     }
@@ -109,7 +109,7 @@ router.post(
       await authService.saveRefreshToken(user.id, refreshToken);
       authService.setRefreshCookie(res, refreshToken);
 
-      res.json({ user: safeUser, accessToken });
+      res.json({ user: safeUser, accessToken, refreshToken });
     } catch (err) {
       next(err);
     }
@@ -119,7 +119,8 @@ router.post(
 // POST /api/auth/refresh
 router.post('/refresh', async (req, res, next) => {
   try {
-    const token = req.cookies?.refreshToken;
+    // Accept token from httpOnly cookie (same-origin) or request body (cross-origin, e.g. GitHub Pages → Railway)
+    const token = req.cookies?.refreshToken || req.body?.refreshToken;
     if (!token) {
       return res.status(401).json({ error: 'No refresh token' });
     }
@@ -138,7 +139,7 @@ router.post('/refresh', async (req, res, next) => {
     const user = { id: stored.uid, email: stored.email, name: stored.name, avatar_url: stored.avatar_url };
     const accessToken = authService.generateAccessToken(user);
 
-    res.json({ user, accessToken });
+    res.json({ user, accessToken, refreshToken: newRefreshToken });
   } catch (err) {
     next(err);
   }
@@ -147,7 +148,7 @@ router.post('/refresh', async (req, res, next) => {
 // POST /api/auth/logout
 router.post('/logout', verifyToken, async (req, res, next) => {
   try {
-    const token = req.cookies?.refreshToken;
+    const token = req.cookies?.refreshToken || req.body?.refreshToken;
     if (token) {
       await authService.deleteRefreshToken(token);
     }
