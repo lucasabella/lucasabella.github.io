@@ -3,7 +3,6 @@
   flex: 1;
   position: relative;
   overflow: hidden;
-  /* Fill remaining height after the nav bar */
   height: calc(100dvh - var(--nav-height));
 }
 

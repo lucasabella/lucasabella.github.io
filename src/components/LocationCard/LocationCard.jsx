@@ -20,7 +20,6 @@ export default function LocationCard({ location, visited = false, onToggle, onFo
         <div className="location-card__info">
           <div className="location-card__name-row">
             <h3 className="location-card__name">{location.name}</h3>
-            {visited && <span className="location-card__check">&#10003;</span>}
           </div>
           <p className="location-card__address">{location.address}</p>
           <span className="location-card__city">{location.city}</span>
@@ -33,7 +32,7 @@ export default function LocationCard({ location, visited = false, onToggle, onFo
           }}
           aria-label={visited ? 'Mark as not visited' : 'Mark as visited'}
         >
-          {visited ? 'Visited' : 'Visit'}
+          {visited ? '✓' : ''}
         </button>
       </div>
     </div>

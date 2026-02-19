@@ -20,6 +20,7 @@ export default function Layout() {
 
         {user && (
           <div className="layout__user">
+            <span className="layout__avatar">{(user.name || user.email)[0].toUpperCase()}</span>
             <span className="layout__user-name">{user.name}</span>
             <button className="layout__logout" onClick={handleLogout}>
               Log out

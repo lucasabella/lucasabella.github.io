@@ -19,12 +19,6 @@ export default function ProgressBar({ visited = 0, total = 0 }) {
           className={`progress-bar__fill ${isComplete ? 'progress-bar__fill--complete' : ''}`}
           style={{ width: `${percentage}%` }}
         />
-        {percentage > 0 && percentage < 100 && (
-          <div
-            className="progress-bar__glow"
-            style={{ left: `${percentage}%` }}
-          />
-        )}
       </div>
       {isComplete && (
         <div className="progress-bar__complete-text">

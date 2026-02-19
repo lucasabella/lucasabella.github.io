@@ -1,6 +1,7 @@
 .location-card {
-  background: var(--bg-card);
+  background: var(--bg-surface);
   border: 1px solid var(--border);
+  border-left: 3px solid transparent;
   border-radius: var(--radius-md);
   padding: 14px 16px;
   margin-bottom: 8px;
@@ -13,8 +14,7 @@
 
 .location-card:hover {
   background: var(--bg-card-hover);
-  border-color: rgba(255, 255, 255, 0.1);
-  transform: translateX(2px);
+  border-left-color: var(--accent);
 }
 
 .location-card:active {
@@ -23,13 +23,14 @@
 }
 
 .location-card--visited {
-  background: var(--bg-visited);
-  border-color: rgba(34, 197, 94, 0.15);
+  background: var(--visited-light);
+  border-left-color: var(--visited);
+  border-color: rgba(44, 110, 73, 0.15);
 }
 
 .location-card--visited:hover {
-  background: rgba(26, 42, 31, 0.8);
-  border-color: rgba(34, 197, 94, 0.25);
+  background: #dff0e8;
+  border-left-color: var(--visited);
 }
 
 .location-card__content {
@@ -59,13 +60,6 @@
   text-overflow: ellipsis;
 }
 
-.location-card__check {
-  flex-shrink: 0;
-  font-size: 12px;
-  color: var(--green-400);
-  animation: stampIn 0.4s var(--ease-spring);
-}
-
 .location-card__address {
   font-size: 12px;
   color: var(--text-secondary);
@@ -78,45 +72,50 @@
 .location-card__city {
   display: inline-block;
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-muted);
   margin-top: 4px;
-  padding: 1px 8px;
-  background: rgba(255, 255, 255, 0.04);
-  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-/* Toggle button */
+/* Toggle button — circular */
 .location-card__toggle {
   flex-shrink: 0;
-  padding: 7px 16px;
-  border-radius: 100px;
-  font-size: 12px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.02em;
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text-secondary);
+  background: transparent;
+  color: var(--text-muted);
+  border: 2px solid var(--border-strong);
   transition: all 0.25s var(--ease-out);
-  min-width: 64px;
-  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 .location-card__toggle:hover {
-  background: rgba(252, 211, 77, 0.12);
-  color: var(--gold-300);
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-light);
 }
 
 .location-card__toggle:active {
-  transform: scale(0.96);
+  transform: scale(0.9);
   transition-duration: 0.1s;
 }
 
 .location-card__toggle--visited {
-  background: rgba(34, 197, 94, 0.12);
-  color: var(--green-400);
+  background: var(--visited);
+  color: #FFFFFF;
+  border-color: var(--visited);
+  animation: stampIn 0.35s var(--ease-spring);
 }
 
 .location-card__toggle--visited:hover {
-  background: rgba(239, 68, 68, 0.12);
-  color: var(--red-400);
+  background: #245a3c;
+  border-color: #245a3c;
 }

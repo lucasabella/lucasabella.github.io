@@ -31,6 +31,10 @@ export default function DashboardPage() {
     );
   }
 
+  const totalVisited   = chains.reduce((s, c) => s + (c.visited_count  || 0), 0);
+  const totalLocations = chains.reduce((s, c) => s + (c.location_count || 0), 0);
+  const pct = totalLocations > 0 ? Math.round(totalVisited / totalLocations * 100) : 0;
+
   return (
     <div className="dashboard">
       <div className="dashboard__header">
@@ -39,6 +43,23 @@ export default function DashboardPage() {
         </h1>
         <p className="dashboard__subtitle">Pick a chain and start chasing</p>
       </div>
+
+      <div className="dashboard__stats-bar">
+        <div className="dashboard__stat">
+          <div className="dashboard__stat-value">{chains.length}</div>
+          <div className="dashboard__stat-label">Chains</div>
+        </div>
+        <div className="dashboard__stat">
+          <div className="dashboard__stat-value">{totalVisited}</div>
+          <div className="dashboard__stat-label">Visited</div>
+        </div>
+        <div className="dashboard__stat">
+          <div className="dashboard__stat-value">{pct}%</div>
+          <div className="dashboard__stat-label">Complete</div>
+        </div>
+      </div>
+
+      <div className="dashboard__section-label">All chains</div>
 
       <div className="dashboard__grid">
         {chains.map((chain, i) => (

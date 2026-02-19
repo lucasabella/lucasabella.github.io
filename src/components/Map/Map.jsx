@@ -6,8 +6,8 @@ import './Map.css';
 
 //test
 function createMarkerIcon(visited) {
-  const color = visited ? '#22c55e' : '#f59e0b';
-  const glow = visited ? 'rgba(34,197,94,0.3)' : 'rgba(245,158,11,0.3)';
+  const color = visited ? '#2C6E49' : '#D4522A';
+  const glow = visited ? 'rgba(44,110,73,0.35)' : 'rgba(212,82,42,0.35)';
 
   const svg = `
     <svg width="32" height="44" viewBox="0 0 32 44" xmlns="http://www.w3.org/2000/svg">
@@ -16,9 +16,9 @@ function createMarkerIcon(visited) {
       </filter>
       <path d="M16 0C7.163 0 0 7.163 0 16c0 12 16 28 16 28s16-16 16-28C32 7.163 24.837 0 16 0z"
             fill="${color}" filter="url(#shadow)" />
-      <circle cx="16" cy="15" r="7" fill="${visited ? '#0b1120' : '#0b1120'}" opacity="0.3"/>
+      <circle cx="16" cy="15" r="7" fill="rgba(255,255,255,0.3)"/>
       <circle cx="16" cy="15" r="5" fill="white" opacity="0.9"/>
-      ${visited ? '<path d="M12 15l3 3 5-5" stroke="#0b1120" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' : ''}
+      ${visited ? '<path d="M12 15l3 3 5-5" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' : ''}
     </svg>
   `;
 
@@ -65,7 +65,7 @@ export default function Map({ locations = [], isVisited, onToggleVisit, focusedI
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         />
 
         <FlyToLocation locations={locations} focusedId={focusedId} />
