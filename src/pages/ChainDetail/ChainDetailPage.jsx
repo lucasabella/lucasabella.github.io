@@ -31,7 +31,7 @@ export default function ChainDetailPage() {
 
   const { isVisited, toggleVisit, visitedCount, updateFromLocations } = useVisits(locations);
   const { position, loading: geoLoading, error: geoError, requestPosition } = useGeolocation();
-  const { sheetStyle, panelRef, dragHandleRef, snapState } = useBottomSheet(52);
+  const { panelRef, dragHandleRef, snapState } = useBottomSheet(52);
 
   useEffect(() => {
     (async () => {
@@ -148,7 +148,6 @@ export default function ChainDetailPage() {
       <aside
         className={panelClass}
         ref={panelRef}
-        style={window.innerWidth <= 768 ? sheetStyle : undefined}
       >
         {/* Desktop toggle */}
         <button

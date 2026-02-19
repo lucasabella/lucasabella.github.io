@@ -390,7 +390,7 @@
     height: 100%;
   }
 
-  /* Bottom sheet: full height, position controlled by useBottomSheet hook */
+  /* Bottom sheet: full height, transform controlled by useBottomSheet hook */
   .app__panel {
     position: absolute;
     top: auto;
@@ -403,14 +403,14 @@
     border-top: 1px solid var(--border-strong);
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     box-shadow: 0 -4px 24px rgba(28, 23, 19, 0.12);
-    /* Animation handled by inline sheetStyle from hook */
     animation: none;
+    transition: none; /* hook controls transition via inline style */
+    /* DO NOT set transform here — useBottomSheet controls it imperatively */
   }
 
-  /* Collapsed class no longer drives transform on mobile — hook does */
+  /* Desktop collapsed class is a no-op on mobile */
   .app__panel--collapsed {
-    transform: none;
-    /* Overridden by inline sheetStyle */
+    transform: unset;
   }
 
   .app__panel-toggle {

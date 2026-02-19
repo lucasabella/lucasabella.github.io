@@ -1,216 +1,206 @@
 import { useState, useRef, useCallback, useEffect, useLayoutEffect } from 'react';
 
 /**
- * useBottomSheet — iOS-style bottom sheet with three snap positions.
+ * useBottomSheet — iOS-style bottom sheet with finger-following drag.
  *
- * Performance: transform during drag is applied directly to the DOM,
- * completely bypassing React state updates. React is only notified once
- * on finger-lift to record the final snap position.
+ * Snap positions (translateY from top of the panel element):
+ *   collapsed — only drag handle visible (~80px from bottom)
+ *   half      — 65% of panel height visible
+ *   full      — entire panel visible
  *
- * Snap positions (translateY from bottom of nav):
- *   collapsed — only drag handle visible (~80px)
- *   half      — 65% of viewport height
- *   full      — full height (minus nav)
+ * All transform manipulation is done imperatively on the DOM.
+ * The component should NOT set any inline `style.transform` on the panel.
  */
 
 const COLLAPSED_PX = 80;
-const VELOCITY_THRESHOLD = 0.4; // px/ms
+const VELOCITY_THRESHOLD = 0.4;   // px/ms
 const SNAP_TRANSITION = 'transform 0.35s cubic-bezier(0.32, 0.72, 0, 1)';
 
-function getTranslateYForState(state, panelHeight) {
+function getTranslateY(state, panelHeight) {
     switch (state) {
-        case 'full':      return 0;
-        case 'half':      return panelHeight * 0.35;
+        case 'full': return 0;
+        case 'half': return panelHeight * 0.35;
         case 'collapsed': return panelHeight - COLLAPSED_PX;
-        default:          return panelHeight * 0.35;
+        default: return panelHeight * 0.35;
     }
 }
 
-/** Read the element's actual current translateY (works mid-animation). */
+function isMobile() {
+    return window.innerWidth <= 768;
+}
+
 function readCurrentTranslateY(el) {
-    const computed = window.getComputedStyle(el).transform;
-    if (!computed || computed === 'none') return 0;
-    const matrix = new DOMMatrix(computed);
-    return matrix.m42; // Y translation in px
+    const style = window.getComputedStyle(el);
+    if (!style.transform || style.transform === 'none') return 0;
+    const matrix = new DOMMatrix(style.transform);
+    return matrix.m42;
 }
 
 export function useBottomSheet(navHeight = 52) {
     const [snapState, setSnapState] = useState('half');
 
-    // Internal DOM reference — updated via callback ref so it's set
-    // even when the panel mounts late (after a loading state).
-    const panelEl      = useRef(null);
-    const dragHandleRef = useRef(null);
-
-    // All drag state lives here — mutations never trigger re-renders.
-    const drag = useRef({
-        active:          false,
-        startY:          0,
-        startTime:       0,
-        startTranslateY: 0,
-        currentY:        0,
-        panelHeight:     0,
-    });
-
-    // Readable in effects/callbacks without stale closures.
-    const snapStateRef   = useRef(snapState);
+    const panelEl = useRef(null);
+    const dragHandleEl = useRef(null);
+    const snapStateRef = useRef(snapState);
     snapStateRef.current = snapState;
-
-    // Prevents useLayoutEffect from overriding the transform that onEnd already set.
     const justSnappedRef = useRef(false);
 
-    // ── Callback ref ────────────────────────────────────────────────────────────
-    // Using a callback ref (instead of useRef + conditional prop) ensures the
-    // initial transform is applied the moment the element enters the DOM,
-    // even if that happens after a loading state change.
+    const drag = useRef({
+        active: false,
+        startY: 0,
+        startTime: 0,
+        startTranslateY: 0,
+        panelHeight: 0,
+    });
+
+    // ── Touch handlers (stable refs — no closures over state) ──────────────
+    const onTouchStart = useCallback((e) => {
+        if (!panelEl.current || !isMobile()) return;
+
+        const touch = e.touches[0];
+        const panelHeight = window.innerHeight - navHeight;
+        const startTranslateY = readCurrentTranslateY(panelEl.current);
+
+        drag.current = {
+            active: true,
+            startY: touch.clientY,
+            startTime: Date.now(),
+            startTranslateY,
+            panelHeight,
+        };
+
+        panelEl.current.style.transition = 'none';
+        if (dragHandleEl.current) {
+            dragHandleEl.current.classList.add('panel__drag-handle--active');
+        }
+    }, [navHeight]);
+
+    const onTouchMove = useCallback((e) => {
+        if (!drag.current.active || !panelEl.current) return;
+
+        const touch = e.touches[0];
+        const dy = touch.clientY - drag.current.startY;
+        let newTY = drag.current.startTranslateY + dy;
+        const maxTY = drag.current.panelHeight - COLLAPSED_PX;
+        newTY = Math.max(0, Math.min(maxTY, newTY));
+
+        panelEl.current.style.transform = `translateY(${newTY}px)`;
+    }, []);
+
+    const onTouchEnd = useCallback((e) => {
+        if (!drag.current.active) return;
+        drag.current.active = false;
+
+        const endY = e.changedTouches?.[0]?.clientY ?? drag.current.startY;
+        const dy = endY - drag.current.startY;
+        const dt = Date.now() - drag.current.startTime;
+        const velocity = dy / Math.max(dt, 1);
+        const { panelHeight, startTranslateY } = drag.current;
+
+        let newTY = startTranslateY + dy;
+        const maxTY = panelHeight - COLLAPSED_PX;
+        newTY = Math.max(0, Math.min(maxTY, newTY));
+
+        const snaps = [
+            { state: 'full', ty: 0 },
+            { state: 'half', ty: panelHeight * 0.35 },
+            { state: 'collapsed', ty: panelHeight - COLLAPSED_PX },
+        ];
+
+        let targetSnap;
+        if (Math.abs(velocity) > VELOCITY_THRESHOLD) {
+            const idx = snaps.findIndex(s => s.state === snapStateRef.current);
+            if (velocity > 0) {
+                targetSnap = snaps[Math.min(idx + 1, snaps.length - 1)];
+            } else {
+                targetSnap = snaps[Math.max(idx - 1, 0)];
+            }
+        } else {
+            let minDist = Infinity;
+            for (const snap of snaps) {
+                const dist = Math.abs(newTY - snap.ty);
+                if (dist < minDist) {
+                    minDist = dist;
+                    targetSnap = snap;
+                }
+            }
+        }
+
+        justSnappedRef.current = true;
+        if (panelEl.current) {
+            panelEl.current.style.transition = SNAP_TRANSITION;
+            panelEl.current.style.transform = `translateY(${targetSnap.ty}px)`;
+        }
+        if (dragHandleEl.current) {
+            dragHandleEl.current.classList.remove('panel__drag-handle--active');
+        }
+        setSnapState(targetSnap.state);
+    }, []);
+
+    // ── Callback ref for the panel ─────────────────────────────────────────
     const panelRef = useCallback((node) => {
         panelEl.current = node;
-        if (!node || window.innerWidth > 768) return;
-        // Apply initial position immediately, before first paint.
+        if (!node || !isMobile()) return;
         const panelHeight = window.innerHeight - navHeight;
-        const ty = getTranslateYForState(snapStateRef.current, panelHeight);
+        const ty = getTranslateY('half', panelHeight);
         node.style.transition = 'none';
-        node.style.transform  = `translateY(${ty}px)`;
-    }, [navHeight]); // navHeight=52 is constant in practice → created once
+        node.style.transform = `translateY(${ty}px)`;
+    }, [navHeight]);
 
-    // ── Snap-state changes (external or post-drag) ───────────────────────────
+    // ── Callback ref for the drag handle ───────────────────────────────────
+    // Attaches touchstart listener here so it fires even if the element
+    // mounts after a loading state. Also cleans up if the ref detaches.
+    const prevHandleRef = useRef(null);
+    const dragHandleRef = useCallback((node) => {
+        // Clean up old listener
+        if (prevHandleRef.current) {
+            prevHandleRef.current.removeEventListener('touchstart', onTouchStart);
+        }
+        dragHandleEl.current = node;
+        prevHandleRef.current = node;
+        if (node) {
+            node.addEventListener('touchstart', onTouchStart, { passive: true });
+        }
+    }, [onTouchStart]);
+
+    // ── Window-level touchmove + touchend (attached once on mount) ─────────
+    useEffect(() => {
+        window.addEventListener('touchmove', onTouchMove, { passive: true });
+        window.addEventListener('touchend', onTouchEnd);
+        window.addEventListener('touchcancel', onTouchEnd);
+
+        return () => {
+            window.removeEventListener('touchmove', onTouchMove);
+            window.removeEventListener('touchend', onTouchEnd);
+            window.removeEventListener('touchcancel', onTouchEnd);
+        };
+    }, [onTouchMove, onTouchEnd]);
+
+    // ── Sync transform when snapState changes externally ───────────────────
     useLayoutEffect(() => {
-        if (!panelEl.current || window.innerWidth > 768) return;
+        if (!panelEl.current || !isMobile()) return;
         if (justSnappedRef.current) {
-            // onEnd already animated to the correct position — skip override.
             justSnappedRef.current = false;
             return;
         }
         const panelHeight = window.innerHeight - navHeight;
-        const ty = getTranslateYForState(snapState, panelHeight);
+        const ty = getTranslateY(snapState, panelHeight);
         panelEl.current.style.transition = SNAP_TRANSITION;
-        panelEl.current.style.transform  = `translateY(${ty}px)`;
+        panelEl.current.style.transform = `translateY(${ty}px)`;
     }, [snapState, navHeight]);
 
-    // ── Touchstart on drag handle ────────────────────────────────────────────
+    // ── Cleanup touchstart on unmount ──────────────────────────────────────
     useEffect(() => {
-        const handle = dragHandleRef.current;
-        if (!handle) return;
-
-        const onStart = (e) => {
-            const touch       = e.touches[0];
-            const panelHeight = window.innerHeight - navHeight;
-
-            // Read the actual visual position (works correctly mid-animation).
-            const startTranslateY = panelEl.current
-                ? readCurrentTranslateY(panelEl.current)
-                : getTranslateYForState(snapStateRef.current, panelHeight);
-
-            drag.current = {
-                active:          true,
-                startY:          touch.clientY,
-                startTime:       Date.now(),
-                startTranslateY,
-                currentY:        touch.clientY,
-                panelHeight,
-            };
-
-            // Remove transition so the sheet follows the finger instantly.
-            if (panelEl.current) {
-                panelEl.current.style.transition = 'none';
-            }
-            handle.classList.add('panel__drag-handle--active');
-        };
-
-        handle.addEventListener('touchstart', onStart, { passive: true });
-        return () => handle.removeEventListener('touchstart', onStart);
-    }, [navHeight]);
-
-    // ── Window-level touchmove + touchend ────────────────────────────────────
-    // Empty deps: runs once on mount. All mutable state accessed via refs.
-    useEffect(() => {
-        const onMove = (e) => {
-            if (!drag.current.active || !panelEl.current) return;
-
-            const touch = e.touches[0];
-            drag.current.currentY = touch.clientY;
-
-            const dy    = touch.clientY - drag.current.startY;
-            let   newTY = drag.current.startTranslateY + dy;
-            const maxTY = drag.current.panelHeight - COLLAPSED_PX;
-            newTY = Math.max(0, Math.min(maxTY, newTY));
-
-            // Direct DOM write — zero React overhead, runs at native 60fps.
-            panelEl.current.style.transform = `translateY(${newTY}px)`;
-        };
-
-        const onEnd = () => {
-            if (!drag.current.active) return;
-            drag.current.active = false;
-
-            const { startY, startTime, startTranslateY, currentY, panelHeight } = drag.current;
-
-            const dy       = currentY - startY;
-            const dt       = Date.now() - startTime;
-            const velocity = dy / Math.max(dt, 1); // px/ms
-
-            let   newTY = startTranslateY + dy;
-            const maxTY = panelHeight - COLLAPSED_PX;
-            newTY = Math.max(0, Math.min(maxTY, newTY));
-
-            const snaps = [
-                { state: 'full',      ty: 0 },
-                { state: 'half',      ty: panelHeight * 0.35 },
-                { state: 'collapsed', ty: panelHeight - COLLAPSED_PX },
-            ];
-
-            let targetSnap;
-            if (Math.abs(velocity) > VELOCITY_THRESHOLD) {
-                // Flick: advance one snap in the direction of travel.
-                const idx = snaps.findIndex(s => s.state === snapStateRef.current);
-                targetSnap = velocity > 0
-                    ? snaps[Math.min(idx + 1, snaps.length - 1)]
-                    : snaps[Math.max(idx - 1, 0)];
-            } else {
-                // Slow drag: snap to nearest position.
-                let minDist = Infinity;
-                for (const snap of snaps) {
-                    const dist = Math.abs(newTY - snap.ty);
-                    if (dist < minDist) { minDist = dist; targetSnap = snap; }
-                }
-            }
-
-            // Animate to snap position directly on the DOM.
-            // Set justSnapped so useLayoutEffect skips the re-render update.
-            justSnappedRef.current = true;
-            if (panelEl.current) {
-                panelEl.current.style.transition = SNAP_TRANSITION;
-                panelEl.current.style.transform  = `translateY(${targetSnap.ty}px)`;
-            }
-            if (dragHandleRef.current) {
-                dragHandleRef.current.classList.remove('panel__drag-handle--active');
-            }
-
-            // One React state update — just to record the final position.
-            setSnapState(targetSnap.state);
-        };
-
-        window.addEventListener('touchmove',   onMove, { passive: true });
-        window.addEventListener('touchend',    onEnd);
-        window.addEventListener('touchcancel', onEnd);
-
         return () => {
-            window.removeEventListener('touchmove',   onMove);
-            window.removeEventListener('touchend',    onEnd);
-            window.removeEventListener('touchcancel', onEnd);
+            if (prevHandleRef.current) {
+                prevHandleRef.current.removeEventListener('touchstart', onTouchStart);
+            }
         };
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-    // Non-transform styles only — transform/transition managed imperatively above.
-    const sheetStyle = {
-        willChange: 'transform',
-        height:     `calc(100dvh - ${navHeight}px)`,
-    };
+    }, [onTouchStart]);
 
     return {
-        panelRef,      // callback ref  — attach to the panel <aside>
-        dragHandleRef, // ref object    — attach to the drag handle <div>
-        sheetStyle,
+        panelRef,
+        dragHandleRef,
         snapState,
         setSnapState,
     };
