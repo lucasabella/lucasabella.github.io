@@ -102,8 +102,13 @@ export default function ChainDetailPage() {
     setFocusedId(location.id);
   }, []);
 
+  const scrollTopRef = useRef(false);
   const handleLocationsScroll = useCallback((e) => {
-    setShowScrollTop(e.target.scrollTop > 200);
+    const shouldShow = e.target.scrollTop > 200;
+    if (shouldShow !== scrollTopRef.current) {
+      scrollTopRef.current = shouldShow;
+      setShowScrollTop(shouldShow);
+    }
   }, []);
 
   const scrollToTop = useCallback(() => {

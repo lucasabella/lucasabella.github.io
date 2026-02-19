@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { memo } from 'react';
 import './LocationCard.css';
 
 function formatDistance(km) {
@@ -8,19 +8,12 @@ function formatDistance(km) {
   return `${Math.round(km)} km`;
 }
 
-export default function LocationCard({ location, visited = false, onToggle, onFocus, index = 0, distance }) {
-  const cardRef = useRef(null);
-
-  useEffect(() => {
-    if (cardRef.current) {
-      cardRef.current.style.animationDelay = `${index * 30}ms`;
-    }
-  }, [index]);
+const LocationCard = memo(function LocationCard({ location, visited = false, onToggle, onFocus, index = 0, distance }) {
 
   return (
     <div
-      ref={cardRef}
       className={`location-card ${visited ? 'location-card--visited' : ''}`}
+      style={{ animationDelay: `${index * 30}ms` }}
       onClick={() => onFocus?.(location)}
     >
       <div className="location-card__content">
@@ -49,4 +42,6 @@ export default function LocationCard({ location, visited = false, onToggle, onFo
       </div>
     </div>
   );
-}
+});
+
+export default LocationCard;

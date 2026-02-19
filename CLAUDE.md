@@ -129,11 +129,17 @@ PostgreSQL with tables: `users`, `chains`, `locations`, `visits`, `refresh_token
 
 ## Key Constraints
 
+- **Local testing is not possible** — the backend cannot run locally (no local PostgreSQL / env config). All testing must be done against the deployed production site.
 - Frontend deployed to GitHub Pages (static hosting — backend needs separate hosting)
 - CORS configured for cross-origin cookies (`SameSite=None; Secure`)
 - Vite dev proxy: `/api` → `http://localhost:3001`
 - Location data seeded from JSON files — source_id enables localStorage migration
 - Phase 1 localStorage data (`chaincaser-visited`) auto-migrated on first login
+
+## Known Gotchas
+
+- **CSS animation fill-mode:** `animation-fill-mode: both` (or `forwards`) locks the final keyframe transform, overriding any subsequent CSS class-applied `transform`. Entrance animations on toggled elements (e.g. `.app__panel`) must use `backwards` instead. Symptom: clicking a toggle/close button appears to do nothing.
+- **JSX HTML entities:** HTML entities like `&#10003;` are not parsed in JSX string literals — use Unicode escapes (`'\u2713'`) instead.
 
 ## Development Phases
 
