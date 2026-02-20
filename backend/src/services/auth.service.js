@@ -19,10 +19,21 @@ export async function comparePassword(password, hash) {
 
 export function generateAccessToken(user) {
   return jwt.sign(
-    { id: user.id, email: user.email },
+    { id: user.id, email: user.email, username: user.username },
     config.jwtSecret,
     { expiresIn: '15m' }
   );
+}
+
+export function generateUsername(name) {
+  const slug = name
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '_')
+    .replace(/_+/g, '_')
+    .replace(/^_|_$/g, '')
+    .slice(0, 24);
+  const suffix = crypto.randomBytes(3).toString('hex'); // 5 chars of hex
+  return `${slug || 'user'}_${suffix}`;
 }
 
 export function generateRefreshToken() {
@@ -41,7 +52,7 @@ export async function saveRefreshToken(userId, token) {
 export async function findRefreshToken(token) {
   const hash = crypto.createHash('sha256').update(token).digest('hex');
   const { rows } = await pool.query(
-    `SELECT rt.*, u.id as uid, u.email, u.name, u.avatar_url
+    `SELECT rt.*, u.id as uid, u.email, u.name, u.username, u.avatar_url
      FROM refresh_tokens rt
      JOIN users u ON u.id = rt.user_id
      WHERE rt.token_hash = $1 AND rt.expires_at > NOW()`,

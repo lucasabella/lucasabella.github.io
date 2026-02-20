@@ -14,25 +14,40 @@ router.post(
   body('email').isEmail().normalizeEmail(),
   body('password').isLength({ min: 8 }),
   body('name').trim().notEmpty(),
+  body('username').optional().matches(/^[a-z0-9_]{3,30}$/).withMessage('Username must be 3–30 chars: lowercase letters, numbers, underscores'),
   validate,
   async (req, res, next) => {
     try {
-      const { email, password, name } = req.body;
+      const { email, password, name, username: requestedUsername } = req.body;
 
       const existing = await User.findByEmail(email);
       if (existing) {
         return res.status(409).json({ error: 'Email already registered' });
       }
 
+      const username = requestedUsername || authService.generateUsername(name);
       const passwordHash = await authService.hashPassword(password);
-      const user = await User.create({ email, name, passwordHash });
 
-      const accessToken = authService.generateAccessToken(user);
+      let user;
+      try {
+        user = await User.create({ email, name, username, passwordHash });
+      } catch (err) {
+        if (err.code === '23505' && err.constraint === 'users_username_unique') {
+          // Username collision — generate a fresh one
+          const fallbackUsername = authService.generateUsername(name);
+          user = await User.create({ email, name, username: fallbackUsername, passwordHash });
+        } else {
+          throw err;
+        }
+      }
+
+      const safeUser = { id: user.id, email: user.email, name: user.name, username: user.username, avatar_url: user.avatar_url };
+      const accessToken = authService.generateAccessToken(safeUser);
       const refreshToken = authService.generateRefreshToken();
       await authService.saveRefreshToken(user.id, refreshToken);
       authService.setRefreshCookie(res, refreshToken);
 
-      res.status(201).json({ user, accessToken, refreshToken });
+      res.status(201).json({ user: safeUser, accessToken, refreshToken });
     } catch (err) {
       next(err);
     }
@@ -59,7 +74,7 @@ router.post(
         return res.status(401).json({ error: 'Invalid credentials' });
       }
 
-      const safeUser = { id: user.id, email: user.email, name: user.name, avatar_url: user.avatar_url };
+      const safeUser = { id: user.id, email: user.email, name: user.name, username: user.username, avatar_url: user.avatar_url };
       const accessToken = authService.generateAccessToken(safeUser);
       const refreshToken = authService.generateRefreshToken();
       await authService.saveRefreshToken(user.id, refreshToken);
@@ -95,16 +110,18 @@ router.post(
             user.id,
           ]);
         } else {
+          const username = authService.generateUsername(googleUser.name);
           user = await User.create({
             email: googleUser.email,
             name: googleUser.name,
+            username,
             googleId: googleUser.googleId,
             avatarUrl: googleUser.avatarUrl,
           });
         }
       }
 
-      const safeUser = { id: user.id, email: user.email || googleUser.email, name: user.name || googleUser.name, avatar_url: user.avatar_url || googleUser.avatarUrl };
+      const safeUser = { id: user.id, email: user.email || googleUser.email, name: user.name || googleUser.name, username: user.username, avatar_url: user.avatar_url || googleUser.avatarUrl };
       const accessToken = authService.generateAccessToken(safeUser);
       const refreshToken = authService.generateRefreshToken();
       await authService.saveRefreshToken(user.id, refreshToken);
@@ -137,7 +154,7 @@ router.post('/refresh', async (req, res, next) => {
     await authService.saveRefreshToken(stored.user_id, newRefreshToken);
     authService.setRefreshCookie(res, newRefreshToken);
 
-    const user = { id: stored.uid, email: stored.email, name: stored.name, avatar_url: stored.avatar_url };
+    const user = { id: stored.uid, email: stored.email, name: stored.name, username: stored.username, avatar_url: stored.avatar_url };
     const accessToken = authService.generateAccessToken(user);
 
     res.json({ user, accessToken, refreshToken: newRefreshToken });

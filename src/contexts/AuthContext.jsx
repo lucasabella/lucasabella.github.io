@@ -118,12 +118,14 @@ export function AuthProvider({ children }) {
     return data.user;
   };
 
-  const register = async (email, password, name) => {
+  const register = async (email, password, name, username) => {
+    const body = { email, password, name };
+    if (username) body.username = username;
     const res = await fetch(`${API_URL}/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify({ email, password, name }),
+      body: JSON.stringify(body),
     });
     if (!res.ok) {
       const err = await safeJson(res, {});

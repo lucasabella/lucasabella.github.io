@@ -7,6 +7,7 @@ export default function RegisterPage() {
   const { register, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -17,7 +18,7 @@ export default function RegisterPage() {
     setError('');
     setSubmitting(true);
     try {
-      await register(email, password, name);
+      await register(email, password, name, username || undefined);
       navigate('/dashboard');
     } catch (err) {
       setError(err.message);
@@ -88,6 +89,20 @@ export default function RegisterPage() {
               onChange={(e) => setName(e.target.value)}
               required
               autoComplete="name"
+            />
+          </div>
+
+          <div className="auth-field">
+            <label htmlFor="username">Username <span style={{ color: 'var(--text-muted)', fontSize: '0.8em' }}>(optional)</span></label>
+            <input
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
+              placeholder="e.g. jan_de_vries"
+              minLength={3}
+              maxLength={30}
+              autoComplete="username"
             />
           </div>
 

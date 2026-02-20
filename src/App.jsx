@@ -7,6 +7,8 @@ import LoginPage from './pages/Login/LoginPage';
 import RegisterPage from './pages/Register/RegisterPage';
 import DashboardPage from './pages/Dashboard/DashboardPage';
 import ChainDetailPage from './pages/ChainDetail/ChainDetailPage';
+import LeaderboardPage from './pages/Leaderboard/LeaderboardPage';
+import FriendsPage from './pages/Friends/FriendsPage';
 import './App.css';
 
 function App() {
@@ -25,6 +27,8 @@ function App() {
           >
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/chains/:slug" element={<ChainDetailPage />} />
+            <Route path="/leaderboard" element={<LeaderboardPage />} />
+            <Route path="/friends" element={<FriendsPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>

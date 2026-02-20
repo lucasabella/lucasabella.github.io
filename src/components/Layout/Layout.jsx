@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, NavLink } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import './Layout.css';
@@ -19,6 +19,18 @@ export default function Layout() {
         <button className="layout__brand" onClick={() => navigate('/dashboard')}>
           Chain<span className="layout__brand-accent">Chaser</span>
         </button>
+
+        <nav className="layout__nav-links" aria-label="Main navigation">
+          <NavLink to="/dashboard" className={({ isActive }) => `layout__nav-link${isActive ? ' layout__nav-link--active' : ''}`}>
+            Chains
+          </NavLink>
+          <NavLink to="/leaderboard" className={({ isActive }) => `layout__nav-link${isActive ? ' layout__nav-link--active' : ''}`}>
+            Leaderboard
+          </NavLink>
+          <NavLink to="/friends" className={({ isActive }) => `layout__nav-link${isActive ? ' layout__nav-link--active' : ''}`}>
+            Friends
+          </NavLink>
+        </nav>
 
         <div className="layout__actions">
           <button

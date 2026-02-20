@@ -34,6 +34,34 @@
   color: var(--accent);
 }
 
+.layout__nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.layout__nav-link {
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.layout__nav-link:hover {
+  color: var(--text-primary);
+  background: var(--bg-card-hover);
+}
+
+.layout__nav-link--active {
+  background: var(--accent-light);
+  color: var(--accent-dark);
+  font-weight: 600;
+}
+
 .layout__actions {
   display: flex;
   align-items: center;
@@ -150,6 +178,11 @@
 
   .layout__brand {
     font-size: 1.2rem;
+  }
+
+  .layout__nav-link {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.8rem;
   }
 
   .layout__user-name {

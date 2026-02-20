@@ -8,6 +8,9 @@ import config from './config/env.js';
 import authRoutes from './routes/auth.js';
 import chainRoutes from './routes/chains.js';
 import visitRoutes from './routes/visits.js';
+import friendRoutes from './routes/friends.js';
+import leaderboardRoutes from './routes/leaderboard.js';
+import userRoutes from './routes/users.js';
 
 const app = express();
 
@@ -20,6 +23,9 @@ app.use(cookieParser());
 app.use('/api/auth', authRoutes);
 app.use('/api/chains', chainRoutes);
 app.use('/api/visits', visitRoutes);
+app.use('/api/friends', friendRoutes);
+app.use('/api/leaderboard', leaderboardRoutes);
+app.use('/api/users', userRoutes);
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' });
