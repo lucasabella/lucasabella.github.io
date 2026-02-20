@@ -60,7 +60,8 @@ router.delete('/:locationId', verifyToken, async (req, res, next) => {
     if (!deleted) {
       return res.status(404).json({ error: 'Visit not found' });
     }
-    res.json({ message: 'Unmarked' });
+    const revokedBadges = await BadgeService.checkAndRevokeBadges(req.user.id);
+    res.json({ message: 'Unmarked', revokedBadges });
   } catch (err) {
     next(err);
   }

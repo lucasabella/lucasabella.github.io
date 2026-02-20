@@ -135,6 +135,18 @@
   line-height: 1.3;
 }
 
+.badge--locked {
+  opacity: 0.5;
+  filter: grayscale(100%);
+  border-style: dashed;
+}
+
+.badge--locked:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--border);
+}
+
 .dashboard__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

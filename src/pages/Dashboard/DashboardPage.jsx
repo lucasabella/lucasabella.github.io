@@ -4,6 +4,14 @@ import { useAuth } from '../../contexts/AuthContext';
 import ChainCard from './ChainCard';
 import './DashboardPage.css';
 
+const ALL_BADGES = [
+  { id: 'first_bite', icon: '🍔', name: 'First Bite', description: 'Started your journey with your first visit.' },
+  { id: 'loyalist', icon: '🔥', name: 'The Loyalist', description: 'Visited 5 locations.' },
+  { id: 'veteran', icon: '🤠', name: 'Veteran Chaser', description: 'Visited 25 locations.' },
+  { id: 'hopper', icon: '🦘', name: 'Chain Hopper', description: 'Visited at least 3 different chains.' },
+  { id: 'completionist', icon: '👑', name: 'Completionist', description: '100% completed a chain.' }
+];
+
 export default function DashboardPage() {
   const apiFetch = useApi();
   const { user } = useAuth();
@@ -64,22 +72,21 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {badges.length > 0 && (
-        <>
-          <div className="dashboard__section-label">🏆 Trophy Case</div>
-          <div className="dashboard__badges">
-            {badges.map(badge => (
-              <div key={badge.id} className="badge">
-                <div className="badge__icon">{badge.icon}</div>
-                <div className="badge__info">
-                  <div className="badge__name">{badge.name}</div>
-                  <div className="badge__desc">{badge.desc}</div>
-                </div>
+      <div className="dashboard__section-label">🏆 Trophy Case</div>
+      <div className="dashboard__badges">
+        {ALL_BADGES.map(badgeDef => {
+          const earned = badges.find(b => b.id === badgeDef.id);
+          return (
+            <div key={badgeDef.id} className={`badge ${!earned ? 'badge--locked' : ''}`}>
+              <div className="badge__icon">{badgeDef.icon}</div>
+              <div className="badge__info">
+                <div className="badge__name">{badgeDef.name}</div>
+                <div className="badge__desc">{badgeDef.description}</div>
               </div>
-            ))}
-          </div>
-        </>
-      )}
+            </div>
+          );
+        })}
+      </div>
 
       <div className="dashboard__section-label">All chains</div>
 

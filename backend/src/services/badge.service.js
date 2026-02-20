@@ -52,3 +52,37 @@ export async function getUserBadges(userId) {
     );
     return rows;
 }
+
+export async function checkAndRevokeBadges(userId) {
+    const stats = await Visit.getStats(userId);
+    const revokedBadgeIds = [];
+
+    const checkRevoke = async (code, condition) => {
+        if (!condition) {
+            const { rowCount } = await pool.query(
+                `DELETE FROM user_badges WHERE user_id = $1 AND badge_id = $2`,
+                [userId, code]
+            );
+            if (rowCount > 0) {
+                revokedBadgeIds.push(code);
+            }
+        }
+    };
+
+    // 1. First Bite (visited_locations >= 1)
+    await checkRevoke('first_bite', stats.visited_locations >= 1);
+
+    // 2. The Loyalist (visited_locations >= 5)
+    await checkRevoke('loyalist', stats.visited_locations >= 5);
+
+    // 3. Veteran Chaser (visited_locations >= 25)
+    await checkRevoke('veteran', stats.visited_locations >= 25);
+
+    // 4. Chain Hopper (chains_started >= 3)
+    await checkRevoke('hopper', stats.chains_started >= 3);
+
+    // 5. Completionist (chains_completed >= 1)
+    await checkRevoke('completionist', stats.chains_completed >= 1);
+
+    return revokedBadgeIds;
+}

@@ -17,6 +17,7 @@ export function fireVisitConfetti(event) {
         origin,
         colors: ['#2C6E49', '#4C956C', '#FEFEE3', '#FFC9B9', '#D68C45'],
         disableForReducedMotion: true,
+        zIndex: 9999,
     });
 }
 
