@@ -52,3 +52,10 @@
   letter-spacing: 0.04em;
   animation: fadeIn 0.5s var(--ease-out);
 }
+
+/* Compact variant — thin bar only, no text */
+.progress-bar--compact .progress-bar__track {
+  height: 4px;
+  border: none;
+  border-radius: 2px;
+}

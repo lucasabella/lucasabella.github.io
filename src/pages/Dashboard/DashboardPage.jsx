@@ -5,12 +5,15 @@ import ChainCard from './ChainCard';
 import './DashboardPage.css';
 
 const ALL_BADGES = [
-  { id: 'first_bite', icon: '🍔', name: 'First Bite', description: 'Started your journey with your first visit.' },
-  { id: 'loyalist', icon: '🔥', name: 'The Loyalist', description: 'Visited 5 locations.' },
-  { id: 'veteran', icon: '🤠', name: 'Veteran Chaser', description: 'Visited 25 locations.' },
-  { id: 'hopper', icon: '🦘', name: 'Chain Hopper', description: 'Visited at least 3 different chains.' },
-  { id: 'completionist', icon: '👑', name: 'Completionist', description: '100% completed a chain.' }
+  { id: 'first_bite', icon: '\u{1F354}', name: 'First Bite', description: 'Started your journey with your first visit.' },
+  { id: 'loyalist', icon: '\u{1F525}', name: 'The Loyalist', description: 'Visited 5 locations.' },
+  { id: 'veteran', icon: '\u{1F920}', name: 'Veteran Chaser', description: 'Visited 25 locations.' },
+  { id: 'hopper', icon: '\u{1F998}', name: 'Chain Hopper', description: 'Visited at least 3 different chains.' },
+  { id: 'completionist', icon: '\u{1F451}', name: 'Completionist', description: '100% completed a chain.' }
 ];
+
+const RING_RADIUS = 54;
+const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 
 export default function DashboardPage() {
   const apiFetch = useApi();
@@ -47,53 +50,111 @@ export default function DashboardPage() {
   const totalVisited = chains.reduce((s, c) => s + (c.visited_count || 0), 0);
   const totalLocations = chains.reduce((s, c) => s + (c.location_count || 0), 0);
   const pct = totalLocations > 0 ? Math.round(totalVisited / totalLocations * 100) : 0;
+  const ringOffset = RING_CIRCUMFERENCE - (pct / 100) * RING_CIRCUMFERENCE;
+  const earnedCount = ALL_BADGES.filter(b => badges.find(e => e.id === b.id)).length;
 
   return (
     <div className="dashboard">
-      <div className="dashboard__header">
-        <h1 className="dashboard__title">
-          {user ? `Welcome back, ${user.name || user.email?.split('@')[0]}` : 'Your Chains'}
-        </h1>
-        <p className="dashboard__subtitle">Pick a chain and start chasing</p>
+      {/* Hero Card */}
+      <div className="dashboard__hero">
+        <div className="dashboard__greeting">
+          <span className="dashboard__eyebrow">ChainChaser</span>
+          <h1 className="dashboard__title">
+            {user ? `Welcome back, ${user.name || user.email?.split('@')[0]}` : 'Your Chains'}
+          </h1>
+          <p className="dashboard__subtitle">Pick a chain and start chasing</p>
+        </div>
+
+        <div className="dashboard__ring-wrap">
+          <svg
+            className="dashboard__ring"
+            viewBox="0 0 120 120"
+            style={{
+              '--ring-circumference': RING_CIRCUMFERENCE,
+              '--ring-offset': ringOffset,
+            }}
+          >
+            <circle
+              className="dashboard__ring-track"
+              cx="60"
+              cy="60"
+              r={RING_RADIUS}
+              fill="none"
+              strokeWidth="8"
+            />
+            <circle
+              className="dashboard__ring-fill"
+              cx="60"
+              cy="60"
+              r={RING_RADIUS}
+              fill="none"
+              strokeWidth="8"
+              strokeLinecap="round"
+              strokeDasharray={RING_CIRCUMFERENCE}
+              strokeDashoffset={RING_CIRCUMFERENCE}
+              transform="rotate(-90 60 60)"
+            />
+          </svg>
+          <span className="dashboard__ring-label">{pct}%</span>
+        </div>
+
+        <div className="dashboard__stats">
+          <div className="dashboard__stat" style={{ animationDelay: '700ms' }}>
+            <div className="dashboard__stat-value">{chains.length}</div>
+            <div className="dashboard__stat-label">Chains</div>
+          </div>
+          <div className="dashboard__stat-divider" />
+          <div className="dashboard__stat" style={{ animationDelay: '800ms' }}>
+            <div className="dashboard__stat-value">{totalVisited}</div>
+            <div className="dashboard__stat-label">Visited</div>
+          </div>
+          <div className="dashboard__stat-divider" />
+          <div className="dashboard__stat" style={{ animationDelay: '900ms' }}>
+            <div className="dashboard__stat-value">{totalLocations}</div>
+            <div className="dashboard__stat-label">Locations</div>
+          </div>
+        </div>
       </div>
 
-      <div className="dashboard__stats-bar">
-        <div className="dashboard__stat">
-          <div className="dashboard__stat-value">{chains.length}</div>
-          <div className="dashboard__stat-label">Chains</div>
+      {/* Trophy Case */}
+      <div className="dashboard__section">
+        <div className="dashboard__section-header">
+          <h2 className="dashboard__section-title">Trophy Case</h2>
+          <span className="dashboard__section-count">{earnedCount}/{ALL_BADGES.length}</span>
         </div>
-        <div className="dashboard__stat">
-          <div className="dashboard__stat-value">{totalVisited}</div>
-          <div className="dashboard__stat-label">Visited</div>
-        </div>
-        <div className="dashboard__stat">
-          <div className="dashboard__stat-value">{pct}%</div>
-          <div className="dashboard__stat-label">Complete</div>
+        <div className="dashboard__badge-shelf">
+          <div className="dashboard__badge-track">
+            {ALL_BADGES.map((badgeDef, i) => {
+              const earned = badges.find(b => b.id === badgeDef.id);
+              return (
+                <div
+                  key={badgeDef.id}
+                  className={`badge ${!earned ? 'badge--locked' : ''}`}
+                  style={{ animationDelay: `${600 + i * 80}ms` }}
+                >
+                  <div className="badge__medallion">
+                    <span className="badge__icon">{badgeDef.icon}</span>
+                  </div>
+                  <div className="badge__pedestal">
+                    <span className="badge__name">{badgeDef.name}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      <div className="dashboard__section-label">🏆 Trophy Case</div>
-      <div className="dashboard__badges">
-        {ALL_BADGES.map(badgeDef => {
-          const earned = badges.find(b => b.id === badgeDef.id);
-          return (
-            <div key={badgeDef.id} className={`badge ${!earned ? 'badge--locked' : ''}`}>
-              <div className="badge__icon">{badgeDef.icon}</div>
-              <div className="badge__info">
-                <div className="badge__name">{badgeDef.name}</div>
-                <div className="badge__desc">{badgeDef.description}</div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="dashboard__section-label">All chains</div>
-
-      <div className="dashboard__grid">
-        {chains.map((chain, i) => (
-          <ChainCard key={chain.id} chain={chain} index={i} />
-        ))}
+      {/* Chain Cards */}
+      <div className="dashboard__section">
+        <div className="dashboard__section-header">
+          <h2 className="dashboard__section-title">Your Chains</h2>
+        </div>
+        <div className="dashboard__grid">
+          {chains.map((chain, i) => (
+            <ChainCard key={chain.id} chain={chain} index={i} />
+          ))}
+        </div>
       </div>
 
       {chains.length === 0 && (

@@ -26,7 +26,8 @@
 
   /* — Typography — */
   --font-display: 'Fraunces', 'Georgia', serif;
-  --font-body: 'Karla', system-ui, sans-serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-label: var(--font-body);
 
   /* — Spacing — */
   --radius-sm: 6px;
@@ -57,6 +58,16 @@
 
   /* — Sheet animation curve — */
   --ease-sheet: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* — Hero & Ring — */
+  --gradient-hero: linear-gradient(135deg, var(--bg-surface) 0%, #FAF7F2 100%);
+  --gradient-hero-accent: linear-gradient(135deg, rgba(212, 82, 42, 0.06) 0%, transparent 60%);
+  --shadow-hero: 0 8px 40px rgba(28, 23, 19, 0.10), 0 1px 3px rgba(28, 23, 19, 0.06);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  --shadow-badge: 0 2px 8px rgba(28, 23, 19, 0.08);
+  --ring-track: rgba(28, 23, 19, 0.06);
+  --ring-fill: var(--accent);
+  --noise-opacity: 0.03;
 }
 
 /* — Dark mode palette — */
@@ -74,6 +85,14 @@
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --gradient-hero: linear-gradient(135deg, var(--bg-surface) 0%, #2A2420 100%);
+  --gradient-hero-accent: linear-gradient(135deg, rgba(212, 82, 42, 0.10) 0%, transparent 60%);
+  --shadow-hero: 0 8px 40px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --shadow-badge: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --ring-track: rgba(237, 232, 225, 0.08);
+  --ring-fill: var(--accent);
+  --noise-opacity: 0.02;
 }
 
 html {
@@ -95,6 +114,18 @@ body {
 #root {
   height: 100%;
   width: 100%;
+}
+
+#root::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: var(--noise-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
 }
 
 button {
@@ -217,6 +248,37 @@ a {
 @keyframes slideUpSheet {
   from { transform: translateY(100%); }
   to { transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ringFill {
+  from { stroke-dashoffset: var(--ring-circumference); }
+  to { stroke-dashoffset: var(--ring-offset); }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInFromRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes badgePedestal {
+  0% { opacity: 0; transform: scale(0.6) translateY(10px); }
+  60% { transform: scale(1.08) translateY(-2px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
 }
 
 /* Map popup — mobile */

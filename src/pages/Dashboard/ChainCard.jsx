@@ -6,13 +6,18 @@ import './ChainCard.css';
 export default function ChainCard({ chain, index }) {
   const navigate = useNavigate();
   const [imgError, setImgError] = useState(false);
+  const isComplete = chain.visited_count === chain.location_count && chain.location_count > 0;
 
   return (
-    <div
-      className="chain-card"
+    <article
+      className={`chain-card ${isComplete ? 'chain-card--complete' : ''}`}
+      role="button"
+      tabIndex={0}
       onClick={() => navigate(`/chains/${chain.slug}`)}
-      style={{ animationDelay: `${index * 60}ms` }}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(`/chains/${chain.slug}`); } }}
+      style={{ animationDelay: `${900 + index * 80}ms` }}
     >
+      <div className="chain-card__accent" />
       <div className="chain-card__header">
         <div className="chain-card__logo-wrap">
           {chain.logo_url && !imgError ? (
@@ -34,6 +39,9 @@ export default function ChainCard({ chain, index }) {
             {chain.visited_count}/{chain.location_count}
           </span>
         </div>
+        <svg className="chain-card__arrow" width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M7.5 4.5L13 10L7.5 15.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
       </div>
 
       {chain.description && (
@@ -41,8 +49,8 @@ export default function ChainCard({ chain, index }) {
       )}
 
       <div className="chain-card__progress">
-        <ProgressBar visited={chain.visited_count} total={chain.location_count} />
+        <ProgressBar visited={chain.visited_count} total={chain.location_count} variant="compact" />
       </div>
-    </div>
+    </article>
   );
 }
