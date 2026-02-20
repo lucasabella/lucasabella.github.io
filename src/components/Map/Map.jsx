@@ -56,9 +56,7 @@ export default function Map({ locations = [], isVisited, onToggleVisit, focusedI
   const center = [52.2, 5.3];
   const zoom = 8;
 
-  const tileUrl = theme === 'dark'
-    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+  const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
   return (
     <div className="map-wrapper">
@@ -71,9 +69,10 @@ export default function Map({ locations = [], isVisited, onToggleVisit, focusedI
         scrollWheelZoom={true}
       >
         <TileLayer
-          key={tileUrl}
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>'
+          key={theme}
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url={tileUrl}
+          className={theme === 'dark' ? 'map-tiles--dark' : ''}
         />
 
         <FlyToLocation locations={locations} focusedId={focusedId} />
