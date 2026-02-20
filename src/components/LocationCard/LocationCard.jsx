@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import './LocationCard.css';
+import { fireVisitConfetti } from '../../utils/confetti';
 
 function formatDistance(km) {
   if (km == null) return null;
@@ -27,12 +28,23 @@ const LocationCard = memo(function LocationCard({ location, visited = false, onT
             {distance != null && (
               <span className="location-card__distance">{formatDistance(distance)}</span>
             )}
+            <a
+              href={`https://www.google.com/maps/dir/?api=1&destination=${location.lat},${location.lng}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="location-card__directions"
+              onClick={(e) => e.stopPropagation()}
+              title="Get Directions"
+            >
+              Directions ↗
+            </a>
           </div>
         </div>
         <button
           className={`location-card__toggle ${visited ? 'location-card__toggle--visited' : ''}`}
           onClick={(e) => {
             e.stopPropagation();
+            if (!visited) fireVisitConfetti(e);
             onToggle?.();
           }}
           aria-label={visited ? 'Mark as not visited' : 'Mark as visited'}

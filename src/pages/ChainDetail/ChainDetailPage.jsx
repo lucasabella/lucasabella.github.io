@@ -8,6 +8,7 @@ import { useVisits } from '../../hooks/useVisits';
 import { useGeolocation } from '../../hooks/useGeolocation';
 import { useBottomSheet } from '../../hooks/useBottomSheet';
 import { haversineDistance } from '../../utils/geo';
+import { fireCompletionConfetti } from '../../utils/confetti';
 import './ChainDetailPage.css';
 
 const FILTERS = ['All', 'Visited', 'Remaining'];
@@ -31,7 +32,8 @@ export default function ChainDetailPage() {
 
   const { isVisited, toggleVisit, visitedCount, updateFromLocations } = useVisits(locations);
   const { position, loading: geoLoading, error: geoError, requestPosition } = useGeolocation();
-  const { panelRef, dragHandleRef, snapState } = useBottomSheet(52);
+  const { panelRef, dragHandleRef, snapState, setSnapState } = useBottomSheet(52);
+  const [findingNearest, setFindingNearest] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -51,6 +53,14 @@ export default function ChainDetailPage() {
 
   const total = locations.length;
   const remainingCount = total - visitedCount;
+
+  const prevVisitedCount = useRef(null);
+  useEffect(() => {
+    if (total > 0 && visitedCount === total && prevVisitedCount.current !== null && prevVisitedCount.current < total) {
+      fireCompletionConfetti();
+    }
+    prevVisitedCount.current = visitedCount;
+  }, [visitedCount, total]);
 
   // Handle sort toggle
   const handleSortChange = useCallback((s) => {
@@ -101,6 +111,43 @@ export default function ChainDetailPage() {
   const handleFocusLocation = useCallback((location) => {
     setFocusedId(location.id);
   }, []);
+
+  const findAndFocusNearest = useCallback((pos) => {
+    const unvisited = locations.filter(l => !isVisited(l.id));
+    if (unvisited.length === 0) return;
+
+    let nearest = unvisited[0];
+    let minDist = haversineDistance(pos.lat, pos.lng, nearest.lat, nearest.lng);
+
+    for (let i = 1; i < unvisited.length; i++) {
+      const dist = haversineDistance(pos.lat, pos.lng, unvisited[i].lat, unvisited[i].lng);
+      if (dist < minDist) {
+        minDist = dist;
+        nearest = unvisited[i];
+      }
+    }
+
+    setFocusedId(nearest.id);
+    if (window.innerWidth <= 768) {
+      setSnapState('collapsed');
+    }
+  }, [locations, isVisited, setSnapState]);
+
+  const handleFindNearestClick = useCallback(() => {
+    if (!position) {
+      setFindingNearest(true);
+      requestPosition();
+    } else {
+      findAndFocusNearest(position);
+    }
+  }, [position, requestPosition, findAndFocusNearest]);
+
+  useEffect(() => {
+    if (findingNearest && position) {
+      findAndFocusNearest(position);
+      setFindingNearest(false);
+    }
+  }, [position, findingNearest, findAndFocusNearest]);
 
   const scrollTopRef = useRef(false);
   const handleLocationsScroll = useCallback((e) => {
@@ -262,7 +309,14 @@ export default function ChainDetailPage() {
               {s === 'Near Me' ? '📍 Near Me' : s}
             </button>
           ))}
-          {sort === 'Near Me' && geoLoading && (
+          <button
+            className="sort-tab"
+            onClick={handleFindNearestClick}
+            disabled={findingNearest || remainingCount === 0}
+          >
+            {findingNearest ? 'Locating…' : '🎯 Find Nearest'}
+          </button>
+          {sort === 'Near Me' && geoLoading && !findingNearest && (
             <span className="sort-status">Locating…</span>
           )}
           {sort === 'Near Me' && geoError && (

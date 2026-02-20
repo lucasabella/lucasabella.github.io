@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useTheme } from '../../contexts/ThemeContext';
+import { fireVisitConfetti } from '../../utils/confetti';
 import './Map.css';
 
 //test
@@ -92,7 +93,10 @@ export default function Map({ locations = [], isVisited, onToggleVisit, focusedI
                   <p className="popup-content__city">{loc.city}</p>
                   <button
                     className={`popup-content__btn ${visited ? 'popup-content__btn--visited' : ''}`}
-                    onClick={() => onToggleVisit?.(loc.id)}
+                    onClick={(e) => {
+                      if (!visited) fireVisitConfetti(e);
+                      onToggleVisit?.(loc.id);
+                    }}
                   >
                     {visited ? '\u2713 Visited' : 'Mark as visited'}
                   </button>

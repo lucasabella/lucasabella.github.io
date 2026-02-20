@@ -3,6 +3,7 @@ import { body } from 'express-validator';
 import { verifyToken } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import * as Visit from '../models/visit.model.js';
+import * as BadgeService from '../services/badge.service.js';
 
 const router = Router();
 
@@ -27,7 +28,8 @@ router.post(
   async (req, res, next) => {
     try {
       const count = await Visit.bulkCreateBySourceIds(req.user.id, req.body.sourceIds);
-      res.status(201).json({ migrated: count });
+      const newBadges = await BadgeService.checkAndAwardBadges(req.user.id);
+      res.status(201).json({ migrated: count, newBadges });
     } catch (err) {
       next(err);
     }
@@ -38,7 +40,11 @@ router.post(
 router.post('/:locationId', verifyToken, async (req, res, next) => {
   try {
     const visit = await Visit.create(req.user.id, req.params.locationId);
-    res.status(201).json({ visit, message: 'Marked as visited' });
+    let newBadges = [];
+    if (visit) {
+      newBadges = await BadgeService.checkAndAwardBadges(req.user.id);
+    }
+    res.status(201).json({ visit, newBadges, message: 'Marked as visited' });
   } catch (err) {
     if (err.code === '23503') {
       return res.status(404).json({ error: 'Location not found' });

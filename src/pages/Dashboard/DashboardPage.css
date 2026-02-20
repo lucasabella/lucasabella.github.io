@@ -78,6 +78,63 @@
   margin-bottom: 0.75rem;
 }
 
+/* Trophy Case */
+.dashboard__badges {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.badge {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.2s var(--ease-out);
+}
+
+.badge:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.badge__icon {
+  font-size: 2rem;
+  line-height: 1;
+  background: var(--bg-page);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.badge__info {
+  display: flex;
+  flex-direction: column;
+}
+
+.badge__name {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.badge__desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.3;
+}
+
 .dashboard__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

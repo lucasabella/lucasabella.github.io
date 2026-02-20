@@ -4,6 +4,7 @@ import { validate } from '../middleware/validate.js';
 import { verifyToken } from '../middleware/auth.js';
 import * as User from '../models/user.model.js';
 import * as authService from '../services/auth.service.js';
+import * as BadgeService from '../services/badge.service.js';
 
 const router = Router();
 
@@ -166,7 +167,8 @@ router.get('/me', verifyToken, async (req, res, next) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    res.json({ user });
+    const badges = await BadgeService.getUserBadges(req.user.id);
+    res.json({ user: { ...user, badges } });
   } catch (err) {
     next(err);
   }

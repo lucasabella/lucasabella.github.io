@@ -1,0 +1,32 @@
+[
+    {
+        "id": "first_bite",
+        "name": "First Bite",
+        "description": "Started your journey with your first visit.",
+        "icon": "🍔"
+    },
+    {
+        "id": "loyalist",
+        "name": "The Loyalist",
+        "description": "Visited 5 locations.",
+        "icon": "🔥"
+    },
+    {
+        "id": "veteran",
+        "name": "Veteran Chaser",
+        "description": "Visited 25 locations.",
+        "icon": "🤠"
+    },
+    {
+        "id": "hopper",
+        "name": "Chain Hopper",
+        "description": "Visited at least 3 different chains.",
+        "icon": "🦘"
+    },
+    {
+        "id": "completionist",
+        "name": "Completionist",
+        "description": "100% completed a chain.",
+        "icon": "👑"
+    }
+]

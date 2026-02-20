@@ -38,7 +38,14 @@ export function useVisits(initialLocations = []) {
         if (wasVisited) {
           await apiFetch(`/visits/${locationId}`, { method: 'DELETE' });
         } else {
-          await apiFetch(`/visits/${locationId}`, { method: 'POST' });
+          const res = await apiFetch(`/visits/${locationId}`, { method: 'POST' });
+          if (res && res.newBadges && res.newBadges.length > 0) {
+            // Give a small delay so confetti from the button can finish
+            setTimeout(() => {
+              const badgeNames = res.newBadges.map(b => `${b.icon} ${b.name}`).join(', ');
+              window.alert(`🎉 Achievement Unlocked: ${badgeNames}!\nCheck your Trophy Case on the Dashboard.`);
+            }, 500);
+          }
         }
       } catch {
         // Revert on failure

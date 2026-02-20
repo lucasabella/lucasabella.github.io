@@ -98,6 +98,26 @@
   white-space: nowrap;
 }
 
+.location-card__directions {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--accent);
+  text-decoration: none;
+  margin-left: auto;
+  /* Push to the right */
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s var(--ease-out);
+}
+
+.location-card__directions:hover {
+  background: var(--accent-light);
+  text-decoration: none;
+}
+
+
 /* Toggle button — pill */
 .location-card__toggle {
   flex-shrink: 0;

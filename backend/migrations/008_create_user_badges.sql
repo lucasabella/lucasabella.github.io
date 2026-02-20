@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS user_badges (
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  badge_id VARCHAR(50) REFERENCES badges(id) ON DELETE CASCADE,
+  earned_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (user_id, badge_id)
+);

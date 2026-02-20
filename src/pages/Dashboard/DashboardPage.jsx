@@ -8,13 +8,18 @@ export default function DashboardPage() {
   const apiFetch = useApi();
   const { user } = useAuth();
   const [chains, setChains] = useState([]);
+  const [badges, setBadges] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
       try {
-        const data = await apiFetch('/chains');
-        setChains(data.chains);
+        const [chainsData, authData] = await Promise.all([
+          apiFetch('/chains'),
+          apiFetch('/auth/me')
+        ]);
+        setChains(chainsData.chains);
+        setBadges(authData.user.badges || []);
       } catch {
         // Handle silently — user will see empty state
       } finally {
@@ -31,7 +36,7 @@ export default function DashboardPage() {
     );
   }
 
-  const totalVisited   = chains.reduce((s, c) => s + (c.visited_count  || 0), 0);
+  const totalVisited = chains.reduce((s, c) => s + (c.visited_count || 0), 0);
   const totalLocations = chains.reduce((s, c) => s + (c.location_count || 0), 0);
   const pct = totalLocations > 0 ? Math.round(totalVisited / totalLocations * 100) : 0;
 
@@ -58,6 +63,23 @@ export default function DashboardPage() {
           <div className="dashboard__stat-label">Complete</div>
         </div>
       </div>
+
+      {badges.length > 0 && (
+        <>
+          <div className="dashboard__section-label">🏆 Trophy Case</div>
+          <div className="dashboard__badges">
+            {badges.map(badge => (
+              <div key={badge.id} className="badge">
+                <div className="badge__icon">{badge.icon}</div>
+                <div className="badge__info">
+                  <div className="badge__name">{badge.name}</div>
+                  <div className="badge__desc">{badge.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
 
       <div className="dashboard__section-label">All chains</div>
 
