@@ -52,7 +52,7 @@ export async function saveRefreshToken(userId, token) {
 export async function findRefreshToken(token) {
   const hash = crypto.createHash('sha256').update(token).digest('hex');
   const { rows } = await pool.query(
-    `SELECT rt.*, u.id as uid, u.email, u.name, u.username, u.avatar_url
+    `SELECT rt.*, u.id as uid, u.email, u.name, u.avatar_url
      FROM refresh_tokens rt
      JOIN users u ON u.id = rt.user_id
      WHERE rt.token_hash = $1 AND rt.expires_at > NOW()`,

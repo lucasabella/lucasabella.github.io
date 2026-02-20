@@ -54,7 +54,11 @@ export function AuthProvider({ children }) {
         body: storedRefreshToken ? JSON.stringify({ refreshToken: storedRefreshToken }) : undefined,
       });
       if (!res.ok) {
-        localStorage.removeItem(REFRESH_TOKEN_KEY);
+        // Only discard the stored token when it's genuinely invalid/expired (401).
+        // A 5xx server error is transient — keep the token so the next page load can retry.
+        if (res.status === 401) {
+          localStorage.removeItem(REFRESH_TOKEN_KEY);
+        }
         return null;
       }
       const data = await res.json();
@@ -87,9 +91,11 @@ export function AuthProvider({ children }) {
           if (data.refreshToken) {
             localStorage.setItem(REFRESH_TOKEN_KEY, data.refreshToken);
           }
-        } else {
+        } else if (res.status === 401) {
+          // Token is genuinely invalid/expired — discard it
           localStorage.removeItem(REFRESH_TOKEN_KEY);
         }
+        // On 5xx: keep the stored token; a server error is transient
       } catch {
         // No valid session
       } finally {

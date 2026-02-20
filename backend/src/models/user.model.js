@@ -11,11 +11,23 @@ export async function findByGoogleId(googleId) {
 }
 
 export async function findById(id) {
-  const { rows } = await pool.query(
-    'SELECT id, email, name, username, avatar_url, created_at FROM users WHERE id = $1',
-    [id]
-  );
-  return rows[0] || null;
+  try {
+    const { rows } = await pool.query(
+      'SELECT id, email, name, username, avatar_url, created_at FROM users WHERE id = $1',
+      [id]
+    );
+    return rows[0] || null;
+  } catch (err) {
+    // 42703 = column does not exist (migration 010 not yet run)
+    if (err.code === '42703') {
+      const { rows } = await pool.query(
+        'SELECT id, email, name, avatar_url, created_at FROM users WHERE id = $1',
+        [id]
+      );
+      return rows[0] || null;
+    }
+    throw err;
+  }
 }
 
 export async function create({ email, name, username, passwordHash, googleId, avatarUrl }) {
