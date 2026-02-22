@@ -58,14 +58,16 @@ router.post(
                 newBadges = await BadgeService.checkAndAwardBadges(req.user.id);
             }
 
-            // 4. Get updated count
+            // 4. Get updated count and mayor
             const checkinCount = await CheckIn.getCountForLocation(req.user.id, req.params.locationId);
+            const mayorData = await CheckIn.getMayorForLocation(req.params.locationId);
 
             res.status(201).json({
                 checkIn,
                 isFirstVisit,
                 newBadges,
                 checkinCount,
+                mayor: mayorData?.username || null,
                 message: isFirstVisit ? 'Marked as visited and checked in' : 'Checked in successfully'
             });
         } catch (err) {

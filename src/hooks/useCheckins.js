@@ -15,22 +15,41 @@ export function useCheckins(initialLocations = []) {
         return counts;
     });
 
+    const [mayors, setMayors] = useState(() => {
+        const m = new Map();
+        for (const loc of initialLocations) {
+            if (loc.mayor) {
+                m.set(loc.id, loc.mayor);
+            }
+        }
+        return m;
+    });
+
     const { user } = useAuth();
     const [checkinError, setCheckinError] = useState(null);
 
     const updateFromLocations = useCallback((locations) => {
         const counts = new Map();
+        const m = new Map();
         for (const loc of locations) {
             if (loc.checkin_count !== undefined) {
                 counts.set(loc.id, loc.checkin_count);
             }
+            if (loc.mayor) {
+                m.set(loc.id, loc.mayor);
+            }
         }
         setCheckinCounts(counts);
+        setMayors(m);
     }, []);
 
     const getCheckinCount = useCallback((id) => {
         return checkinCounts.get(id) || 0;
     }, [checkinCounts]);
+
+    const getMayor = useCallback((id) => {
+        return mayors.get(id) || null;
+    }, [mayors]);
 
     const checkIn = useCallback(async (locationId) => {
         setCheckinError(null);
@@ -70,6 +89,14 @@ export function useCheckins(initialLocations = []) {
                 });
             }
 
+            if (res && res.mayor !== undefined) {
+                setMayors(prev => {
+                    const next = new Map(prev);
+                    next.set(locationId, res.mayor);
+                    return next;
+                });
+            }
+
             return res;
         } catch (err) {
             setCheckinError(err.message);
@@ -87,6 +114,7 @@ export function useCheckins(initialLocations = []) {
     return {
         checkinCounts,
         getCheckinCount,
+        getMayor,
         checkIn,
         updateFromLocations,
         checkinError,

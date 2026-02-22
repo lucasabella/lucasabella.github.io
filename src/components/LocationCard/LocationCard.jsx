@@ -8,7 +8,7 @@ function formatDistance(km) {
   return `${Math.round(km)} km`;
 }
 
-const LocationCard = memo(function LocationCard({ location, visited = false, onToggle, onFocus, index = 0, distance, checkinCount = 0, onCheckIn }) {
+const LocationCard = memo(function LocationCard({ location, visited = false, onToggle, onFocus, index = 0, distance, checkinCount = 0, mayor = null, onCheckIn }) {
 
   return (
     <div
@@ -23,6 +23,11 @@ const LocationCard = memo(function LocationCard({ location, visited = false, onT
             {checkinCount > 0 && (
               <span className="location-card__checkin-pill">
                 {checkinCount} check-in{checkinCount > 1 ? 's' : ''}
+              </span>
+            )}
+            {mayor && (
+              <span className="location-card__mayor-badge" title={`${mayor} is the Mayor of this location`}>
+                👑 {mayor}
               </span>
             )}
           </div>

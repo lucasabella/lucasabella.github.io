@@ -32,7 +32,7 @@ export default function ChainDetailPage() {
   const locationsRef = useRef(null);
 
   const { isVisited, toggleVisit, visitedCount, updateFromLocations, actionError, setActionError, markVisited } = useVisits(locations);
-  const { checkinCounts, getCheckinCount, checkIn, updateFromLocations: updateCheckinsFromLocations, checkinError } = useCheckins(locations);
+  const { checkinCounts, getCheckinCount, getMayor, checkIn, updateFromLocations: updateCheckinsFromLocations, checkinError } = useCheckins(locations);
   const { position, loading: geoLoading, error: geoError, requestPosition } = useGeolocation();
   const { panelRef, dragHandleRef, snapState, setSnapState } = useBottomSheet(52);
   const [findingNearest, setFindingNearest] = useState(false);
@@ -378,6 +378,7 @@ export default function ChainDetailPage() {
                 index={i}
                 distance={distances[loc.id]}
                 checkinCount={getCheckinCount(loc.id)}
+                mayor={getMayor(loc.id)}
                 onCheckIn={(e) => handleCheckIn(loc.id, e)}
               />
             ))

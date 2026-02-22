@@ -29,7 +29,8 @@ export async function findBySlug(slug, userId) {
   const { rows: locations } = await pool.query(
     `SELECT l.*,
        CASE WHEN v.id IS NOT NULL THEN true ELSE false END AS visited,
-       COALESCE(ci.checkin_count, 0)::int AS checkin_count
+       COALESCE(ci.checkin_count, 0)::int AS checkin_count,
+       m.mayor_username AS mayor
      FROM locations l
      LEFT JOIN visits v ON v.location_id = l.id AND v.user_id = $1
      LEFT JOIN (
@@ -37,6 +38,16 @@ export async function findBySlug(slug, userId) {
        FROM check_ins WHERE user_id = $1
        GROUP BY location_id
      ) ci ON ci.location_id = l.id
+     LEFT JOIN (
+       SELECT location_id, u.username as mayor_username 
+       FROM (
+         SELECT location_id, user_id, COUNT(*) as count,
+         ROW_NUMBER() OVER(PARTITION BY location_id ORDER BY COUNT(*) DESC, MAX(checked_in_at) ASC) as rn
+         FROM check_ins GROUP BY location_id, user_id
+       ) ranked
+       JOIN users u ON u.id = ranked.user_id
+       WHERE rn = 1
+     ) m ON m.location_id = l.id
      WHERE l.chain_id = $2
      ORDER BY l.name`,
     [userId, chain.id]
