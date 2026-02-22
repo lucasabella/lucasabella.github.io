@@ -5,6 +5,7 @@ import ProgressBar from '../../components/ProgressBar/ProgressBar';
 import LocationCard from '../../components/LocationCard/LocationCard';
 import { useApi } from '../../hooks/useApi';
 import { useVisits } from '../../hooks/useVisits';
+import { useCheckins } from '../../hooks/useCheckins';
 import { useGeolocation } from '../../hooks/useGeolocation';
 import { useBottomSheet } from '../../hooks/useBottomSheet';
 import { haversineDistance } from '../../utils/geo';
@@ -30,7 +31,8 @@ export default function ChainDetailPage() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const locationsRef = useRef(null);
 
-  const { isVisited, toggleVisit, visitedCount, updateFromLocations, actionError, setActionError } = useVisits(locations);
+  const { isVisited, toggleVisit, visitedCount, updateFromLocations, actionError, setActionError, markVisited } = useVisits(locations);
+  const { checkinCounts, getCheckinCount, checkIn, updateFromLocations: updateCheckinsFromLocations, checkinError } = useCheckins(locations);
   const { position, loading: geoLoading, error: geoError, requestPosition } = useGeolocation();
   const { panelRef, dragHandleRef, snapState, setSnapState } = useBottomSheet(52);
   const [findingNearest, setFindingNearest] = useState(false);
@@ -51,6 +53,7 @@ export default function ChainDetailPage() {
         setChain(data.chain);
         setLocations(data.chain.locations);
         updateFromLocations(data.chain.locations);
+        updateCheckinsFromLocations(data.chain.locations);
       } catch {
         // Error state could be added
       } finally {
@@ -69,6 +72,20 @@ export default function ChainDetailPage() {
     }
     prevVisitedCount.current = visitedCount;
   }, [visitedCount, total]);
+
+  const handleCheckIn = useCallback(async (locationId, e) => {
+    if (e) e.stopPropagation();
+    const res = await checkIn(locationId);
+    if (res && res.isFirstVisit) {
+      markVisited(locationId);
+      if (res.newBadges && res.newBadges.length > 0) {
+        setTimeout(() => {
+          const badgeNames = res.newBadges.map(b => `${b.icon} ${b.name}`).join(', ');
+          window.alert(`🎉 Achievement Unlocked: ${badgeNames}!\nCheck your Trophy Case on the Dashboard.`);
+        }, 500);
+      }
+    }
+  }, [checkIn, markVisited]);
 
   // Handle sort toggle
   const handleSortChange = useCallback((s) => {
@@ -194,6 +211,11 @@ export default function ChainDetailPage() {
       {actionError && (
         <div className="chain-detail__toast">
           {actionError}
+        </div>
+      )}
+      {checkinError && (
+        <div className="chain-detail__toast">
+          {checkinError}
         </div>
       )}
       <div className="chain-detail__map">
@@ -355,6 +377,8 @@ export default function ChainDetailPage() {
                 onFocus={handleFocusLocation}
                 index={i}
                 distance={distances[loc.id]}
+                checkinCount={getCheckinCount(loc.id)}
+                onCheckIn={(e) => handleCheckIn(loc.id, e)}
               />
             ))
           )}

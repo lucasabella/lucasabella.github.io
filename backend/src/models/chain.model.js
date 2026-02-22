@@ -28,9 +28,15 @@ export async function findBySlug(slug, userId) {
 
   const { rows: locations } = await pool.query(
     `SELECT l.*,
-       CASE WHEN v.id IS NOT NULL THEN true ELSE false END AS visited
+       CASE WHEN v.id IS NOT NULL THEN true ELSE false END AS visited,
+       COALESCE(ci.checkin_count, 0)::int AS checkin_count
      FROM locations l
      LEFT JOIN visits v ON v.location_id = l.id AND v.user_id = $1
+     LEFT JOIN (
+       SELECT location_id, COUNT(*) AS checkin_count
+       FROM check_ins WHERE user_id = $1
+       GROUP BY location_id
+     ) ci ON ci.location_id = l.id
      WHERE l.chain_id = $2
      ORDER BY l.name`,
     [userId, chain.id]

@@ -95,5 +95,13 @@ export function useVisits(initialLocations = []) {
   const isVisited = useCallback((id) => visitedIds.has(id), [visitedIds]);
   const visitedCount = visitedIds.size;
 
-  return { visitedIds, visitedCount, isVisited, toggleVisit, updateFromLocations, actionError, setActionError };
+  const markVisited = useCallback((locationId) => {
+    setVisitedIds((prev) => {
+      const next = new Set(prev);
+      next.add(locationId);
+      return next;
+    });
+  }, []);
+
+  return { visitedIds, visitedCount, isVisited, toggleVisit, updateFromLocations, actionError, setActionError, markVisited };
 }

@@ -11,6 +11,7 @@ import visitRoutes from './routes/visits.js';
 import friendRoutes from './routes/friends.js';
 import leaderboardRoutes from './routes/leaderboard.js';
 import userRoutes from './routes/users.js';
+import checkinRoutes from './routes/checkins.js';
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use(cookieParser());
 app.use('/api/auth', authRoutes);
 app.use('/api/chains', chainRoutes);
 app.use('/api/visits', visitRoutes);
+app.use('/api/checkins', checkinRoutes);
 app.use('/api/friends', friendRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
 app.use('/api/users', userRoutes);
