@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useApi } from './useApi';
 import { getCurrentPositionAsync } from '../utils/geo';
+import { useAuth } from '../contexts/AuthContext';
 
 export function useCheckins(initialLocations = []) {
     const apiFetch = useApi();
@@ -14,6 +15,7 @@ export function useCheckins(initialLocations = []) {
         return counts;
     });
 
+    const { user } = useAuth();
     const [checkinError, setCheckinError] = useState(null);
 
     const updateFromLocations = useCallback((locations) => {
@@ -34,11 +36,15 @@ export function useCheckins(initialLocations = []) {
         setCheckinError(null);
         let coords = null;
 
-        try {
-            coords = await getCurrentPositionAsync();
-        } catch (err) {
-            setCheckinError(err.message);
-            return null;
+        if (user?.isAdmin) {
+            coords = { lat: 0, lng: 0 };
+        } else {
+            try {
+                coords = await getCurrentPositionAsync();
+            } catch (err) {
+                setCheckinError(err.message);
+                return null;
+            }
         }
 
         // Optimistic update

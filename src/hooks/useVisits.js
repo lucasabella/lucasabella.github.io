@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { useApi } from './useApi';
 import { getCurrentPositionAsync } from '../utils/geo';
 import { fireVisitConfetti } from '../utils/confetti';
+import { useAuth } from '../contexts/AuthContext';
 
 export function useVisits(initialLocations = []) {
   const apiFetch = useApi();
@@ -13,6 +14,7 @@ export function useVisits(initialLocations = []) {
     return set;
   });
 
+  const { user } = useAuth();
   const [actionError, setActionError] = useState(null);
 
   const updateFromLocations = useCallback((locations) => {
@@ -32,11 +34,16 @@ export function useVisits(initialLocations = []) {
       let coords = null;
       // We only need location if we are marking it AS visited (not unmarking)
       if (!wasVisited) {
-        try {
-          coords = await getCurrentPositionAsync();
-        } catch (err) {
-          setActionError(err.message);
-          return;
+        if (user?.isAdmin) {
+          // Bypass geolocation completely if admin
+          coords = { lat: 0, lng: 0 };
+        } else {
+          try {
+            coords = await getCurrentPositionAsync();
+          } catch (err) {
+            setActionError(err.message);
+            return;
+          }
         }
       }
 

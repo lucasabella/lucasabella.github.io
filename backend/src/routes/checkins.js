@@ -7,6 +7,7 @@ import * as Visit from '../models/visit.model.js';
 import * as Location from '../models/location.model.js';
 import * as BadgeService from '../services/badge.service.js';
 import { haversineDistance } from '../utils/geo.js';
+import config from '../config/env.js';
 
 const router = Router();
 
@@ -37,9 +38,10 @@ router.post(
             }
 
             const distance = haversineDistance(lat, lng, targetLocation.lat, targetLocation.lng);
+            const isAdmin = config.adminEmails.includes(req.user.email.toLowerCase());
 
             // 0.5 km = 500 meters
-            if (distance > 0.5) {
+            if (!isAdmin && distance > 0.5) {
                 return res.status(403).json({ error: 'You are too far away to check in here.' });
             }
 

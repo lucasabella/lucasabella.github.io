@@ -12,4 +12,5 @@ export default {
   jwtRefreshSecret: process.env.JWT_REFRESH_SECRET,
   googleClientId: process.env.GOOGLE_CLIENT_ID,
   corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  adminEmails: (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean),
 };
