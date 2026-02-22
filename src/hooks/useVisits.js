@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useApi } from './useApi';
 import { getCurrentPositionAsync } from '../utils/geo';
+import { fireVisitConfetti } from '../utils/confetti';
 
 export function useVisits(initialLocations = []) {
   const apiFetch = useApi();
@@ -12,6 +13,8 @@ export function useVisits(initialLocations = []) {
     return set;
   });
 
+  const [actionError, setActionError] = useState(null);
+
   const updateFromLocations = useCallback((locations) => {
     const set = new Set();
     for (const loc of locations) {
@@ -21,8 +24,10 @@ export function useVisits(initialLocations = []) {
   }, []);
 
   const toggleVisit = useCallback(
-    async (locationId) => {
+    async (locationId, e) => {
       const wasVisited = visitedIds.has(locationId);
+
+      setActionError(null);
 
       let coords = null;
       // We only need location if we are marking it AS visited (not unmarking)
@@ -30,7 +35,7 @@ export function useVisits(initialLocations = []) {
         try {
           coords = await getCurrentPositionAsync();
         } catch (err) {
-          window.alert(err.message);
+          setActionError(err.message);
           return;
         }
       }
@@ -54,6 +59,12 @@ export function useVisits(initialLocations = []) {
             method: 'POST',
             body: JSON.stringify({ lat: coords.lat, lng: coords.lng })
           });
+
+          // Fire confetti only AFTER successful backend response!
+          if (e) {
+            fireVisitConfetti(e);
+          }
+
           if (res && res.newBadges && res.newBadges.length > 0) {
             // Give a small delay so confetti from the button can finish
             setTimeout(() => {
@@ -64,7 +75,7 @@ export function useVisits(initialLocations = []) {
         }
       } catch (err) {
         if (err.message) {
-          window.alert(err.message);
+          setActionError(err.message);
         }
         // Revert on failure
         setVisitedIds((prev) => {
@@ -84,5 +95,5 @@ export function useVisits(initialLocations = []) {
   const isVisited = useCallback((id) => visitedIds.has(id), [visitedIds]);
   const visitedCount = visitedIds.size;
 
-  return { visitedIds, visitedCount, isVisited, toggleVisit, updateFromLocations };
+  return { visitedIds, visitedCount, isVisited, toggleVisit, updateFromLocations, actionError, setActionError };
 }

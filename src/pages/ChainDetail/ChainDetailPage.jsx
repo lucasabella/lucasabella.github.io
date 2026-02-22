@@ -30,10 +30,18 @@ export default function ChainDetailPage() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const locationsRef = useRef(null);
 
-  const { isVisited, toggleVisit, visitedCount, updateFromLocations } = useVisits(locations);
+  const { isVisited, toggleVisit, visitedCount, updateFromLocations, actionError, setActionError } = useVisits(locations);
   const { position, loading: geoLoading, error: geoError, requestPosition } = useGeolocation();
   const { panelRef, dragHandleRef, snapState, setSnapState } = useBottomSheet(52);
   const [findingNearest, setFindingNearest] = useState(false);
+
+  // Auto-dismiss the action error toast
+  useEffect(() => {
+    if (actionError) {
+      const timer = setTimeout(() => setActionError(null), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [actionError, setActionError]);
 
   useEffect(() => {
     (async () => {
@@ -183,6 +191,11 @@ export default function ChainDetailPage() {
 
   return (
     <div className="chain-detail">
+      {actionError && (
+        <div className="chain-detail__toast">
+          {actionError}
+        </div>
+      )}
       <div className="chain-detail__map">
         <Map
           locations={locations}
@@ -338,7 +351,7 @@ export default function ChainDetailPage() {
                 key={loc.id}
                 location={loc}
                 visited={isVisited(loc.id)}
-                onToggle={() => toggleVisit(loc.id)}
+                onToggle={(e) => toggleVisit(loc.id, e)}
                 onFocus={handleFocusLocation}
                 index={i}
                 distance={distances[loc.id]}

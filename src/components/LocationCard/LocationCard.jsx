@@ -1,6 +1,5 @@
 import { memo } from 'react';
 import './LocationCard.css';
-import { fireVisitConfetti } from '../../utils/confetti';
 
 function formatDistance(km) {
   if (km == null) return null;
@@ -44,8 +43,7 @@ const LocationCard = memo(function LocationCard({ location, visited = false, onT
           className={`location-card__toggle ${visited ? 'location-card__toggle--visited' : ''}`}
           onClick={(e) => {
             e.stopPropagation();
-            if (!visited) fireVisitConfetti(e);
-            onToggle?.();
+            onToggle?.(e);
           }}
           aria-label={visited ? 'Mark as not visited' : 'Mark as visited'}
         >
