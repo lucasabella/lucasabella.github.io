@@ -6,7 +6,8 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "migrate": "node scripts/migrate.js",
-    "seed": "node scripts/seed.js"
+    "seed": "node scripts/seed.js",
+    "geocode": "node scripts/geocode.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
