@@ -129,7 +129,7 @@ PostgreSQL with tables: `users`, `chains`, `locations`, `visits`, `refresh_token
 
 ## Key Constraints
 
-- **Local testing is not possible** — the backend cannot run locally (no local PostgreSQL / env config). All testing must be done against the deployed production site.
+- **Local backend server is not possible** — the frontend+backend cannot run together locally. However, database migrations (`npm run migrate`) and seeding (`npm run seed`) DO work locally since the backend connects to the remote PostgreSQL database. All end-to-end testing must be done against the deployed production site.
 - Frontend deployed to GitHub Pages (static hosting — backend needs separate hosting)
 - CORS configured for cross-origin cookies (`SameSite=None; Secure`)
 - Vite dev proxy: `/api` → `http://localhost:3001`
