@@ -45,3 +45,21 @@ export function formatCoords(lat, lng) {
     const lngDir = lng >= 0 ? 'E' : 'W';
     return `${Math.abs(lat).toFixed(4)}°${latDir}, ${Math.abs(lng).toFixed(4)}°${lngDir}`;
 }
+
+/**
+ * Promisified wrapper for navigator.geolocation.getCurrentPosition
+ * @returns {Promise<{lat: number, lng: number}>}
+ */
+export function getCurrentPositionAsync() {
+    return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+            reject(new Error('Geolocation is not supported by your browser'));
+            return;
+        }
+        navigator.geolocation.getCurrentPosition(
+            (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+            (err) => reject(new Error('Location access is required to mark a visit. Please enable it in your browser settings.')),
+            { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
+        );
+    });
+}

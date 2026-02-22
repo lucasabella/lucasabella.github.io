@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useApi } from './useApi';
+import { getCurrentPositionAsync } from '../utils/geo';
 
 export function useVisits(initialLocations = []) {
   const apiFetch = useApi();
@@ -23,6 +24,17 @@ export function useVisits(initialLocations = []) {
     async (locationId) => {
       const wasVisited = visitedIds.has(locationId);
 
+      let coords = null;
+      // We only need location if we are marking it AS visited (not unmarking)
+      if (!wasVisited) {
+        try {
+          coords = await getCurrentPositionAsync();
+        } catch (err) {
+          window.alert(err.message);
+          return;
+        }
+      }
+
       // Optimistic update
       setVisitedIds((prev) => {
         const next = new Set(prev);
@@ -38,7 +50,10 @@ export function useVisits(initialLocations = []) {
         if (wasVisited) {
           await apiFetch(`/visits/${locationId}`, { method: 'DELETE' });
         } else {
-          const res = await apiFetch(`/visits/${locationId}`, { method: 'POST' });
+          const res = await apiFetch(`/visits/${locationId}`, {
+            method: 'POST',
+            body: JSON.stringify({ lat: coords.lat, lng: coords.lng })
+          });
           if (res && res.newBadges && res.newBadges.length > 0) {
             // Give a small delay so confetti from the button can finish
             setTimeout(() => {
@@ -47,7 +62,10 @@ export function useVisits(initialLocations = []) {
             }, 500);
           }
         }
-      } catch {
+      } catch (err) {
+        if (err.message) {
+          window.alert(err.message);
+        }
         // Revert on failure
         setVisitedIds((prev) => {
           const next = new Set(prev);
