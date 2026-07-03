@@ -1,10 +1,14 @@
-import { Outlet, useNavigate } from 'react-router-dom';
+import { cloneElement } from 'react';
+import { useLocation, useNavigate, useOutlet } from 'react-router-dom';
+import { AnimatePresence, motion as Motion } from 'framer-motion';
 import { useTheme } from '../../contexts/ThemeContext';
 import './Layout.css';
 
 export default function Layout() {
   const { theme, toggle } = useTheme();
   const navigate = useNavigate();
+  const location = useLocation();
+  const outlet = useOutlet();
 
   return (
     <div className="layout">
@@ -41,7 +45,18 @@ export default function Layout() {
       </nav>
 
       <main className="layout__content">
-        <Outlet />
+        <AnimatePresence mode="wait" initial={false}>
+          <Motion.div
+            key={location.pathname}
+            className="layout__page"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+          >
+            {outlet && cloneElement(outlet, { key: location.pathname })}
+          </Motion.div>
+        </AnimatePresence>
       </main>
     </div>
   );

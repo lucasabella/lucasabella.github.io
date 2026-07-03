@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { motion as Motion } from 'framer-motion';
 import Map from '../../components/Map/Map';
-import ProgressBar from '../../components/ProgressBar/ProgressBar';
 import LocationCard from '../../components/LocationCard/LocationCard';
 import { getChain } from '../../data/chains';
 import { useVisits } from '../../hooks/useVisits';
@@ -12,7 +12,9 @@ import { fireCompletionConfetti } from '../../utils/confetti';
 import './ChainDetailPage.css';
 
 const FILTERS = ['All', 'Visited', 'Remaining'];
-const SORT_OPTIONS = ['Default', 'Near Me'];
+
+const MINI_RING_RADIUS = 9;
+const MINI_RING_CIRCUMFERENCE = 2 * Math.PI * MINI_RING_RADIUS;
 
 export default function ChainDetailPage() {
   const { slug } = useParams();
@@ -20,7 +22,7 @@ export default function ChainDetailPage() {
   const [panelCollapsed, setPanelCollapsed] = useState(false);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('All');
-  const [sort, setSort] = useState('Default');
+  const [nearMe, setNearMe] = useState(false);
   const [focusedId, setFocusedId] = useState(null);
   const [imgError, setImgError] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -37,6 +39,8 @@ export default function ChainDetailPage() {
   const total = locations.length;
   const visitedCount = locations.filter((l) => isVisited(l.id)).length;
   const remainingCount = total - visitedCount;
+  const pct = total > 0 ? Math.round(visitedCount / total * 100) : 0;
+  const miniRingOffset = MINI_RING_CIRCUMFERENCE - (pct / 100) * MINI_RING_CIRCUMFERENCE;
 
   const prevVisitedCount = useRef(null);
   useEffect(() => {
@@ -46,12 +50,11 @@ export default function ChainDetailPage() {
     prevVisitedCount.current = visitedCount;
   }, [visitedCount, total]);
 
-  // Handle sort toggle
-  const handleSortChange = useCallback((s) => {
-    setSort(s);
-    if (s === 'Near Me') {
-      requestPosition();
-    }
+  const handleNearMeToggle = useCallback(() => {
+    setNearMe((active) => {
+      if (!active) requestPosition();
+      return !active;
+    });
   }, [requestPosition]);
 
   // Filter + sort locations
@@ -71,8 +74,7 @@ export default function ChainDetailPage() {
           (l.address && l.address.toLowerCase().includes(q))
       );
     }
-    // Sort by distance when Near Me is active and we have a position
-    if (sort === 'Near Me' && position) {
+    if (nearMe && position) {
       result = [...result].sort((a, b) => {
         const distA = haversineDistance(position.lat, position.lng, a.lat, a.lng);
         const distB = haversineDistance(position.lat, position.lng, b.lat, b.lng);
@@ -80,17 +82,17 @@ export default function ChainDetailPage() {
       });
     }
     return result;
-  }, [locations, filter, search, isVisited, sort, position]);
+  }, [locations, filter, search, isVisited, nearMe, position]);
 
   // Pre-compute distances for display
   const distances = useMemo(() => {
-    if (sort !== 'Near Me' || !position) return {};
+    if (!nearMe || !position) return {};
     const map = {};
     for (const loc of locations) {
       map[loc.id] = haversineDistance(position.lat, position.lng, loc.lat, loc.lng);
     }
     return map;
-  }, [locations, sort, position]);
+  }, [locations, nearMe, position]);
 
   const handleFocusLocation = useCallback((location) => {
     setFocusedId(location.id);
@@ -166,6 +168,31 @@ export default function ChainDetailPage() {
           onToggleVisit={toggleVisit}
           focusedId={focusedId}
         />
+
+        {/* Floating map actions */}
+        <div className="map-actions">
+          <Motion.button
+            className={`map-action ${nearMe ? 'map-action--active' : ''}`}
+            onClick={handleNearMeToggle}
+            whileTap={{ scale: 0.94 }}
+          >
+            📍 Near Me
+          </Motion.button>
+          <Motion.button
+            className="map-action"
+            onClick={handleFindNearestClick}
+            disabled={findingNearest || remainingCount === 0}
+            whileTap={{ scale: 0.94 }}
+          >
+            🎯 {findingNearest ? 'Locating…' : 'Nearest'}
+          </Motion.button>
+          {nearMe && geoLoading && !findingNearest && (
+            <span className="map-actions__status">Locating…</span>
+          )}
+          {nearMe && geoError && (
+            <span className="map-actions__status map-actions__status--error">Location unavailable</span>
+          )}
+        </div>
       </div>
 
       <aside
@@ -191,56 +218,52 @@ export default function ChainDetailPage() {
         </div>
 
         <div className="panel__header">
-          <div className="panel__back-row">
-            <button className="panel__back" onClick={() => navigate('/dashboard')} aria-label="Back to dashboard">
-              ← Dashboard
-            </button>
+          <button className="panel__back" onClick={() => navigate('/dashboard')} aria-label="Back to dashboard">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+              <path d="M12.5 4.5L7 10L12.5 15.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          <div className="panel__chain">
+            {chain.logo_url && !imgError ? (
+              <img
+                src={chain.logo_url}
+                alt={`${chain.name} logo`}
+                className="panel__chain-logo"
+                onError={() => setImgError(true)}
+              />
+            ) : (
+              <span className="panel__chain-logo-fallback">
+                {chain.name?.charAt(0)}
+              </span>
+            )}
+            <h1 className="panel__chain-name">{chain.name}</h1>
           </div>
-          <div className="panel__brand">
-            <span className="panel__logo">
-              Chain<span className="panel__logo-accent">Chaser</span>
-            </span>
-            <div className="panel__chain-info">
-              {chain.logo_url && !imgError ? (
-                <img
-                  src={chain.logo_url}
-                  alt={`${chain.name} logo`}
-                  className="panel__chain-logo"
-                  onError={() => setImgError(true)}
-                />
-              ) : (
-                <span className="panel__chain-logo-fallback">
-                  {chain.name?.charAt(0)}
-                </span>
-              )}
-              <span className="panel__chain-badge">{chain.name}</span>
-            </div>
+          <div className="panel__ring-wrap" title={`${visitedCount} of ${total} visited`}>
+            <svg className="panel__ring" viewBox="0 0 24 24">
+              <circle className="panel__ring-track" cx="12" cy="12" r={MINI_RING_RADIUS} fill="none" strokeWidth="2.5" />
+              <Motion.circle
+                className="panel__ring-fill"
+                cx="12" cy="12" r={MINI_RING_RADIUS}
+                fill="none" strokeWidth="2.5" strokeLinecap="round"
+                strokeDasharray={MINI_RING_CIRCUMFERENCE}
+                transform="rotate(-90 12 12)"
+                initial={false}
+                animate={{ strokeDashoffset: miniRingOffset }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              />
+            </svg>
+            <span className="panel__ring-label">{pct}%</span>
           </div>
-          <p className="panel__subtitle">{chain.description}</p>
-        </div>
-
-        <div className="panel__stats">
-          <div className="stat">
-            <div className="stat__value">{total}</div>
-            <div className="stat__label">Total</div>
-          </div>
-          <div className="stat">
-            <div className="stat__value stat__value--green">{visitedCount}</div>
-            <div className="stat__label">Visited</div>
-          </div>
-          <div className="stat">
-            <div className="stat__value stat__value--gold">{remainingCount}</div>
-            <div className="stat__label">Remaining</div>
-          </div>
-        </div>
-
-        <div className="panel__progress">
-          <ProgressBar visited={visitedCount} total={total} />
         </div>
 
         <div className="panel__search">
           <div className="search-wrapper">
-            <span className="search-icon">{'⌕'}</span>
+            <span className="search-icon">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                <circle cx="7" cy="7" r="4.5" stroke="currentColor" strokeWidth="1.5" />
+                <line x1="10.5" y1="10.5" x2="14" y2="14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </span>
             <input
               type="text"
               className="search-input"
@@ -261,49 +284,32 @@ export default function ChainDetailPage() {
         </div>
 
         <div className="panel__filters">
-          {FILTERS.map((f) => (
-            <button
-              key={f}
-              className={`filter-tab ${filter === f ? 'filter-tab--active' : ''}`}
-              onClick={() => setFilter(f)}
-            >
-              {f}
-              {f === 'All' && ` (${total})`}
-              {f === 'Visited' && ` (${visitedCount})`}
-              {f === 'Remaining' && ` (${remainingCount})`}
-            </button>
-          ))}
-        </div>
-
-        <div className="panel__sort">
-          {SORT_OPTIONS.map((s) => (
-            <button
-              key={s}
-              className={`sort-tab ${sort === s ? 'sort-tab--active' : ''}`}
-              onClick={() => handleSortChange(s)}
-            >
-              {s === 'Near Me' ? '📍 Near Me' : s}
-            </button>
-          ))}
-          <button
-            className="sort-tab"
-            onClick={handleFindNearestClick}
-            disabled={findingNearest || remainingCount === 0}
-          >
-            {findingNearest ? 'Locating…' : '🎯 Find Nearest'}
-          </button>
-          {sort === 'Near Me' && geoLoading && !findingNearest && (
-            <span className="sort-status">Locating…</span>
-          )}
-          {sort === 'Near Me' && geoError && (
-            <span className="sort-status sort-status--error">Location unavailable</span>
-          )}
+          <div className="segmented">
+            {FILTERS.map((f) => {
+              const count = f === 'All' ? total : f === 'Visited' ? visitedCount : remainingCount;
+              return (
+                <button
+                  key={f}
+                  className={`segmented__option ${filter === f ? 'segmented__option--active' : ''}`}
+                  onClick={() => setFilter(f)}
+                >
+                  {filter === f && (
+                    <Motion.span
+                      layoutId="filter-thumb"
+                      className="segmented__thumb"
+                      transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+                    />
+                  )}
+                  <span className="segmented__label">
+                    {f} <span className="segmented__count">{count}</span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         <div className="panel__locations" ref={locationsRef} onScroll={handleLocationsScroll}>
-          <div className="panel__locations-count">
-            {filteredLocations.length} location{filteredLocations.length !== 1 ? 's' : ''}
-          </div>
           {filteredLocations.length === 0 ? (
             <div className="panel__empty">
               {search ? 'No locations match your search.' : 'No locations to show.'}

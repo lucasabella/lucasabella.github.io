@@ -25,11 +25,11 @@
 }
 
 .map-marker--visited {
-  filter: drop-shadow(0 0 6px rgba(44, 110, 73, 0.45));
+  filter: drop-shadow(0 2px 4px rgba(36, 138, 61, 0.30));
 }
 
 .map-marker--unvisited {
-  filter: drop-shadow(0 0 6px rgba(212, 82, 42, 0.35));
+  filter: drop-shadow(0 2px 4px rgba(212, 82, 42, 0.28));
 }
 
 /* Popup styling */
@@ -65,7 +65,7 @@
 .popup-content__btn {
   width: 100%;
   padding: 8px 16px;
-  border-radius: var(--radius-sm);
+  border-radius: 99px;
   font-size: 13px;
   font-weight: 600;
   font-family: var(--font-body);

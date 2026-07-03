@@ -18,6 +18,68 @@
 .chain-detail__map {
   flex: 1;
   height: 100%;
+  position: relative;
+}
+
+/* — Floating map actions (glass) — */
+.map-actions {
+  position: absolute;
+  top: 12px;
+  left: 56px;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.map-action {
+  padding: 8px 14px;
+  border-radius: 99px;
+  background: var(--glass-bg-strong);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-md);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color 0.2s var(--ease-out), background 0.2s var(--ease-out);
+}
+
+.map-action:hover:not(:disabled) {
+  color: var(--accent);
+}
+
+.map-action:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.map-action--active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.map-action--active:hover:not(:disabled) {
+  color: #fff;
+}
+
+.map-actions__status {
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  padding: 4px 10px;
+  border-radius: 99px;
+}
+
+.map-actions__status--error {
+  color: var(--accent);
 }
 
 /* Mobile: map fills full screen behind sheet */
@@ -31,5 +93,12 @@
     inset: 0;
     height: 100%;
     width: 100%;
+  }
+
+  .map-actions {
+    left: auto;
+    right: 12px;
+    flex-direction: column;
+    align-items: flex-end;
   }
 }

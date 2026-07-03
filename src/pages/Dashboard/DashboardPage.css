@@ -1,87 +1,54 @@
 /* ============================================
-   Dashboard — Curated Editorial Luxury
+   Dashboard — Apple Marketing Style
    ============================================ */
 
 .dashboard {
-  padding: 1.25rem 1rem 3rem;
-  max-width: 1080px;
+  padding: 3rem 1.25rem 4rem;
+  max-width: 720px;
   margin: 0 auto;
   width: 100%;
 }
 
-/* ---- Hero Card ---- */
+/* ---- Hero ---- */
 .dashboard__hero {
-  background: var(--gradient-hero);
-  border-radius: var(--radius-xl);
-  padding: 2rem 1.5rem;
-  margin-bottom: 2rem;
-  box-shadow: var(--shadow-hero);
-  position: relative;
-  overflow: hidden;
-  animation: fadeUp 0.6s var(--ease-out) backwards;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
-}
-
-.dashboard__hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--gradient-hero-accent);
-  pointer-events: none;
-}
-
-.dashboard__hero::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  box-shadow: var(--shadow-inset);
-  border-radius: var(--radius-xl);
-  pointer-events: none;
-}
-
-/* Greeting */
-.dashboard__greeting {
   text-align: center;
-  position: relative;
-  z-index: 1;
+  padding: 1.5rem 0 3.5rem;
 }
 
 .dashboard__eyebrow {
-  display: block;
-  font-family: var(--font-label);
-  font-size: 0.65rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.02em;
   color: var(--accent);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 
 .dashboard__title {
   font-family: var(--font-display);
-  font-size: 1.7rem;
+  font-size: clamp(2.5rem, 7vw, 3.5rem);
   font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
   color: var(--text-primary);
-  margin: 0 0 0.25rem;
-  line-height: 1.2;
+  margin: 0 0 0.75rem;
 }
 
 .dashboard__subtitle {
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  margin: 0;
+  color: var(--text-secondary);
+  font-size: clamp(1.05rem, 3vw, 1.3rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  margin: 0 0 2.5rem;
 }
 
 /* Ring */
 .dashboard__ring-wrap {
   position: relative;
-  width: 140px;
-  height: 140px;
-  flex-shrink: 0;
-  z-index: 1;
+  width: 150px;
+  height: 150px;
 }
 
 .dashboard__ring {
@@ -95,7 +62,6 @@
 
 .dashboard__ring-fill {
   stroke: var(--ring-fill);
-  animation: ringFill 1.2s var(--ease-out) 400ms backwards;
 }
 
 .dashboard__ring-label {
@@ -107,155 +73,55 @@
   font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--text-primary);
-  animation: countUp 0.6s var(--ease-out) 600ms backwards;
 }
 
-/* Stats row */
-.dashboard__stats {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  position: relative;
-  z-index: 1;
-}
-
-.dashboard__stat {
-  text-align: center;
-  animation: countUp 0.5s var(--ease-out) backwards;
-}
-
-.dashboard__stat-divider {
-  width: 1px;
-  height: 32px;
-  background: var(--border-strong);
-}
-
-.dashboard__stat-value {
-  font-family: var(--font-display);
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  line-height: 1;
-}
-
-.dashboard__stat-label {
-  font-family: var(--font-label);
-  font-size: 0.65rem;
+.dashboard__ring-pct {
+  font-size: 1.1rem;
   font-weight: 600;
   color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-top: 4px;
+  margin-left: 1px;
 }
 
 /* ---- Sections ---- */
 .dashboard__section {
-  margin-bottom: 2rem;
+  margin-bottom: 3.5rem;
 }
 
 .dashboard__section-header {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
 }
 
 .dashboard__section-title {
   font-family: var(--font-display);
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--text-primary);
-  margin: 0;
+  margin: 0 0 1.25rem;
+}
+
+.dashboard__section-header .dashboard__section-title {
+  margin-bottom: 0;
 }
 
 .dashboard__section-count {
-  font-family: var(--font-label);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--text-muted);
-  background: var(--border);
-  padding: 2px 8px;
+  background: var(--bg-card-hover);
+  padding: 2px 10px;
   border-radius: 99px;
 }
 
-/* ---- Badge Shelf ---- */
-.dashboard__badge-shelf {
-  overflow-x: auto;
-  margin: 0 -1rem;
-  padding: 0 1rem;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.dashboard__badge-shelf::-webkit-scrollbar {
-  display: none;
-}
-
-.dashboard__badge-track {
-  display: flex;
-  gap: 1rem;
-  padding-bottom: 0.5rem;
-}
-
-.badge {
-  flex-shrink: 0;
+/* ---- Chain list ---- */
+.dashboard__grid {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  text-align: center;
-  animation: badgePedestal 0.5s var(--ease-spring) backwards;
-}
-
-.badge__medallion {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: var(--bg-surface);
-  border: 2px solid var(--border-strong);
-  box-shadow: var(--shadow-badge);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
-}
-
-.badge:not(.badge--locked) .badge__medallion:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-}
-
-.badge__icon {
-  font-size: 1.75rem;
-  line-height: 1;
-}
-
-.badge__pedestal {
-  max-width: 80px;
-}
-
-.badge__name {
-  font-family: var(--font-label);
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  line-height: 1.2;
-}
-
-.badge--locked {
-  opacity: 0.4;
-  filter: grayscale(100%);
-}
-
-.badge--locked .badge__medallion {
-  border-style: dashed;
-}
-
-/* ---- Chain Grid ---- */
-.dashboard__grid {
-  display: grid;
-  grid-template-columns: 1fr;
   gap: 1rem;
 }
 
@@ -266,88 +132,83 @@
   font-size: 1rem;
 }
 
-/* ---- Tablet (768px+) ---- */
-@media (min-width: 768px) {
-  .dashboard {
-    padding: 2rem;
-  }
-
-  .dashboard__hero {
-    flex-direction: row;
-    align-items: center;
-    padding: 2.5rem 2rem;
-    gap: 2rem;
-  }
-
-  .dashboard__greeting {
-    text-align: left;
-    flex: 1;
-  }
-
-  .dashboard__ring-wrap {
-    width: 160px;
-    height: 160px;
-  }
-
-  .dashboard__ring-label {
-    font-size: 2.2rem;
-  }
-
-  .dashboard__stats {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .dashboard__stat-divider {
-    width: 32px;
-    height: 1px;
-  }
-
-  .dashboard__badge-shelf {
-    margin: 0;
-    padding: 0;
-    overflow-x: visible;
-  }
-
-  .dashboard__badge-track {
-    flex-wrap: wrap;
-  }
-
-  .dashboard__grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
-  }
+/* ---- Trophies ---- */
+.dashboard__badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 2rem;
 }
 
-/* ---- Desktop (1024px+) ---- */
-@media (min-width: 1024px) {
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: center;
+  width: 84px;
+}
+
+.badge__medallion {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-badge);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+}
+
+.badge:not(.badge--locked) .badge__medallion:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.badge__icon {
+  display: flex;
+  width: 30px;
+  height: 30px;
+}
+
+.badge__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.badge__name {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  line-height: 1.25;
+}
+
+.badge--locked .badge__medallion {
+  color: var(--text-muted);
+  border-style: dashed;
+  box-shadow: none;
+  opacity: 0.55;
+}
+
+.badge--locked .badge__name {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+/* ---- Tablet+ ---- */
+@media (min-width: 768px) {
   .dashboard {
-    padding: 2.5rem 2rem;
+    padding: 4.5rem 2rem 5rem;
   }
 
   .dashboard__hero {
-    padding: 3rem 2.5rem;
-  }
-
-  .dashboard__title {
-    font-size: 2.2rem;
+    padding-bottom: 4.5rem;
   }
 
   .dashboard__ring-wrap {
-    width: 180px;
-    height: 180px;
-  }
-
-  .dashboard__ring-label {
-    font-size: 2.5rem;
-  }
-
-  .badge__medallion {
-    width: 72px;
-    height: 72px;
-  }
-
-  .badge__icon {
-    font-size: 2rem;
+    width: 170px;
+    height: 170px;
   }
 }

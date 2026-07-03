@@ -7,8 +7,8 @@ import './Map.css';
 
 //test
 function createMarkerIcon(visited) {
-  const color = visited ? '#2C6E49' : '#D4522A';
-  const glow = visited ? 'rgba(44,110,73,0.35)' : 'rgba(212,82,42,0.35)';
+  const color = visited ? '#248A3D' : '#D4522A';
+  const glow = visited ? 'rgba(36,138,61,0.30)' : 'rgba(212,82,42,0.30)';
 
   const svg = `
     <svg width="32" height="44" viewBox="0 0 32 44" xmlns="http://www.w3.org/2000/svg">

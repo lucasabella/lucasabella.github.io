@@ -23,17 +23,16 @@
 }
 
 .progress-bar__track {
-  height: 12px;
-  background: var(--bg-page);
-  border-radius: 0;
+  height: 8px;
+  background: var(--bg-card-hover);
+  border-radius: 99px;
   overflow: hidden;
   position: relative;
-  border: 1px solid var(--border);
 }
 
 .progress-bar__fill {
   height: 100%;
-  border-radius: 0;
+  border-radius: 99px;
   background: var(--accent);
   transition: width 0.6s var(--ease-out);
   position: relative;
@@ -55,7 +54,5 @@
 
 /* Compact variant — thin bar only, no text */
 .progress-bar--compact .progress-bar__track {
-  height: 4px;
-  border: none;
-  border-radius: 2px;
+  height: 5px;
 }

@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect, useLayoutEffect } from 'react';
+import { animate } from 'framer-motion';
 
 /**
  * useBottomSheet — iOS-style bottom sheet with finger-following drag.
@@ -14,7 +15,7 @@ import { useState, useRef, useCallback, useEffect, useLayoutEffect } from 'react
 
 const COLLAPSED_PX = 80;
 const VELOCITY_THRESHOLD = 0.4;   // px/ms
-const SNAP_TRANSITION = 'transform 0.35s cubic-bezier(0.32, 0.72, 0, 1)';
+const SPRING = { type: 'spring', stiffness: 420, damping: 38 };
 
 function getTranslateY(state, panelHeight) {
     switch (state) {
@@ -44,6 +45,22 @@ export function useBottomSheet(navHeight = 52) {
     const snapStateRef = useRef(snapState);
     snapStateRef.current = snapState;
     const justSnappedRef = useRef(false);
+    const springRef = useRef(null);
+
+    // Spring-animate the panel to a target translateY, clamped to the sheet's range.
+    const springTo = useCallback((from, to, maxTY, velocity = 0) => {
+        springRef.current?.stop();
+        springRef.current = animate(from, to, {
+            ...SPRING,
+            velocity,
+            onUpdate: (v) => {
+                if (panelEl.current) {
+                    const clamped = Math.max(0, Math.min(maxTY, v));
+                    panelEl.current.style.transform = `translateY(${clamped}px)`;
+                }
+            },
+        });
+    }, []);
 
     const drag = useRef({
         active: false,
@@ -57,6 +74,7 @@ export function useBottomSheet(navHeight = 52) {
     const onTouchStart = useCallback((e) => {
         if (!panelEl.current || !isMobile()) return;
 
+        springRef.current?.stop();
         const touch = e.touches[0];
         const panelHeight = window.innerHeight - navHeight;
         const startTranslateY = readCurrentTranslateY(panelEl.current);
@@ -128,14 +146,15 @@ export function useBottomSheet(navHeight = 52) {
 
         justSnappedRef.current = true;
         if (panelEl.current) {
-            panelEl.current.style.transition = SNAP_TRANSITION;
-            panelEl.current.style.transform = `translateY(${targetSnap.ty}px)`;
+            panelEl.current.style.transition = 'none';
+            // velocity is px/ms; framer springs expect px/s
+            springTo(newTY, targetSnap.ty, maxTY, velocity * 1000);
         }
         if (dragHandleEl.current) {
             dragHandleEl.current.classList.remove('panel__drag-handle--active');
         }
         setSnapState(targetSnap.state);
-    }, []);
+    }, [springTo]);
 
     // ── Callback ref for the panel ─────────────────────────────────────────
     const panelRef = useCallback((node) => {
@@ -185,9 +204,10 @@ export function useBottomSheet(navHeight = 52) {
         }
         const panelHeight = window.innerHeight - navHeight;
         const ty = getTranslateY(snapState, panelHeight);
-        panelEl.current.style.transition = SNAP_TRANSITION;
-        panelEl.current.style.transform = `translateY(${ty}px)`;
-    }, [snapState, navHeight]);
+        const from = readCurrentTranslateY(panelEl.current);
+        panelEl.current.style.transition = 'none';
+        springTo(from, ty, panelHeight - COLLAPSED_PX);
+    }, [snapState, navHeight, springTo]);
 
     // ── Cleanup touchstart on unmount ──────────────────────────────────────
     useEffect(() => {
