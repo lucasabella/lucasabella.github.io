@@ -12,5 +12,5 @@ This is an open-source project — feel free to explore the code, learn from it,
 
 - **Frontend:** React + Vite
 - **Map:** Leaflet (via react-leaflet)
-- **Backend:** Node.js / Express + PostgreSQL
-- **Hosting:** GitHub Pages (frontend)
+- **Storage:** localStorage (no account needed)
+- **Hosting:** GitHub Pages

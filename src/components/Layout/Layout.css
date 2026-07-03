@@ -34,34 +34,6 @@
   color: var(--accent);
 }
 
-.layout__nav-links {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.layout__nav-link {
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--radius-sm);
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.layout__nav-link:hover {
-  color: var(--text-primary);
-  background: var(--bg-card-hover);
-}
-
-.layout__nav-link--active {
-  background: var(--accent-light);
-  color: var(--accent-dark);
-  font-weight: 600;
-}
-
 .layout__actions {
   display: flex;
   align-items: center;
@@ -86,56 +58,6 @@
 .layout__theme-toggle:hover {
   background: var(--bg-card-hover);
   color: var(--text-primary);
-  border-color: var(--accent);
-}
-
-.layout__user {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  min-width: 0;
-}
-
-.layout__avatar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--accent-light);
-  color: var(--accent-dark);
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 600;
-  flex-shrink: 0;
-}
-
-.layout__user-name {
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 0;
-}
-
-.layout__logout {
-  background: none;
-  border: 1px solid var(--border-strong);
-  color: var(--text-secondary);
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-  white-space: nowrap;
-}
-
-.layout__logout:hover {
-  background: var(--accent-light);
-  color: var(--accent-dark);
   border-color: var(--accent);
 }
 
@@ -178,19 +100,5 @@
 
   .layout__brand {
     font-size: 1.2rem;
-  }
-
-  .layout__nav-link {
-    padding: 0.3rem 0.5rem;
-    font-size: 0.8rem;
-  }
-
-  .layout__user-name {
-    display: none;
-  }
-
-  .layout__logout {
-    padding: 0.3rem 0.5rem;
-    font-size: 0.75rem;
   }
 }

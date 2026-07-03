@@ -9,13 +9,6 @@
   width: 100%;
 }
 
-.dashboard--loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
-}
-
 /* ---- Hero Card ---- */
 .dashboard__hero {
   background: var(--gradient-hero);

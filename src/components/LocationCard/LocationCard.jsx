@@ -8,7 +8,7 @@ function formatDistance(km) {
   return `${Math.round(km)} km`;
 }
 
-const LocationCard = memo(function LocationCard({ location, visited = false, onToggle, onFocus, index = 0, distance, checkinCount = 0, mayor = null, onCheckIn }) {
+const LocationCard = memo(function LocationCard({ location, visited = false, onToggle, onFocus, index = 0, distance }) {
 
   return (
     <div
@@ -20,16 +20,6 @@ const LocationCard = memo(function LocationCard({ location, visited = false, onT
         <div className="location-card__info">
           <div className="location-card__name-row">
             <h3 className="location-card__name">{location.name}</h3>
-            {checkinCount > 0 && (
-              <span className="location-card__checkin-pill">
-                {checkinCount} check-in{checkinCount > 1 ? 's' : ''}
-              </span>
-            )}
-            {mayor && (
-              <span className="location-card__mayor-badge" title={`${mayor} is the Mayor of this location`}>
-                👑 {mayor}
-              </span>
-            )}
           </div>
           <p className="location-card__address">{location.address}</p>
           <div className="location-card__meta">
@@ -59,16 +49,6 @@ const LocationCard = memo(function LocationCard({ location, visited = false, onT
             aria-label={visited ? 'Mark as not visited' : 'Mark as visited'}
           >
             {visited ? 'Visited' : 'Mark as visited'}
-          </button>
-          <button
-            className="location-card__checkin-btn"
-            onClick={(e) => {
-              e.stopPropagation();
-              onCheckIn?.(e);
-            }}
-            aria-label="Check in here"
-          >
-            Check in
           </button>
         </div>
       </div>

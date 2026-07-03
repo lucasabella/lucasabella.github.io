@@ -152,58 +152,6 @@
   flex-shrink: 0;
 }
 
-.location-card__checkin-pill {
-  display: inline-flex;
-  align-items: center;
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  background: var(--bg-surface-hover);
-  padding: 2px 6px;
-  border-radius: 99px;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-  border: 1px solid var(--border);
-}
-
-.location-card__mayor-badge {
-  display: inline-flex;
-  align-items: center;
-  font-size: 10px;
-  font-weight: 700;
-  color: #a46f00;
-  background: #fffcf0;
-  padding: 2px 6px;
-  border-radius: 99px;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-  border: 1px solid #ffd466;
-  margin-left: 2px;
-}
-
-.location-card__checkin-btn {
-  padding: 4px 12px;
-  border-radius: var(--radius-sm);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  background: transparent;
-  color: var(--text-secondary);
-  border: 1px solid var(--border);
-  transition: all 0.2s var(--ease-out);
-  white-space: nowrap;
-}
-
-.location-card__checkin-btn:hover {
-  border-color: var(--text-primary);
-  color: var(--text-primary);
-  background: var(--bg-surface-hover);
-}
-
-.location-card__checkin-btn:active {
-  transform: scale(0.99);
-}
-
 .location-card__toggle--visited {
   background: var(--visited);
   color: #FFFFFF;

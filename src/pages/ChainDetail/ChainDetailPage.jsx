@@ -3,9 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Map from '../../components/Map/Map';
 import ProgressBar from '../../components/ProgressBar/ProgressBar';
 import LocationCard from '../../components/LocationCard/LocationCard';
-import { useApi } from '../../hooks/useApi';
+import { getChain } from '../../data/chains';
 import { useVisits } from '../../hooks/useVisits';
-import { useCheckins } from '../../hooks/useCheckins';
 import { useGeolocation } from '../../hooks/useGeolocation';
 import { useBottomSheet } from '../../hooks/useBottomSheet';
 import { haversineDistance } from '../../utils/geo';
@@ -18,10 +17,6 @@ const SORT_OPTIONS = ['Default', 'Near Me'];
 export default function ChainDetailPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const apiFetch = useApi();
-  const [chain, setChain] = useState(null);
-  const [locations, setLocations] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [panelCollapsed, setPanelCollapsed] = useState(false);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('All');
@@ -31,38 +26,16 @@ export default function ChainDetailPage() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const locationsRef = useRef(null);
 
-  const { isVisited, toggleVisit, visitedCount, updateFromLocations, actionError, setActionError, markVisited } = useVisits(locations);
-  const { checkinCounts, getCheckinCount, getMayor, checkIn, updateFromLocations: updateCheckinsFromLocations, checkinError } = useCheckins(locations);
+  const chain = getChain(slug);
+  const locations = useMemo(() => chain?.locations ?? [], [chain]);
+
+  const { isVisited, toggleVisit } = useVisits();
   const { position, loading: geoLoading, error: geoError, requestPosition } = useGeolocation();
   const { panelRef, dragHandleRef, snapState, setSnapState } = useBottomSheet(52);
   const [findingNearest, setFindingNearest] = useState(false);
 
-  // Auto-dismiss the action error toast
-  useEffect(() => {
-    if (actionError) {
-      const timer = setTimeout(() => setActionError(null), 4000);
-      return () => clearTimeout(timer);
-    }
-  }, [actionError, setActionError]);
-
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
-      try {
-        const data = await apiFetch(`/chains/${slug}`);
-        setChain(data.chain);
-        setLocations(data.chain.locations);
-        updateFromLocations(data.chain.locations);
-        updateCheckinsFromLocations(data.chain.locations);
-      } catch {
-        // Error state could be added
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [slug, apiFetch, updateFromLocations]);
-
   const total = locations.length;
+  const visitedCount = locations.filter((l) => isVisited(l.id)).length;
   const remainingCount = total - visitedCount;
 
   const prevVisitedCount = useRef(null);
@@ -72,20 +45,6 @@ export default function ChainDetailPage() {
     }
     prevVisitedCount.current = visitedCount;
   }, [visitedCount, total]);
-
-  const handleCheckIn = useCallback(async (locationId, e) => {
-    if (e) e.stopPropagation();
-    const res = await checkIn(locationId);
-    if (res && res.isFirstVisit) {
-      markVisited(locationId);
-      if (res.newBadges && res.newBadges.length > 0) {
-        setTimeout(() => {
-          const badgeNames = res.newBadges.map(b => `${b.icon} ${b.name}`).join(', ');
-          window.alert(`🎉 Achievement Unlocked: ${badgeNames}!\nCheck your Trophy Case on the Dashboard.`);
-        }, 500);
-      }
-    }
-  }, [checkIn, markVisited]);
 
   // Handle sort toggle
   const handleSortChange = useCallback((s) => {
@@ -187,14 +146,6 @@ export default function ChainDetailPage() {
     locationsRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  if (loading) {
-    return (
-      <div className="chain-detail chain-detail--loading">
-        <div className="loading-spinner" />
-      </div>
-    );
-  }
-
   if (!chain) {
     return (
       <div className="chain-detail chain-detail--error">
@@ -208,16 +159,6 @@ export default function ChainDetailPage() {
 
   return (
     <div className="chain-detail">
-      {actionError && (
-        <div className="chain-detail__toast">
-          {actionError}
-        </div>
-      )}
-      {checkinError && (
-        <div className="chain-detail__toast">
-          {checkinError}
-        </div>
-      )}
       <div className="chain-detail__map">
         <Map
           locations={locations}
@@ -237,7 +178,7 @@ export default function ChainDetailPage() {
           onClick={() => setPanelCollapsed((c) => !c)}
           aria-label={panelCollapsed ? 'Open panel' : 'Close panel'}
         >
-          {panelCollapsed ? '\u25C0' : '\u25B6'}
+          {panelCollapsed ? '◀' : '▶'}
         </button>
 
         {/* Mobile drag handle */}
@@ -299,7 +240,7 @@ export default function ChainDetailPage() {
 
         <div className="panel__search">
           <div className="search-wrapper">
-            <span className="search-icon">{'\u2315'}</span>
+            <span className="search-icon">{'⌕'}</span>
             <input
               type="text"
               className="search-input"
@@ -377,9 +318,6 @@ export default function ChainDetailPage() {
                 onFocus={handleFocusLocation}
                 index={i}
                 distance={distances[loc.id]}
-                checkinCount={getCheckinCount(loc.id)}
-                mayor={getMayor(loc.id)}
-                onCheckIn={(e) => handleCheckIn(loc.id, e)}
               />
             ))
           )}

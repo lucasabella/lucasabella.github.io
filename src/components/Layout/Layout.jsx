@@ -1,17 +1,10 @@
-import { Outlet, useNavigate, NavLink } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../contexts/ThemeContext';
 import './Layout.css';
 
 export default function Layout() {
-  const { user, logout } = useAuth();
   const { theme, toggle } = useTheme();
   const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    await logout();
-    navigate('/login');
-  };
 
   return (
     <div className="layout">
@@ -19,18 +12,6 @@ export default function Layout() {
         <button className="layout__brand" onClick={() => navigate('/dashboard')}>
           Chain<span className="layout__brand-accent">Chaser</span>
         </button>
-
-        <nav className="layout__nav-links" aria-label="Main navigation">
-          <NavLink to="/dashboard" className={({ isActive }) => `layout__nav-link${isActive ? ' layout__nav-link--active' : ''}`}>
-            Chains
-          </NavLink>
-          <NavLink to="/leaderboard" className={({ isActive }) => `layout__nav-link${isActive ? ' layout__nav-link--active' : ''}`}>
-            Leaderboard
-          </NavLink>
-          <NavLink to="/friends" className={({ isActive }) => `layout__nav-link${isActive ? ' layout__nav-link--active' : ''}`}>
-            Friends
-          </NavLink>
-        </nav>
 
         <div className="layout__actions">
           <button
@@ -56,19 +37,6 @@ export default function Layout() {
               </svg>
             )}
           </button>
-
-          {user && (
-            <div className="layout__user">
-              {user.isAdmin && (
-                <span className="layout__admin-badge" title="Admin Test Mode Active">🧪</span>
-              )}
-              <span className="layout__avatar">{(user.name || user.email)[0].toUpperCase()}</span>
-              <span className="layout__user-name">{user.name}</span>
-              <button className="layout__logout" onClick={handleLogout}>
-                Log out
-              </button>
-            </div>
-          )}
         </div>
       </nav>
 

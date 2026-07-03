@@ -1,114 +1,39 @@
-import { useState, useCallback } from 'react';
-import { useApi } from './useApi';
-import { getCurrentPositionAsync } from '../utils/geo';
+import { useState, useEffect, useCallback } from 'react';
 import { fireVisitConfetti } from '../utils/confetti';
-import { useAuth } from '../contexts/AuthContext';
 
-export function useVisits(initialLocations = []) {
-  const apiFetch = useApi();
-  const [visitedIds, setVisitedIds] = useState(() => {
-    const set = new Set();
-    for (const loc of initialLocations) {
-      if (loc.visited) set.add(loc.id);
-    }
-    return set;
-  });
+const STORAGE_KEY = 'chainchaser-visits';
+const LEGACY_KEY = 'chaincaser-visited';
 
-  const { user } = useAuth();
-  const [actionError, setActionError] = useState(null);
+function loadVisits() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_KEY);
+    return stored ? new Set(JSON.parse(stored)) : new Set();
+  } catch {
+    return new Set();
+  }
+}
 
-  const updateFromLocations = useCallback((locations) => {
-    const set = new Set();
-    for (const loc of locations) {
-      if (loc.visited) set.add(loc.id);
-    }
-    setVisitedIds(set);
-  }, []);
+export function useVisits() {
+  const [visitedIds, setVisitedIds] = useState(loadVisits);
 
-  const toggleVisit = useCallback(
-    async (locationId, e) => {
-      const wasVisited = visitedIds.has(locationId);
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([...visitedIds]));
+  }, [visitedIds]);
 
-      setActionError(null);
-
-      let coords = null;
-      // We only need location if we are marking it AS visited (not unmarking)
-      if (!wasVisited) {
-        if (user?.isAdmin) {
-          // Bypass geolocation completely if admin
-          coords = { lat: 0, lng: 0 };
-        } else {
-          try {
-            coords = await getCurrentPositionAsync();
-          } catch (err) {
-            setActionError(err.message);
-            return;
-          }
-        }
-      }
-
-      // Optimistic update
-      setVisitedIds((prev) => {
-        const next = new Set(prev);
-        if (wasVisited) {
-          next.delete(locationId);
-        } else {
-          next.add(locationId);
-        }
-        return next;
-      });
-
-      try {
-        if (wasVisited) {
-          await apiFetch(`/visits/${locationId}`, { method: 'DELETE' });
-        } else {
-          const res = await apiFetch(`/visits/${locationId}`, {
-            method: 'POST',
-            body: JSON.stringify({ lat: coords.lat, lng: coords.lng })
-          });
-
-          // Fire confetti only AFTER successful backend response!
-          if (e) {
-            fireVisitConfetti(e);
-          }
-
-          if (res && res.newBadges && res.newBadges.length > 0) {
-            // Give a small delay so confetti from the button can finish
-            setTimeout(() => {
-              const badgeNames = res.newBadges.map(b => `${b.icon} ${b.name}`).join(', ');
-              window.alert(`🎉 Achievement Unlocked: ${badgeNames}!\nCheck your Trophy Case on the Dashboard.`);
-            }, 500);
-          }
-        }
-      } catch (err) {
-        if (err.message) {
-          setActionError(err.message);
-        }
-        // Revert on failure
-        setVisitedIds((prev) => {
-          const next = new Set(prev);
-          if (wasVisited) {
-            next.add(locationId);
-          } else {
-            next.delete(locationId);
-          }
-          return next;
-        });
-      }
-    },
-    [visitedIds, apiFetch]
-  );
-
-  const isVisited = useCallback((id) => visitedIds.has(id), [visitedIds]);
-  const visitedCount = visitedIds.size;
-
-  const markVisited = useCallback((locationId) => {
+  const toggleVisit = useCallback((locationId, e) => {
+    if (e && !visitedIds.has(locationId)) fireVisitConfetti(e);
     setVisitedIds((prev) => {
       const next = new Set(prev);
-      next.add(locationId);
+      if (next.has(locationId)) {
+        next.delete(locationId);
+      } else {
+        next.add(locationId);
+      }
       return next;
     });
-  }, []);
+  }, [visitedIds]);
 
-  return { visitedIds, visitedCount, isVisited, toggleVisit, updateFromLocations, actionError, setActionError, markVisited };
+  const isVisited = useCallback((id) => visitedIds.has(id), [visitedIds]);
+
+  return { visitedIds, isVisited, toggleVisit };
 }

@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { useApi } from '../../hooks/useApi';
-import { useAuth } from '../../contexts/AuthContext';
+import { useMemo } from 'react';
+import { getChains } from '../../data/chains';
+import { useVisits } from '../../hooks/useVisits';
 import ChainCard from './ChainCard';
 import './DashboardPage.css';
 
@@ -16,42 +16,31 @@ const RING_RADIUS = 54;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 
 export default function DashboardPage() {
-  const apiFetch = useApi();
-  const { user } = useAuth();
-  const [chains, setChains] = useState([]);
-  const [badges, setBadges] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { visitedIds } = useVisits();
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const [chainsData, authData] = await Promise.all([
-          apiFetch('/chains'),
-          apiFetch('/auth/me')
-        ]);
-        setChains(chainsData.chains);
-        setBadges(authData.user.badges || []);
-      } catch {
-        // Handle silently — user will see empty state
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [apiFetch]);
+  const chains = useMemo(() =>
+    getChains().map((chain) => ({
+      ...chain,
+      location_count: chain.locations.length,
+      visited_count: chain.locations.filter((l) => visitedIds.has(l.id)).length,
+    })),
+    [visitedIds]
+  );
 
-  if (loading) {
-    return (
-      <div className="dashboard dashboard--loading">
-        <div className="loading-spinner" />
-      </div>
-    );
-  }
-
-  const totalVisited = chains.reduce((s, c) => s + (c.visited_count || 0), 0);
-  const totalLocations = chains.reduce((s, c) => s + (c.location_count || 0), 0);
+  const totalVisited = chains.reduce((s, c) => s + c.visited_count, 0);
+  const totalLocations = chains.reduce((s, c) => s + c.location_count, 0);
   const pct = totalLocations > 0 ? Math.round(totalVisited / totalLocations * 100) : 0;
   const ringOffset = RING_CIRCUMFERENCE - (pct / 100) * RING_CIRCUMFERENCE;
-  const earnedCount = ALL_BADGES.filter(b => badges.find(e => e.id === b.id)).length;
+
+  const chainsStarted = chains.filter((c) => c.visited_count > 0).length;
+  const earnedIds = new Set([
+    totalVisited >= 1 && 'first_bite',
+    totalVisited >= 5 && 'loyalist',
+    totalVisited >= 25 && 'veteran',
+    chainsStarted >= 3 && 'hopper',
+    chains.some((c) => c.location_count > 0 && c.visited_count === c.location_count) && 'completionist',
+  ].filter(Boolean));
+  const earnedCount = earnedIds.size;
 
   return (
     <div className="dashboard">
@@ -59,9 +48,7 @@ export default function DashboardPage() {
       <div className="dashboard__hero">
         <div className="dashboard__greeting">
           <span className="dashboard__eyebrow">ChainChaser</span>
-          <h1 className="dashboard__title">
-            {user ? `Welcome back, ${user.name || user.email?.split('@')[0]}` : 'Your Chains'}
-          </h1>
+          <h1 className="dashboard__title">Your Chains</h1>
           <p className="dashboard__subtitle">Pick a chain and start chasing</p>
         </div>
 
@@ -125,7 +112,7 @@ export default function DashboardPage() {
         <div className="dashboard__badge-shelf">
           <div className="dashboard__badge-track">
             {ALL_BADGES.map((badgeDef, i) => {
-              const earned = badges.find(b => b.id === badgeDef.id);
+              const earned = earnedIds.has(badgeDef.id);
               return (
                 <div
                   key={badgeDef.id}
@@ -152,7 +139,7 @@ export default function DashboardPage() {
         </div>
         <div className="dashboard__grid">
           {chains.map((chain, i) => (
-            <ChainCard key={chain.id} chain={chain} index={i} />
+            <ChainCard key={chain.slug} chain={chain} index={i} />
           ))}
         </div>
       </div>
